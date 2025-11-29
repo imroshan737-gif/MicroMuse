@@ -12,6 +12,8 @@ import Landing from "./pages/Landing";
 import Onboarding from "./pages/Onboarding";
 import Home from "./pages/Home";
 import Challenge from "./pages/Challenge";
+import Challenges from "./pages/Challenges";
+import Achievements from "./pages/Achievements";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
@@ -50,6 +52,22 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Challenge />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/challenges"
+              element={
+                <ProtectedRoute>
+                  <Challenges />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/achievements"
+              element={
+                <ProtectedRoute>
+                  <Achievements />
                 </ProtectedRoute>
               }
             />
