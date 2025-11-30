@@ -153,10 +153,28 @@ export default function Settings() {
         </GlassCard>
         
         <div className="flex gap-4">
-          <Button className="bg-gradient-primary text-primary-foreground hover:opacity-90">
+          <Button 
+            onClick={() => {
+              localStorage.setItem('settings', JSON.stringify(settings));
+              alert('Settings saved successfully!');
+            }}
+            className="bg-gradient-primary text-primary-foreground hover:opacity-90"
+          >
             Save Changes
           </Button>
-          <Button variant="outline" className="glass">
+          <Button 
+            variant="outline" 
+            className="glass"
+            onClick={() => {
+              updateSettings({
+                enableThreeD: true,
+                threeDIntensity: 0.7,
+                theme: 'studio',
+                energySaver: false,
+                reducedMotion: false,
+              });
+            }}
+          >
             Reset to Defaults
           </Button>
         </div>

@@ -3,30 +3,51 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useStore } from "@/store/useStore";
+import { useAuth } from "@/hooks/useAuth";
 import ThreeScene from "@/components/ThreeScene";
 import Header from "@/components/Header";
 
 // Pages
-import Landing from "./pages/Landing";
+import Auth from "./pages/Auth";
+import UpdatedOnboarding from "./pages/UpdatedOnboarding";
 import Onboarding from "./pages/Onboarding";
 import Home from "./pages/Home";
 import Challenge from "./pages/Challenge";
 import Challenges from "./pages/Challenges";
 import Achievements from "./pages/Achievements";
 import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const user = useStore((state) => state.user);
+  const { user, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-lg">Loading...</div>
+      </div>
+    );
+  }
+  
   return user ? <>{children}</> : <Navigate to="/" replace />;
 }
 
 const App = () => {
-  const user = useStore((state) => state.user);
+  const { user, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-pulse text-lg">Loading...</div>
+        </div>
+      </QueryClientProvider>
+    );
+  }
   
   return (
     <QueryClientProvider client={queryClient}>
@@ -37,8 +58,15 @@ const App = () => {
           <ThreeScene />
           {user && <Header />}
           <Routes>
-            <Route path="/" element={user ? <Navigate to="/home" replace /> : <Landing />} />
-            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/" element={user ? <Navigate to="/onboarding" replace /> : <Auth />} />
+            <Route
+              path="/onboarding"
+              element={
+                <ProtectedRoute>
+                  <UpdatedOnboarding />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/home"
               element={
@@ -76,6 +104,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/edit"
+              element={
+                <ProtectedRoute>
+                  <EditProfile />
                 </ProtectedRoute>
               }
             />

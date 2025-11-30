@@ -14,16 +14,431 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      achievements: {
+        Row: {
+          badge_url: string | null
+          created_at: string | null
+          description: string
+          icon: string
+          id: string
+          name: string
+          points: number | null
+          requirement_type: string
+          requirement_value: number
+        }
+        Insert: {
+          badge_url?: string | null
+          created_at?: string | null
+          description: string
+          icon: string
+          id?: string
+          name: string
+          points?: number | null
+          requirement_type: string
+          requirement_value: number
+        }
+        Update: {
+          badge_url?: string | null
+          created_at?: string | null
+          description?: string
+          icon?: string
+          id?: string
+          name?: string
+          points?: number | null
+          requirement_type?: string
+          requirement_value?: number
+        }
+        Relationships: []
+      }
+      challenges: {
+        Row: {
+          category: Database["public"]["Enums"]["challenge_category"]
+          created_at: string | null
+          description: string
+          difficulty: Database["public"]["Enums"]["difficulty_level"]
+          duration_minutes: number | null
+          id: string
+          is_active: boolean | null
+          points: number | null
+          title: string
+          type: Database["public"]["Enums"]["challenge_type"]
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["challenge_category"]
+          created_at?: string | null
+          description: string
+          difficulty: Database["public"]["Enums"]["difficulty_level"]
+          duration_minutes?: number | null
+          id?: string
+          is_active?: boolean | null
+          points?: number | null
+          title: string
+          type: Database["public"]["Enums"]["challenge_type"]
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["challenge_category"]
+          created_at?: string | null
+          description?: string
+          difficulty?: Database["public"]["Enums"]["difficulty_level"]
+          duration_minutes?: number | null
+          id?: string
+          is_active?: boolean | null
+          points?: number | null
+          title?: string
+          type?: Database["public"]["Enums"]["challenge_type"]
+        }
+        Relationships: []
+      }
+      hobbies: {
+        Row: {
+          category: string
+          created_at: string | null
+          emoji: string | null
+          icon: string | null
+          id: string
+          is_trending: boolean | null
+          name: string
+          popularity_count: number | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          emoji?: string | null
+          icon?: string | null
+          id?: string
+          is_trending?: boolean | null
+          name: string
+          popularity_count?: number | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          emoji?: string | null
+          icon?: string | null
+          id?: string
+          is_trending?: boolean | null
+          name?: string
+          popularity_count?: number | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          message: string
+          title: string
+          type: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message: string
+          title: string
+          type?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          title?: string
+          type?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          current_streak: number | null
+          email: string
+          full_name: string | null
+          id: string
+          is_profile_public: boolean | null
+          location: string | null
+          longest_streak: number | null
+          mood: string | null
+          profile_completion: number | null
+          total_points: number | null
+          total_sessions: number | null
+          two_factor_enabled: boolean | null
+          updated_at: string | null
+          user_status: Database["public"]["Enums"]["user_status"] | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          current_streak?: number | null
+          email: string
+          full_name?: string | null
+          id: string
+          is_profile_public?: boolean | null
+          location?: string | null
+          longest_streak?: number | null
+          mood?: string | null
+          profile_completion?: number | null
+          total_points?: number | null
+          total_sessions?: number | null
+          two_factor_enabled?: boolean | null
+          updated_at?: string | null
+          user_status?: Database["public"]["Enums"]["user_status"] | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          current_streak?: number | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          is_profile_public?: boolean | null
+          location?: string | null
+          longest_streak?: number | null
+          mood?: string | null
+          profile_completion?: number | null
+          total_points?: number | null
+          total_sessions?: number | null
+          two_factor_enabled?: boolean | null
+          updated_at?: string | null
+          user_status?: Database["public"]["Enums"]["user_status"] | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      user_achievements: {
+        Row: {
+          achievement_id: string
+          earned_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          achievement_id: string
+          earned_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          achievement_id?: string
+          earned_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
+            isOneToOne: false
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_achievements_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_activity: {
+        Row: {
+          activity_date: string
+          created_at: string | null
+          id: string
+          points_earned: number | null
+          sessions_count: number | null
+          user_id: string
+        }
+        Insert: {
+          activity_date: string
+          created_at?: string | null
+          id?: string
+          points_earned?: number | null
+          sessions_count?: number | null
+          user_id: string
+        }
+        Update: {
+          activity_date?: string
+          created_at?: string | null
+          id?: string
+          points_earned?: number | null
+          sessions_count?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_challenges: {
+        Row: {
+          challenge_id: string
+          completed_at: string | null
+          id: string
+          is_completed: boolean | null
+          score: number | null
+          started_at: string | null
+          submission_url: string | null
+          user_id: string
+        }
+        Insert: {
+          challenge_id: string
+          completed_at?: string | null
+          id?: string
+          is_completed?: boolean | null
+          score?: number | null
+          started_at?: string | null
+          submission_url?: string | null
+          user_id: string
+        }
+        Update: {
+          challenge_id?: string
+          completed_at?: string | null
+          id?: string
+          is_completed?: boolean | null
+          score?: number | null
+          started_at?: string | null
+          submission_url?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_hobbies: {
+        Row: {
+          created_at: string | null
+          display_order: number | null
+          hobby_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          display_order?: number | null
+          hobby_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          display_order?: number | null
+          hobby_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_hobbies_hobby_id_fkey"
+            columns: ["hobby_id"]
+            isOneToOne: false
+            referencedRelation: "hobbies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_hobbies_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      challenge_category:
+        | "music"
+        | "art"
+        | "writing"
+        | "dance"
+        | "coding"
+        | "photography"
+        | "fitness"
+        | "cooking"
+        | "gaming"
+        | "design"
+      challenge_type: "daily" | "weekly" | "personal"
+      difficulty_level: "beginner" | "moderate" | "expert"
+      user_status: "online" | "away" | "busy" | "offline"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +565,23 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      challenge_category: [
+        "music",
+        "art",
+        "writing",
+        "dance",
+        "coding",
+        "photography",
+        "fitness",
+        "cooking",
+        "gaming",
+        "design",
+      ],
+      challenge_type: ["daily", "weekly", "personal"],
+      difficulty_level: ["beginner", "moderate", "expert"],
+      user_status: ["online", "away", "busy", "offline"],
+    },
   },
 } as const

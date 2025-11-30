@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export default function Header() {
+export default function AuthenticatedHeader() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -49,30 +49,21 @@ export default function Header() {
         </div>
 
         <div className="hidden md:flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate('/home')}
-            className={location.pathname === '/home' ? 'bg-primary/10 text-primary' : ''}
-          >
+          <NavLink to="/home" activeClassName="text-primary">
             Home
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate('/challenges')}
-            className={location.pathname === '/challenges' ? 'bg-primary/10 text-primary' : ''}
+          </NavLink>
+          <NavLink
+            to="/challenges"
+            activeClassName="text-primary"
           >
             Challenges
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate('/achievements')}
-            className={location.pathname === '/achievements' ? 'bg-primary/10 text-primary' : ''}
+          </NavLink>
+          <NavLink
+            to="/achievements"
+            activeClassName="text-primary"
           >
             Achievements
-          </Button>
+          </NavLink>
         </div>
 
         <DropdownMenu>
