@@ -12,6 +12,23 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
+import { z } from 'zod';
+
+// Validation schemas
+const profileSchema = z.object({
+  full_name: z.string().max(100, 'Name too long').optional(),
+  username: z.string()
+    .min(3, 'Username must be at least 3 characters')
+    .max(30, 'Username too long')
+    .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores')
+    .optional(),
+  bio: z.string().max(500, 'Bio too long').optional(),
+  mood: z.string().max(50, 'Mood too long').optional(),
+  location: z.string().max(100, 'Location too long').optional(),
+});
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 export default function EditProfile() {
   const { user } = useAuth();
@@ -81,6 +98,28 @@ export default function EditProfile() {
     const file = e.target.files?.[0];
     if (!file || !user) return;
 
+    // Validate file type
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      toast({
+        title: 'Invalid file type',
+        description: 'Please upload a JPEG, PNG, or WebP image',
+        variant: 'destructive',
+      });
+      e.target.value = ''; // Reset input
+      return;
+    }
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      toast({
+        title: 'File too large',
+        description: 'Please upload an image smaller than 5MB',
+        variant: 'destructive',
+      });
+      e.target.value = ''; // Reset input
+      return;
+    }
+
     setUploading(true);
     const fileExt = file.name.split('.').pop();
     const filePath = `${user.id}/avatar.${fileExt}`;
@@ -112,33 +151,52 @@ export default function EditProfile() {
   const handleSave = async () => {
     if (!user) return;
 
-    setLoading(true);
-    const { error } = await supabase
-      .from('profiles')
-      .update({
-        full_name: profile.full_name,
-        username: profile.username,
-        bio: profile.bio,
-        mood: profile.mood,
-        location: profile.location,
-        avatar_url: profile.avatar_url,
-        is_profile_public: profile.is_profile_public,
-        two_factor_enabled: profile.two_factor_enabled,
-      })
-      .eq('id', user.id);
+    try {
+      // Validate profile data
+      const validated = profileSchema.parse({
+        full_name: profile.full_name || undefined,
+        username: profile.username || undefined,
+        bio: profile.bio || undefined,
+        mood: profile.mood || undefined,
+        location: profile.location || undefined,
+      });
 
-    if (error) {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive',
-      });
-    } else {
-      toast({
-        title: 'Success',
-        description: 'Profile updated successfully',
-      });
-      navigate('/profile');
+      setLoading(true);
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          full_name: validated.full_name,
+          username: validated.username,
+          bio: validated.bio,
+          mood: validated.mood,
+          location: validated.location,
+          avatar_url: profile.avatar_url,
+          is_profile_public: profile.is_profile_public,
+          two_factor_enabled: profile.two_factor_enabled,
+        })
+        .eq('id', user.id);
+
+      if (error) {
+        toast({
+          title: 'Error',
+          description: error.message,
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Success',
+          description: 'Profile updated successfully',
+        });
+        navigate('/profile');
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast({
+          title: 'Validation Error',
+          description: error.errors[0].message,
+          variant: 'destructive',
+        });
+      }
     }
     setLoading(false);
   };
