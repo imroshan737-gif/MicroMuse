@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -12,6 +12,7 @@ import { motion } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useUserHobbies } from '@/hooks/useUserHobbies';
 
 const dailyChallenges = [
   {
@@ -63,7 +64,7 @@ const weeklyChallenges = [
     description: 'Create a full 2-minute composition across 7 days',
     category: 'music' as const,
     totalDays: 7,
-    currentDay: 3,
+    currentDay: 0,
     difficulty: 'advanced' as const,
     points: 500,
     icon: Music,
@@ -74,7 +75,7 @@ const weeklyChallenges = [
     description: 'Complete a detailed artwork through daily progress',
     category: 'art' as const,
     totalDays: 7,
-    currentDay: 2,
+    currentDay: 0,
     difficulty: 'advanced' as const,
     points: 600,
     icon: Palette,
@@ -85,7 +86,7 @@ const weeklyChallenges = [
     description: 'Write a 1000-word story, 150 words per day',
     category: 'writing' as const,
     totalDays: 7,
-    currentDay: 5,
+    currentDay: 0,
     difficulty: 'intermediate' as const,
     points: 450,
     icon: PenTool,
@@ -102,6 +103,7 @@ const categoryColors = {
 export default function Challenges() {
   const navigate = useNavigate();
   const startChallenge = useStore((state) => state.startChallenge);
+  const { hobbies, loading: hobbiesLoading } = useUserHobbies();
   const [personalChallenges, setPersonalChallenges] = useState<any[]>([]);
   const [newChallenge, setNewChallenge] = useState({
     title: '',
@@ -109,6 +111,21 @@ export default function Challenges() {
     category: 'music',
     duration: 10,
   });
+
+  // Filter challenges based on user's hobbies
+  const userHobbyCategories = useMemo(() => {
+    return new Set(hobbies.map(h => h.category.toLowerCase()));
+  }, [hobbies]);
+
+  const filteredDailyChallenges = useMemo(() => {
+    if (userHobbyCategories.size === 0) return dailyChallenges;
+    return dailyChallenges.filter(c => userHobbyCategories.has(c.category));
+  }, [userHobbyCategories]);
+
+  const filteredWeeklyChallenges = useMemo(() => {
+    if (userHobbyCategories.size === 0) return weeklyChallenges;
+    return weeklyChallenges.filter(c => userHobbyCategories.has(c.category));
+  }, [userHobbyCategories]);
 
   const handleStartChallenge = (challenge: any) => {
     startChallenge(challenge);
@@ -151,8 +168,19 @@ export default function Challenges() {
           </TabsList>
 
           <TabsContent value="daily" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {dailyChallenges.map((challenge, index) => (
+            {filteredDailyChallenges.length === 0 ? (
+              <GlassCard className="text-center py-12">
+                <Target className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-xl font-display font-semibold mb-2">
+                  No challenges match your hobbies
+                </h3>
+                <p className="text-muted-foreground">
+                  Update your hobbies in profile settings to see relevant challenges
+                </p>
+              </GlassCard>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {filteredDailyChallenges.map((challenge, index) => (
                 <motion.div
                   key={challenge.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -206,11 +234,23 @@ export default function Challenges() {
                 </motion.div>
               ))}
             </div>
+            )}
           </TabsContent>
 
           <TabsContent value="weekly" className="space-y-6">
-            <div className="grid grid-cols-1 gap-6">
-              {weeklyChallenges.map((challenge, index) => (
+            {filteredWeeklyChallenges.length === 0 ? (
+              <GlassCard className="text-center py-12">
+                <Target className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-xl font-display font-semibold mb-2">
+                  No weekly challenges match your hobbies
+                </h3>
+                <p className="text-muted-foreground">
+                  Update your hobbies in profile settings to see relevant challenges
+                </p>
+              </GlassCard>
+            ) : (
+              <div className="grid grid-cols-1 gap-6">
+                {filteredWeeklyChallenges.map((challenge, index) => (
                 <motion.div
                   key={challenge.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -276,6 +316,7 @@ export default function Challenges() {
                 </motion.div>
               ))}
             </div>
+            )}
           </TabsContent>
 
           <TabsContent value="personal" className="space-y-6">
@@ -320,11 +361,18 @@ export default function Challenges() {
                       <SelectTrigger className="glass">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                       <SelectContent>
                         <SelectItem value="music">Music</SelectItem>
                         <SelectItem value="art">Art</SelectItem>
                         <SelectItem value="writing">Writing</SelectItem>
                         <SelectItem value="dance">Dance</SelectItem>
+                        <SelectItem value="coding">Coding</SelectItem>
+                        <SelectItem value="photography">Photography</SelectItem>
+                        <SelectItem value="fitness">Fitness</SelectItem>
+                        <SelectItem value="cooking">Cooking</SelectItem>
+                        <SelectItem value="gaming">Gaming</SelectItem>
+                        <SelectItem value="design">Design</SelectItem>
+                        <SelectItem value="others">Others</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

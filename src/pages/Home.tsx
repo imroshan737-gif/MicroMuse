@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import GlassCard from '@/components/GlassCard';
@@ -5,6 +6,10 @@ import { Flame, Sparkles, Clock, Trophy, Play, Star } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useUserHobbies } from '@/hooks/useUserHobbies';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { useEffect, useState } from 'react';
 
 const mockChallenges = [
   {
@@ -54,8 +59,49 @@ const categoryColors = {
 
 export default function Home() {
   const user = useStore((state) => state.user);
+  const { user: authUser } = useAuth();
   const startChallenge = useStore((state) => state.startChallenge);
   const navigate = useNavigate();
+  const { hobbies } = useUserHobbies();
+  const [profileData, setProfileData] = useState({
+    currentStreak: 0,
+    totalSessions: 0,
+    badgesCount: 0,
+  });
+
+  useEffect(() => {
+    async function fetchProfileData() {
+      if (!authUser) return;
+
+      const { data } = await supabase
+        .from('profiles')
+        .select('current_streak, total_sessions')
+        .eq('id', authUser.id)
+        .single();
+
+      const { data: achievements } = await supabase
+        .from('user_achievements')
+        .select('id')
+        .eq('user_id', authUser.id);
+
+      setProfileData({
+        currentStreak: data?.current_streak || 0,
+        totalSessions: data?.total_sessions || 0,
+        badgesCount: achievements?.length || 0,
+      });
+    }
+
+    fetchProfileData();
+  }, [authUser]);
+
+  const userHobbyCategories = useMemo(() => {
+    return new Set(hobbies.map(h => h.category.toLowerCase()));
+  }, [hobbies]);
+
+  const filteredChallenges = useMemo(() => {
+    if (userHobbyCategories.size === 0) return mockChallenges;
+    return mockChallenges.filter(c => userHobbyCategories.has(c.category));
+  }, [userHobbyCategories]);
   
   const handleStartChallenge = (challenge: typeof mockChallenges[0]) => {
     startChallenge(challenge);
@@ -84,7 +130,7 @@ export default function Home() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Current Streak</p>
-              <p className="text-2xl font-bold">{user?.streak || 0} days</p>
+              <p className="text-2xl font-bold">{profileData.currentStreak} days</p>
             </div>
           </GlassCard>
           
@@ -94,7 +140,7 @@ export default function Home() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Total Sessions</p>
-              <p className="text-2xl font-bold">{user?.totalSessions || 0}</p>
+              <p className="text-2xl font-bold">{profileData.totalSessions}</p>
             </div>
           </GlassCard>
           
@@ -104,7 +150,7 @@ export default function Home() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Badges Earned</p>
-              <p className="text-2xl font-bold">{user?.badges.length || 0}</p>
+              <p className="text-2xl font-bold">{profileData.badgesCount}</p>
             </div>
           </GlassCard>
         </div>
@@ -125,7 +171,18 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {mockChallenges.map((challenge, index) => (
+            {filteredChallenges.length === 0 ? (
+              <GlassCard className="col-span-2 text-center py-12">
+                <Sparkles className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-xl font-display font-semibold mb-2">
+                  No challenges match your hobbies yet
+                </h3>
+                <p className="text-muted-foreground">
+                  Update your hobbies in profile settings to see personalized challenges
+                </p>
+              </GlassCard>
+            ) : (
+              filteredChallenges.map((challenge, index) => (
               <motion.div
                 key={challenge.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -167,7 +224,8 @@ export default function Home() {
                   </div>
                 </GlassCard>
               </motion.div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>

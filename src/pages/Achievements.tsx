@@ -7,150 +7,68 @@ import {
   Music, Palette, PenTool, Calendar, TrendingUp,
   Clock, Users, Heart
 } from 'lucide-react';
-import { useStore } from '@/store/useStore';
+import { useUserStats } from '@/hooks/useUserStats';
+import { useUserAchievements } from '@/hooks/useUserAchievements';
+import { useUserHobbies } from '@/hooks/useUserHobbies';
 
-const achievements = [
-  { 
-    id: '1', 
-    name: 'First Steps', 
-    description: 'Complete your first session', 
-    icon: Star, 
-    earned: true,
-    category: 'milestone',
-    earnedDate: '2025-01-15'
-  },
-  { 
-    id: '2', 
-    name: 'Week Warrior', 
-    description: 'Maintain a 7-day streak', 
-    icon: Flame, 
-    earned: true,
-    category: 'streak',
-    earnedDate: '2025-01-20'
-  },
-  { 
-    id: '3', 
-    name: 'Melody Master', 
-    description: 'Complete 10 music sessions', 
-    icon: Music, 
-    earned: true,
-    category: 'category',
-    progress: 10,
-    total: 10,
-    earnedDate: '2025-01-18'
-  },
-  { 
-    id: '4', 
-    name: 'Art Enthusiast', 
-    description: 'Complete 10 art sessions', 
-    icon: Palette, 
-    earned: false,
-    category: 'category',
-    progress: 6,
-    total: 10
-  },
-  { 
-    id: '5', 
-    name: 'Speed Demon', 
-    description: 'Complete 5 sessions in one day', 
-    icon: Zap, 
-    earned: false,
-    category: 'daily',
-    progress: 3,
-    total: 5
-  },
-  { 
-    id: '6', 
-    name: 'Consistent Creator', 
-    description: 'Complete 30 total sessions', 
-    icon: Calendar, 
-    earned: true,
-    category: 'milestone',
-    earnedDate: '2025-01-22'
-  },
-  { 
-    id: '7', 
-    name: 'Perfect Score', 
-    description: 'Achieve a score of 95 or higher', 
-    icon: Crown, 
-    earned: true,
-    category: 'score',
-    earnedDate: '2025-01-19'
-  },
-  { 
-    id: '8', 
-    name: 'Night Owl', 
-    description: 'Complete 10 sessions after 10 PM', 
-    icon: Clock, 
-    earned: false,
-    category: 'special',
-    progress: 4,
-    total: 10
-  },
-  { 
-    id: '9', 
-    name: 'Social Butterfly', 
-    description: 'Participate in 5 collaborative sessions', 
-    icon: Users, 
-    earned: false,
-    category: 'social',
-    progress: 2,
-    total: 5
-  },
-  { 
-    id: '10', 
-    name: 'Community Hero', 
-    description: 'Receive 100 likes on your sessions', 
-    icon: Heart, 
-    earned: false,
-    category: 'social',
-    progress: 47,
-    total: 100
-  },
-];
-
-const stats = [
-  { 
-    label: 'Highest Score', 
-    value: '96', 
-    icon: Trophy, 
-    color: 'text-primary',
-    description: 'In "Morning Melody"'
-  },
-  { 
-    label: 'Longest Streak', 
-    value: '14', 
-    icon: Flame, 
-    color: 'text-orange-500',
-    description: 'days in a row'
-  },
-  { 
-    label: 'Best Day', 
-    value: '8', 
-    icon: Zap, 
-    color: 'text-accent',
-    description: 'sessions completed'
-  },
-  { 
-    label: 'Total Points', 
-    value: '4,280', 
-    icon: Star, 
-    color: 'text-secondary',
-    description: 'lifetime earned'
-  },
-];
-
-const categoryProgress = [
-  { category: 'Music', completed: 12, total: 50, icon: Music, color: 'primary' },
-  { category: 'Art', completed: 8, total: 50, icon: Palette, color: 'secondary' },
-  { category: 'Writing', completed: 15, total: 50, icon: PenTool, color: 'accent' },
-  { category: 'Dance', completed: 5, total: 50, icon: Zap, color: 'primary' },
-];
+const iconMap: Record<string, any> = {
+  Star, Flame, Music, Palette, Zap, Calendar, Crown, Clock, Users, Heart, Trophy
+};
 
 export default function Achievements() {
-  const user = useStore((state) => state.user);
+  const { stats, loading: statsLoading } = useUserStats();
+  const { achievements, loading: achievementsLoading } = useUserAchievements();
+  const { hobbies, loading: hobbiesLoading } = useUserHobbies();
+
   const earnedCount = achievements.filter(a => a.earned).length;
   const totalCount = achievements.length;
+
+  const statsDisplay = [
+    { 
+      label: 'Highest Score', 
+      value: stats.highestScore.toString(), 
+      icon: Trophy, 
+      color: 'text-primary',
+      description: 'Your best performance'
+    },
+    { 
+      label: 'Longest Streak', 
+      value: stats.longestStreak.toString(), 
+      icon: Flame, 
+      color: 'text-orange-500',
+      description: 'days in a row'
+    },
+    { 
+      label: 'Best Day', 
+      value: stats.bestDay.toString(), 
+      icon: Zap, 
+      color: 'text-accent',
+      description: 'sessions completed'
+    },
+    { 
+      label: 'Total Points', 
+      value: stats.totalPoints.toLocaleString(), 
+      icon: Star, 
+      color: 'text-secondary',
+      description: 'lifetime earned'
+    },
+  ];
+
+  const categoryProgress = hobbies.map(hobby => ({
+    category: hobby.name,
+    completed: 0, // Will be calculated from user_activity in future
+    total: 50,
+    icon: iconMap[hobby.icon || 'Star'] || Star,
+    color: 'primary',
+  }));
+
+  if (statsLoading || achievementsLoading || hobbiesLoading) {
+    return (
+      <div className="min-h-screen pt-24 pb-12 px-4 flex items-center justify-center">
+        <div className="animate-pulse text-lg">Loading achievements...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-24 pb-12 px-4">
@@ -187,7 +105,7 @@ export default function Achievements() {
         <div>
           <h2 className="text-2xl font-display font-bold mb-4">Record Stats</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {stats.map((stat, index) => (
+            {statsDisplay.map((stat, index) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -254,14 +172,17 @@ export default function Achievements() {
                   className={`h-full ${!achievement.earned && 'opacity-60'}`}
                 >
                   <div className="flex items-start gap-3 mb-3">
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
                       achievement.earned 
                         ? 'bg-gradient-primary shadow-glow-primary' 
                         : 'bg-muted'
                     }`}>
-                      <achievement.icon className={`w-7 h-7 ${
-                        achievement.earned ? 'text-primary-foreground' : 'text-muted-foreground'
-                      }`} />
+                      {(() => {
+                        const Icon = iconMap[achievement.icon] || Star;
+                        return <Icon className={`w-7 h-7 ${
+                          achievement.earned ? 'text-primary-foreground' : 'text-muted-foreground'
+                        }`} />;
+                      })()}
                     </div>
                     <div className="flex-1">
                       <h3 className="font-display font-semibold text-lg mb-1">

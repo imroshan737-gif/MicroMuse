@@ -74,7 +74,22 @@ export default function Auth() {
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
-    await signInWithGoogle();
+    try {
+      const { error } = await signInWithGoogle();
+      if (error) {
+        toast({
+          title: 'Google Sign-In Failed',
+          description: error.message || 'Unable to sign in with Google. Please try again.',
+          variant: 'destructive',
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Google Sign-In Failed',
+        description: error?.message || 'An unexpected error occurred.',
+        variant: 'destructive',
+      });
+    }
     setLoading(false);
   };
 
