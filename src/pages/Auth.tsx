@@ -7,6 +7,28 @@ import { Sparkles, Mail, Lock, User, Chrome } from 'lucide-react';
 import GlassCard from '@/components/GlassCard';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+import { toast } from '@/hooks/use-toast';
+
+// Validation schemas
+const signInSchema = z.object({
+  email: z.string().email('Invalid email address').max(255, 'Email too long'),
+  password: z.string().min(1, 'Password is required'),
+});
+
+const signUpSchema = z.object({
+  email: z.string().email('Invalid email address').max(255, 'Email too long'),
+  password: z.string()
+    .min(8, 'Password must be at least 8 characters')
+    .max(128, 'Password too long')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number'),
+  fullName: z.string()
+    .min(1, 'Full name is required')
+    .max(100, 'Name too long')
+    .regex(/^[a-zA-Z\s'-]+$/, 'Name can only contain letters, spaces, hyphens, and apostrophes'),
+});
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -21,15 +43,29 @@ export default function Auth() {
     e.preventDefault();
     setLoading(true);
 
-    if (isLogin) {
-      const { error } = await signIn(email, password);
-      if (!error) {
-        navigate('/onboarding');
+    try {
+      if (isLogin) {
+        // Validate sign-in input
+        const validated = signInSchema.parse({ email, password });
+        const { error } = await signIn(validated.email, validated.password);
+        if (!error) {
+          navigate('/onboarding');
+        }
+      } else {
+        // Validate sign-up input
+        const validated = signUpSchema.parse({ email, password, fullName });
+        const { error } = await signUp(validated.email, validated.password, validated.fullName);
+        if (!error) {
+          setIsLogin(true);
+        }
       }
-    } else {
-      const { error } = await signUp(email, password, fullName);
-      if (!error) {
-        setIsLogin(true);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast({
+          title: 'Validation Error',
+          description: error.errors[0].message,
+          variant: 'destructive',
+        });
       }
     }
 
