@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import ThreeScene from "@/components/ThreeScene";
 import Header from "@/components/Header";
@@ -54,78 +54,76 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <ThreeScene />
-          {user && <Header />}
-          <Routes>
-            <Route path="/" element={user ? <Navigate to="/onboarding" replace /> : <Auth />} />
-            <Route
-              path="/onboarding"
-              element={
-                <ProtectedRoute>
-                  <UpdatedOnboarding />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/home"
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/challenge"
-              element={
-                <ProtectedRoute>
-                  <Challenge />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/challenges"
-              element={
-                <ProtectedRoute>
-                  <Challenges />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/achievements"
-              element={
-                <ProtectedRoute>
-                  <Achievements />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile/edit"
-              element={
-                <ProtectedRoute>
-                  <EditProfile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/settings"
-              element={
-                <ProtectedRoute>
-                  <Settings />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <ThreeScene />
+        {user && <Header />}
+        <Routes>
+          <Route path="/" element={user ? <Navigate to="/onboarding" replace /> : <Auth />} />
+          <Route
+            path="/onboarding"
+            element={
+              <ProtectedRoute>
+                <UpdatedOnboarding />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/challenge"
+            element={
+              <ProtectedRoute>
+                <Challenge />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/challenges"
+            element={
+              <ProtectedRoute>
+                <Challenges />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/achievements"
+            element={
+              <ProtectedRoute>
+                <Achievements />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/edit"
+            element={
+              <ProtectedRoute>
+                <EditProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </TooltipProvider>
     </QueryClientProvider>
   );
