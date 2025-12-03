@@ -1,9 +1,9 @@
-🎯 MicroMuse – Micro-Commitment Creative Challenge Platform
+#🎯 MicroMuse – Micro-Commitment Creative Challenge Platform
 
 MicroMuse is a web-based creative habit-building and productivity platform designed to help users develop and sustain daily creative passions through micro-commitments of just 10–15 minutes per day. It supports creative domains like music, singing, dancing, writing, art, photography, fitness, public speaking, and many more.
 The platform transforms creativity into a structured, trackable, and gamified journey using challenges, achievements, weekly goals, and personal milestones.
 
-🚀 What This Project Does
+#🚀 What This Project Does
 
 MicroMuse enables users to:
 
@@ -29,7 +29,7 @@ View only relevant content tailored to their interests
 
 The entire platform is optimized for consistency, motivation, and long-term personal growth through small daily actions.
 
-🧠 Core Concept – Micro-Commitment Model
+#🧠 Core Concept – Micro-Commitment Model
 
 Instead of overwhelming users with large goals, MicroMuse follows a Micro-Commitment Model:
 
@@ -45,8 +45,8 @@ Motivation is driven by visual progress and achievements
 
 This model is aligned with behavioral habit-forming principles.
 
-⚙️ How the System Works (Technical Flow)
-1️⃣ Authentication & User Onboarding
+#⚙️ How the System Works (Technical Flow)
+##1️⃣ Authentication & User Onboarding
 
 Users must log in or sign up before accessing the platform
 
@@ -60,7 +60,7 @@ Profile is created in the database
 
 Initial achievements, stats, and challenges are assigned with default value = 0
 
-2️⃣ Profile Management
+##2️⃣ Profile Management
 
 Users can:
 
@@ -74,7 +74,7 @@ Manage personal settings securely
 
 All changes are synced in real time with the Supabase database.
 
-3️⃣ Challenges System
+##3️⃣ Challenges System
 
 There are three types of challenges:
 
@@ -138,7 +138,7 @@ User-specific data isolation is enforced
 
 Real-time synchronization ensures no data loss
 
-🖥️ Technology Stack
+#🖥️ Technology Stack
 Frontend
 
 React + TypeScript
@@ -173,7 +173,7 @@ TypeScript Config
 
 Environment-based configuration
 
-📂 Project Structure Overview
+#📂 Project Structure Overview
 
 public/ → Static assets
 src/components/ → Reusable UI components
@@ -184,7 +184,7 @@ src/store/ → Global state management
 supabase/migrations/ → Database schema & migrations
 .env → Environment secrets
 
-🧩 Where This Platform Works
+#🧩 Where This Platform Works
 
 Web Browsers (Chrome, Edge, Firefox, Brave)
 
@@ -194,7 +194,7 @@ Cloud-based deployment
 
 Works on any OS with browser support
 
-🎯 Use Cases
+#🎯 Use Cases
 
 Students building creative habits
 
@@ -208,11 +208,11 @@ Fitness beginners staying consistent 🏋️
 
 Public speakers practicing daily 🎤
 
-👥 SPOC (Single Point of Contact)
+#👥 SPOC (Single Point of Contact)
 
 For this project, the SPOC is the designated authority responsible for all technical coordination, development decisions, and official communication related to MicroMuse. All queries, approvals, integrations, and troubleshooting are routed through the SPOC to ensure structured workflow and clear accountability.
 
-✅ Key Features Summary
+#✅ Key Features Summary
 
 Secure Authentication 🔐
 
@@ -232,10 +232,10 @@ Responsive Modern UI 📱
 
 Scalable Backend Architecture 🌐
 
-📜 License
+#📜 License
 
 This project is developed for educational, innovation, and hackathon purposes. Licensing can be added as per deployment needs.
 
-💡 Vision
+#💡 Vision
 
 MicroMuse aims to become a global digital companion for creative discipline, transforming small daily actions into life-changing creative mastery through structured micro-progress.
