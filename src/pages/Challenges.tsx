@@ -159,16 +159,14 @@ export default function Challenges() {
     duration: 10,
   });
 
-  // Combine database challenges with defaults (filtering out completed)
-  const filteredDailyChallenges = [
-    ...dbDailyChallenges,
-    ...defaultDailyChallenges.filter(c => !completedChallengeIds.includes(c.id))
-  ];
+  // Use database challenges primarily, fallback to defaults only when database is empty
+  const filteredDailyChallenges = dbDailyChallenges.length > 0 
+    ? dbDailyChallenges 
+    : defaultDailyChallenges.filter(c => !completedChallengeIds.includes(c.id));
 
-  const filteredWeeklyChallenges = [
-    ...dbWeeklyChallenges,
-    ...defaultWeeklyChallenges.filter(c => !completedChallengeIds.includes(c.id))
-  ];
+  const filteredWeeklyChallenges = dbWeeklyChallenges.length > 0 
+    ? dbWeeklyChallenges 
+    : defaultWeeklyChallenges.filter(c => !completedChallengeIds.includes(c.id));
 
   const handleStartChallenge = (challenge: any) => {
     const transformedChallenge = {
