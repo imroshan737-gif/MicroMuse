@@ -1,21 +1,22 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import GlassCard from '@/components/GlassCard';
-import { Clock, Trophy, Target, Play, Plus, Calendar, Music, Palette, PenTool, Zap } from 'lucide-react';
+import { Clock, Trophy, Target, Play, Plus, Calendar, Music, Palette, PenTool, Zap, CheckCircle } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useUserHobbies } from '@/hooks/useUserHobbies';
-import { useChallengeCompletion } from '@/hooks/useChallengeCompletion';
+import { useChallenges } from '@/hooks/useChallenges';
+import { toast } from '@/hooks/use-toast';
 
-const dailyChallenges = [
+// Fallback challenges when database is empty or for additional variety
+const defaultDailyChallenges = [
   // Music challenges
   { id: 'd1', title: 'Morning Melody Maker', description: 'Compose a cheerful 30-second tune to kickstart your day', category: 'music' as const, duration: 10, difficulty: 'beginner' as const, points: 50, icon: Music },
   { id: 'd2', title: 'Harmony Builder', description: 'Create a 4-chord progression and explore variations', category: 'music' as const, duration: 15, difficulty: 'moderate' as const, points: 75, icon: Music },
@@ -67,62 +68,90 @@ const dailyChallenges = [
   { id: 'd30', title: 'Brand Identity', description: 'Design a full brand identity system with guidelines', category: 'design' as const, duration: 30, difficulty: 'expert' as const, points: 135, icon: Palette },
 ];
 
-const weeklyChallenges = [
+const defaultWeeklyChallenges = [
   // Music
-  { id: 'w1', title: 'Symphony Builder', description: 'Create a full 2-minute composition across 7 days', category: 'music' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 500, icon: Music },
-  { id: 'w2', title: 'Album Project', description: 'Produce 5 different tracks exploring various genres', category: 'music' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 400, icon: Music },
+  { id: 'w1', title: 'Symphony Builder', description: 'Create a full 2-minute composition across 7 days', category: 'music' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 500, icon: Music, duration: 30 },
+  { id: 'w2', title: 'Album Project', description: 'Produce 5 different tracks exploring various genres', category: 'music' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 400, icon: Music, duration: 25 },
   
   // Art
-  { id: 'w3', title: 'Masterpiece Journey', description: 'Complete a detailed artwork through daily progress', category: 'art' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 600, icon: Palette },
-  { id: 'w4', title: 'Style Evolution', description: 'Create one piece each day in a different art style', category: 'art' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 450, icon: Palette },
+  { id: 'w3', title: 'Masterpiece Journey', description: 'Complete a detailed artwork through daily progress', category: 'art' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 600, icon: Palette, duration: 30 },
+  { id: 'w4', title: 'Style Evolution', description: 'Create one piece each day in a different art style', category: 'art' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 450, icon: Palette, duration: 20 },
   
   // Writing
-  { id: 'w5', title: 'Short Story Saga', description: 'Write a 1000-word story, 150 words per day', category: 'writing' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 450, icon: PenTool },
-  { id: 'w6', title: 'Novel Chapter', description: 'Complete a full chapter of a novel across the week', category: 'writing' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 550, icon: PenTool },
+  { id: 'w5', title: 'Short Story Saga', description: 'Write a 1000-word story, 150 words per day', category: 'writing' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 450, icon: PenTool, duration: 20 },
+  { id: 'w6', title: 'Novel Chapter', description: 'Complete a full chapter of a novel across the week', category: 'writing' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 550, icon: PenTool, duration: 30 },
   
   // Dance
-  { id: 'w7', title: 'Choreography Collection', description: 'Create a complete dance routine by adding daily', category: 'dance' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 420, icon: Zap },
-  { id: 'w8', title: 'Performance Ready', description: 'Master a complex routine for stage performance', category: 'dance' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 520, icon: Zap },
+  { id: 'w7', title: 'Choreography Collection', description: 'Create a complete dance routine by adding daily', category: 'dance' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 420, icon: Zap, duration: 20 },
+  { id: 'w8', title: 'Performance Ready', description: 'Master a complex routine for stage performance', category: 'dance' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 520, icon: Zap, duration: 30 },
   
   // Coding
-  { id: 'w9', title: 'Full Stack App', description: 'Build a complete web application from scratch', category: 'coding' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 650, icon: Zap },
-  { id: 'w10', title: 'Algorithm Marathon', description: 'Solve different algorithm challenges each day', category: 'coding' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 480, icon: Zap },
+  { id: 'w9', title: 'Full Stack App', description: 'Build a complete web application from scratch', category: 'coding' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 650, icon: Zap, duration: 45 },
+  { id: 'w10', title: 'Algorithm Marathon', description: 'Solve different algorithm challenges each day', category: 'coding' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 480, icon: Zap, duration: 30 },
   
   // Photography
-  { id: 'w11', title: 'Photo Series', description: 'Create a cohesive series telling a visual story', category: 'photography' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 430, icon: Palette },
-  { id: 'w12', title: 'Master Techniques', description: 'Practice a different advanced technique each day', category: 'photography' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 530, icon: Palette },
+  { id: 'w11', title: 'Photo Series', description: 'Create a cohesive series telling a visual story', category: 'photography' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 430, icon: Palette, duration: 25 },
+  { id: 'w12', title: 'Master Techniques', description: 'Practice a different advanced technique each day', category: 'photography' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 530, icon: Palette, duration: 30 },
   
   // Fitness
-  { id: 'w13', title: '7-Day Transformation', description: 'Complete progressive workouts building strength', category: 'fitness' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 410, icon: Zap },
-  { id: 'w14', title: 'Athletic Challenge', description: 'Train like an athlete with intense daily sessions', category: 'fitness' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 510, icon: Zap },
+  { id: 'w13', title: '7-Day Transformation', description: 'Complete progressive workouts building strength', category: 'fitness' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 410, icon: Zap, duration: 30 },
+  { id: 'w14', title: 'Athletic Challenge', description: 'Train like an athlete with intense daily sessions', category: 'fitness' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 510, icon: Zap, duration: 45 },
   
   // Cooking
-  { id: 'w15', title: 'Culinary World Tour', description: 'Cook dishes from 7 different countries', category: 'cooking' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 470, icon: Palette },
-  { id: 'w16', title: 'Master Chef Journey', description: 'Perfect advanced cooking techniques daily', category: 'cooking' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 580, icon: Palette },
+  { id: 'w15', title: 'Culinary World Tour', description: 'Cook dishes from 7 different countries', category: 'cooking' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 470, icon: Palette, duration: 40 },
+  { id: 'w16', title: 'Master Chef Journey', description: 'Perfect advanced cooking techniques daily', category: 'cooking' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 580, icon: Palette, duration: 50 },
   
   // Gaming
-  { id: 'w17', title: 'Skill Mastery', description: 'Improve rank through focused practice sessions', category: 'gaming' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 440, icon: Zap },
-  { id: 'w18', title: 'Pro Tournament Prep', description: 'Train for competitive esports readiness', category: 'gaming' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 540, icon: Zap },
+  { id: 'w17', title: 'Skill Mastery', description: 'Improve rank through focused practice sessions', category: 'gaming' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 440, icon: Zap, duration: 30 },
+  { id: 'w18', title: 'Pro Tournament Prep', description: 'Train for competitive esports readiness', category: 'gaming' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 540, icon: Zap, duration: 45 },
   
   // Design
-  { id: 'w19', title: 'Design System', description: 'Create a complete design system from scratch', category: 'design' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 620, icon: Palette },
-  { id: 'w20', title: 'Portfolio Expansion', description: 'Add one polished project to portfolio daily', category: 'design' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 460, icon: Palette },
+  { id: 'w19', title: 'Design System', description: 'Create a complete design system from scratch', category: 'design' as const, totalDays: 7, currentDay: 0, difficulty: 'expert' as const, points: 620, icon: Palette, duration: 40 },
+  { id: 'w20', title: 'Portfolio Expansion', description: 'Add one polished project to portfolio daily', category: 'design' as const, totalDays: 7, currentDay: 0, difficulty: 'moderate' as const, points: 460, icon: Palette, duration: 35 },
 ];
 
-const categoryColors = {
+const categoryColors: Record<string, string> = {
   music: 'bg-primary/10 text-primary border-primary/20',
   art: 'bg-secondary/10 text-secondary border-secondary/20',
   writing: 'bg-accent/10 text-accent border-accent/20',
   dance: 'bg-primary/10 text-primary border-primary/20',
+  coding: 'bg-secondary/10 text-secondary border-secondary/20',
+  photography: 'bg-accent/10 text-accent border-accent/20',
+  fitness: 'bg-primary/10 text-primary border-primary/20',
+  cooking: 'bg-secondary/10 text-secondary border-secondary/20',
+  gaming: 'bg-accent/10 text-accent border-accent/20',
+  design: 'bg-primary/10 text-primary border-primary/20',
+};
+
+const getCategoryIcon = (category: string) => {
+  switch (category) {
+    case 'music': return Music;
+    case 'art': return Palette;
+    case 'writing': return PenTool;
+    case 'dance': return Zap;
+    case 'coding': return Zap;
+    case 'photography': return Palette;
+    case 'fitness': return Zap;
+    case 'cooking': return Palette;
+    case 'gaming': return Zap;
+    case 'design': return Palette;
+    default: return Target;
+  }
 };
 
 export default function Challenges() {
   const navigate = useNavigate();
   const startChallenge = useStore((state) => state.startChallenge);
-  const { hobbies, loading: hobbiesLoading } = useUserHobbies();
-  const { getCompletedChallenges } = useChallengeCompletion();
-  const [personalChallenges, setPersonalChallenges] = useState<any[]>([]);
-  const [completedChallengeIds, setCompletedChallengeIds] = useState<string[]>([]);
+  const { 
+    dailyChallenges: dbDailyChallenges, 
+    weeklyChallenges: dbWeeklyChallenges, 
+    personalChallenges,
+    completedChallengeIds,
+    loading,
+    createPersonalChallenge 
+  } = useChallenges();
+  
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [newChallenge, setNewChallenge] = useState({
     title: '',
     description: '',
@@ -130,45 +159,57 @@ export default function Challenges() {
     duration: 10,
   });
 
-  // Load completed challenges
-  useEffect(() => {
-    async function loadCompletedChallenges() {
-      const completed = await getCompletedChallenges();
-      setCompletedChallengeIds(completed);
-    }
-    loadCompletedChallenges();
-  }, []);
+  // Combine database challenges with defaults (filtering out completed)
+  const filteredDailyChallenges = [
+    ...dbDailyChallenges,
+    ...defaultDailyChallenges.filter(c => !completedChallengeIds.includes(c.id))
+  ];
 
-  // Filter challenges based on user's hobbies and completion status
-  const userHobbyCategories = useMemo(() => {
-    return new Set(hobbies.map(h => h.category.toLowerCase()));
-  }, [hobbies]);
-
-  const filteredDailyChallenges = useMemo(() => {
-    let filtered = userHobbyCategories.size === 0 ? dailyChallenges : dailyChallenges.filter(c => userHobbyCategories.has(c.category));
-    return filtered.filter(c => !completedChallengeIds.includes(c.id));
-  }, [userHobbyCategories, completedChallengeIds]);
-
-  const filteredWeeklyChallenges = useMemo(() => {
-    let filtered = userHobbyCategories.size === 0 ? weeklyChallenges : weeklyChallenges.filter(c => userHobbyCategories.has(c.category));
-    return filtered.filter(c => !completedChallengeIds.includes(c.id));
-  }, [userHobbyCategories, completedChallengeIds]);
+  const filteredWeeklyChallenges = [
+    ...dbWeeklyChallenges,
+    ...defaultWeeklyChallenges.filter(c => !completedChallengeIds.includes(c.id))
+  ];
 
   const handleStartChallenge = (challenge: any) => {
-    startChallenge(challenge);
+    const transformedChallenge = {
+      id: challenge.id,
+      title: challenge.title,
+      description: challenge.description,
+      category: challenge.category,
+      duration: challenge.duration || challenge.totalDays || 10,
+      difficulty: challenge.difficulty,
+      points: challenge.points,
+      isPersonal: challenge.type === 'personal' || challenge.isPersonal,
+    };
+    startChallenge(transformedChallenge);
     navigate('/challenge');
   };
 
-  const handleCreatePersonalChallenge = () => {
-    const challenge = {
-      id: `p${Date.now()}`,
-      ...newChallenge,
-      difficulty: 'beginner' as const,
-      points: newChallenge.duration * 5,
-      isPersonal: true,
-    };
-    setPersonalChallenges([...personalChallenges, challenge]);
-    setNewChallenge({ title: '', description: '', category: 'music', duration: 10 });
+  const handleCreatePersonalChallenge = async () => {
+    if (!newChallenge.title || !newChallenge.description) {
+      toast({
+        title: 'Missing Information',
+        description: 'Please fill in all fields',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const result = await createPersonalChallenge(newChallenge);
+    if (result) {
+      toast({
+        title: 'Challenge Created!',
+        description: 'Your personal challenge is ready to start',
+      });
+      setDialogOpen(false);
+      setNewChallenge({ title: '', description: '', category: 'music', duration: 10 });
+    } else {
+      toast({
+        title: 'Error',
+        description: 'Failed to create challenge. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (

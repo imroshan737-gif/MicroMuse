@@ -22,6 +22,7 @@ export default function Challenge() {
   const [isActive, setIsActive] = useState(false);
   const [phase, setPhase] = useState<'warmup' | 'main' | 'cooldown'>('warmup');
   const [showFeedback, setShowFeedback] = useState(false);
+  const [earnedPoints, setEarnedPoints] = useState(0);
   
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -121,9 +122,34 @@ export default function Challenge() {
       stopAudioMonitoring();
     }
     
+    // Calculate points based on time spent
+    const totalTime = currentChallenge ? currentChallenge.duration * 60 : 600;
+    const timeSpent = totalTime - timeLeft;
+    const completionPercentage = (timeSpent / totalTime) * 100;
+    
+    // Award points based on completion percentage
+    let earnedPoints = 0;
+    if (currentChallenge) {
+      const basePoints = currentChallenge.points || 50;
+      if (completionPercentage >= 100) {
+        earnedPoints = basePoints; // Full points for completing
+      } else if (completionPercentage >= 75) {
+        earnedPoints = Math.round(basePoints * 0.8);
+      } else if (completionPercentage >= 50) {
+        earnedPoints = Math.round(basePoints * 0.6);
+      } else if (completionPercentage >= 25) {
+        earnedPoints = Math.round(basePoints * 0.4);
+      } else {
+        earnedPoints = Math.round(basePoints * 0.2);
+      }
+    }
+    
+    setEarnedPoints(earnedPoints);
+    
     // Mark challenge as completed
     if (currentChallenge) {
-      await completeChallenge(currentChallenge.id, currentChallenge.points || 0);
+      const isPersonal = 'isPersonal' in currentChallenge && Boolean((currentChallenge as any).isPersonal);
+      await completeChallenge(currentChallenge.id, earnedPoints, isPersonal);
     }
   };
   
@@ -154,11 +180,14 @@ export default function Challenge() {
                 <Sparkles className="w-10 h-10 text-primary-foreground" />
               </div>
               
-              <h1 className="text-4xl font-display font-bold mb-4">
-                Amazing Work! 🎉
+              <h1 className="text-4xl font-display font-bold mb-4 text-primary">
+                CHALLENGE COMPLETED! 🎉
               </h1>
-              <p className="text-lg text-muted-foreground mb-8">
-                Your session has been saved. Here's your AI-powered feedback:
+              <p className="text-lg text-muted-foreground mb-4">
+                Great job! You earned <span className="text-primary font-bold">{earnedPoints} points</span>!
+              </p>
+              <p className="text-sm text-muted-foreground mb-8">
+                Your progress has been saved and achievements have been updated.
               </p>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
