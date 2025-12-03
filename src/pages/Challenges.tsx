@@ -259,7 +259,7 @@ export default function Challenges() {
                   <GlassCard hover className="h-full">
                     <div className="flex items-start gap-4 mb-4">
                       <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center">
-                        <challenge.icon className="w-6 h-6 text-primary-foreground" />
+                        {(() => { const Icon = getCategoryIcon(challenge.category); return <Icon className="w-6 h-6 text-primary-foreground" />; })()}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
@@ -338,7 +338,7 @@ export default function Challenges() {
                       <div className="flex-1">
                         <div className="flex items-start gap-4 mb-4">
                           <div className="w-12 h-12 rounded-xl bg-gradient-secondary flex items-center justify-center">
-                            <challenge.icon className="w-6 h-6 text-white" />
+                            {(() => { const Icon = getCategoryIcon(challenge.category); return <Icon className="w-6 h-6 text-white" />; })()}
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
@@ -363,11 +363,11 @@ export default function Challenges() {
                           <div className="flex items-center justify-between text-sm">
                             <span className="text-muted-foreground">Progress</span>
                             <span className="font-semibold">
-                              Day {challenge.currentDay} of {challenge.totalDays}
+                              Day {('currentDay' in challenge ? challenge.currentDay : 0)} of {('totalDays' in challenge ? challenge.totalDays : 7)}
                             </span>
                           </div>
                           <Progress 
-                            value={(challenge.currentDay / challenge.totalDays) * 100} 
+                            value={(('currentDay' in challenge ? challenge.currentDay : 0) / ('totalDays' in challenge ? challenge.totalDays : 7)) * 100} 
                             className="h-2"
                           />
                         </div>
