@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Music, Palette, PenTool, Sparkles, Heart, Zap, Clock, Plus,
-  Code, Camera, Dumbbell, Coffee, Gamepad2, Scissors
+  Code, Camera, Dumbbell, Coffee, Gamepad2, Scissors, Check
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -96,19 +96,26 @@ export default function UpdatedOnboarding() {
               };
               const IconComponent = iconMap[hobby.icon] || Sparkles;
 
+              const isSelected = selectedHobbies.includes(hobby.id);
+
               return (
                 <GlassCard
                   key={hobby.id}
                   hover
                   onClick={() => toggleHobby(hobby.id)}
-                  className={`p-4 text-center cursor-pointer ${
-                    selectedHobbies.includes(hobby.id)
-                      ? 'ring-2 ring-primary shadow-glow-primary'
+                  className={`p-4 text-center cursor-pointer relative transition-all duration-200 ${
+                    isSelected
+                      ? 'ring-2 ring-primary shadow-glow-primary bg-primary/10'
                       : ''
                   }`}
                 >
+                  {isSelected && (
+                    <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                      <Check className="w-3 h-3 text-primary-foreground" />
+                    </div>
+                  )}
                   <div className="flex flex-col items-center gap-2">
-                    <IconComponent className="w-8 h-8 text-primary" />
+                    <IconComponent className={`w-8 h-8 transition-colors ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
                     <h3 className="font-display font-semibold text-sm">
                       {hobby.emoji} {hobby.name}
                     </h3>
