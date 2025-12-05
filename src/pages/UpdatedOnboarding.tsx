@@ -99,28 +99,54 @@ export default function UpdatedOnboarding() {
               const isSelected = selectedHobbies.includes(hobby.id);
 
               return (
-                <GlassCard
+                <motion.div
                   key={hobby.id}
-                  hover
-                  onClick={() => toggleHobby(hobby.id)}
-                  className={`p-4 text-center cursor-pointer relative transition-all duration-200 ${
-                    isSelected
-                      ? 'ring-2 ring-primary shadow-glow-primary bg-primary/10'
-                      : ''
-                  }`}
+                  whileTap={{ scale: 0.95 }}
+                  animate={{ scale: isSelected ? 1.02 : 1 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 >
-                  {isSelected && (
-                    <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                      <Check className="w-3 h-3 text-primary-foreground" />
+                  <GlassCard
+                    hover
+                    onClick={() => toggleHobby(hobby.id)}
+                    className={`p-4 text-center cursor-pointer relative transition-all duration-300 ${
+                      isSelected
+                        ? 'ring-2 ring-primary shadow-glow-primary bg-primary/20 border-primary/50'
+                        : 'hover:bg-muted/50'
+                    }`}
+                  >
+                    {/* Checkmark indicator */}
+                    <AnimatePresence>
+                      {isSelected && (
+                        <motion.div
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                          className="absolute top-2 right-2 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-lg"
+                        >
+                          <Check className="w-4 h-4 text-primary-foreground" strokeWidth={3} />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    
+                    <div className="flex flex-col items-center gap-2">
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                        isSelected 
+                          ? 'bg-primary/20 shadow-md' 
+                          : 'bg-muted/30'
+                      }`}>
+                        <IconComponent className={`w-7 h-7 transition-colors duration-300 ${
+                          isSelected ? 'text-primary' : 'text-muted-foreground'
+                        }`} />
+                      </div>
+                      <h3 className={`font-display font-semibold text-sm transition-colors duration-300 ${
+                        isSelected ? 'text-primary' : 'text-foreground'
+                      }`}>
+                        {hobby.emoji} {hobby.name}
+                      </h3>
                     </div>
-                  )}
-                  <div className="flex flex-col items-center gap-2">
-                    <IconComponent className={`w-8 h-8 transition-colors ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
-                    <h3 className="font-display font-semibold text-sm">
-                      {hobby.emoji} {hobby.name}
-                    </h3>
-                  </div>
-                </GlassCard>
+                  </GlassCard>
+                </motion.div>
               );
             })}
           </div>

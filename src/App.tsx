@@ -18,6 +18,7 @@ import Achievements from "./pages/Achievements";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import Settings from "./pages/Settings";
+import YourWork from "./pages/YourWork";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -119,6 +120,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Settings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/your-work"
+            element={
+              <ProtectedRoute>
+                <YourWork />
               </ProtectedRoute>
             }
           />

@@ -174,7 +174,7 @@ export default function Home() {
                 Today's Challenges
               </h2>
               <p className="text-muted-foreground">
-                Handpicked for your creative journey ({dailyChallenges.length} available)
+                Handpicked for your creative journey • <span className="text-primary font-medium">{dailyChallenges.length} {dailyChallenges.length === 1 ? 'challenge' : 'challenges'} left</span>
               </p>
             </div>
             {dailyChallenges.length > 4 && (
@@ -190,7 +190,7 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    View All
+                    View All ({dailyChallenges.length - 4} more)
                     <ChevronDown className="w-4 h-4 ml-2" />
                   </>
                 )}

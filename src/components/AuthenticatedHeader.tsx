@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from './NavLink';
 import { Button } from './ui/button';
-import { Sparkles, LogOut, User, ChevronDown } from 'lucide-react';
+import { Sparkles, LogOut, User, ChevronDown, FolderOpen } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -63,6 +63,12 @@ export default function AuthenticatedHeader() {
             activeClassName="text-primary"
           >
             Achievements
+          </NavLink>
+          <NavLink
+            to="/your-work"
+            activeClassName="text-primary"
+          >
+            Your Work
           </NavLink>
         </div>
 
