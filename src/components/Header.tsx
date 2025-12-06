@@ -73,6 +73,14 @@ export default function Header() {
           >
             Achievements
           </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/your-work')}
+            className={location.pathname === '/your-work' ? 'bg-primary/10 text-primary' : ''}
+          >
+            Your Work
+          </Button>
         </div>
 
         <DropdownMenu>
