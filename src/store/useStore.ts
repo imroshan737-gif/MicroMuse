@@ -71,8 +71,8 @@ export const useStore = create<AppState>((set) => ({
   audioLevel: 0,
   settings: {
     enableThreeD: true,
-    threeDIntensity: 0.7,
-    theme: 'studio',
+    threeDIntensity: 1.0,
+    theme: 'galaxy',
     energySaver: false,
     reducedMotion: false,
   },

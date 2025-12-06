@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import GlassCard from '@/components/GlassCard';
@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { useEffect } from 'react';
 import { useChallenges, Challenge } from '@/hooks/useChallenges';
 
 const categoryColors: Record<string, string> = {
@@ -40,7 +39,7 @@ export default function Home() {
   const { user: authUser } = useAuth();
   const startChallenge = useStore((state) => state.startChallenge);
   const navigate = useNavigate();
-  const { dailyChallenges, loading } = useChallenges();
+  const { dailyChallenges, loading, refreshChallenges } = useChallenges();
   const [showAllChallenges, setShowAllChallenges] = useState(false);
   const [profileData, setProfileData] = useState({
     currentStreak: 0,
@@ -52,30 +51,31 @@ export default function Home() {
     return motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
   }, []);
 
-  useEffect(() => {
-    async function fetchProfileData() {
-      if (!authUser) return;
+  const fetchProfileData = useCallback(async () => {
+    if (!authUser) return;
 
-      const { data } = await supabase
-        .from('profiles')
-        .select('current_streak, total_sessions')
-        .eq('id', authUser.id)
-        .single();
+    const { data } = await supabase
+      .from('profiles')
+      .select('current_streak, total_sessions')
+      .eq('id', authUser.id)
+      .single();
 
-      const { data: achievements } = await supabase
-        .from('user_achievements')
-        .select('id')
-        .eq('user_id', authUser.id);
+    const { data: achievements } = await supabase
+      .from('user_achievements')
+      .select('id')
+      .eq('user_id', authUser.id);
 
-      setProfileData({
-        currentStreak: data?.current_streak || 0,
-        totalSessions: data?.total_sessions || 0,
-        badgesCount: achievements?.length || 0,
-      });
-    }
-
-    fetchProfileData();
+    setProfileData({
+      currentStreak: data?.current_streak || 0,
+      totalSessions: data?.total_sessions || 0,
+      badgesCount: achievements?.length || 0,
+    });
   }, [authUser]);
+
+  useEffect(() => {
+    fetchProfileData();
+    refreshChallenges();
+  }, [authUser, fetchProfileData]);
 
   // Show first 4 challenges by default, 14 when expanded
   const visibleChallenges = useMemo(() => {

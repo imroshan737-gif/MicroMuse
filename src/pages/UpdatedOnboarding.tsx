@@ -88,7 +88,7 @@ export default function UpdatedOnboarding() {
       subtitle: "Select all that interest you",
       content: (
         <div className="space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 max-w-5xl mx-auto px-2">
             {hobbies.map((hobby) => {
               const iconMap: any = {
                 Music, Palette, PenTool, Code, Camera,
@@ -98,13 +98,15 @@ export default function UpdatedOnboarding() {
               const isSelected = selectedHobbies.includes(hobby.id);
 
               return (
-                <div
+                <motion.div
                   key={hobby.id}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => toggleHobby(hobby.id)}
-                  className={`relative p-4 rounded-xl border cursor-pointer transition-all duration-200 h-[120px] flex flex-col items-center justify-center gap-2 ${
+                  className={`relative glass rounded-xl border cursor-pointer transition-all duration-200 aspect-square flex flex-col items-center justify-center gap-2 p-3 ${
                     isSelected
-                      ? 'bg-primary/15 border-primary ring-2 ring-primary shadow-lg'
-                      : 'bg-card/50 border-border/50 hover:bg-muted/50 hover:border-border'
+                      ? 'bg-primary/15 border-primary ring-2 ring-primary shadow-lg shadow-primary/20'
+                      : 'border-border/50 hover:bg-muted/30 hover:border-border'
                   }`}
                 >
                   {/* Checkmark indicator */}
@@ -115,32 +117,39 @@ export default function UpdatedOnboarding() {
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                        className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center"
+                        className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center shadow-md"
                       >
                         <Check className="w-3 h-3 text-primary-foreground" strokeWidth={3} />
                       </motion.div>
                     )}
                   </AnimatePresence>
                   
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 ${
-                    isSelected ? 'bg-primary/20' : 'bg-muted/50'
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                    isSelected ? 'bg-primary/20 shadow-inner' : 'bg-muted/50'
                   }`}>
-                    <IconComponent className={`w-5 h-5 transition-colors duration-200 ${
+                    <IconComponent className={`w-6 h-6 transition-colors duration-200 ${
                       isSelected ? 'text-primary' : 'text-muted-foreground'
                     }`} />
                   </div>
-                  <span className={`font-medium text-sm text-center leading-tight transition-colors duration-200 ${
+                  <span className={`font-medium text-xs sm:text-sm text-center leading-tight transition-colors duration-200 line-clamp-2 ${
                     isSelected ? 'text-primary' : 'text-foreground'
                   }`}>
                     {hobby.emoji} {hobby.name}
                   </span>
-                </div>
+                </motion.div>
               );
             })}
           </div>
 
           {selectedHobbies.length > 0 && (
-            <div className="flex flex-wrap gap-2 justify-center max-w-3xl mx-auto">
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-wrap gap-2 justify-center max-w-3xl mx-auto"
+            >
+              <span className="text-sm text-muted-foreground mr-2 self-center">
+                Selected ({selectedHobbies.length}):
+              </span>
               {selectedHobbies.map((hobbyId) => {
                 const hobby = hobbies.find(h => h.id === hobbyId);
                 return (
@@ -149,7 +158,7 @@ export default function UpdatedOnboarding() {
                   </Badge>
                 );
               })}
-            </div>
+            </motion.div>
           )}
         </div>
       ),
