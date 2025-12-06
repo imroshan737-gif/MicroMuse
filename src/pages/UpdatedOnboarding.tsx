@@ -153,7 +153,7 @@ export default function UpdatedOnboarding() {
               {selectedHobbies.map((hobbyId) => {
                 const hobby = hobbies.find(h => h.id === hobbyId);
                 return (
-                  <Badge key={hobbyId} variant="secondary" className="glass">
+                  <Badge key={hobbyId} variant="secondary" className="bg-secondary text-secondary-foreground">
                     {hobby?.emoji} {hobby?.name}
                   </Badge>
                 );
@@ -168,19 +168,39 @@ export default function UpdatedOnboarding() {
       subtitle: "We'll match your session to your mood",
       content: (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-          {moods.map((mood) => (
-            <GlassCard
-              key={mood.id}
-              hover
-              onClick={() => setSelectedMood(mood.id)}
-              className={`p-6 text-center cursor-pointer ${
-                selectedMood === mood.id ? 'ring-2 ring-primary shadow-glow-primary' : ''
-              }`}
-            >
-              <mood.icon className="w-10 h-10 mx-auto mb-3 text-primary" />
-              <h3 className="font-semibold">{mood.label}</h3>
-            </GlassCard>
-          ))}
+          {moods.map((mood) => {
+            const isSelected = selectedMood === mood.id;
+            return (
+              <motion.div
+                key={mood.id}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setSelectedMood(mood.id)}
+                className={`relative glass rounded-xl p-6 text-center cursor-pointer transition-all duration-200 ${
+                  isSelected
+                    ? 'ring-2 ring-primary shadow-lg shadow-primary/20 bg-primary/10'
+                    : 'border border-border/50 hover:bg-muted/30'
+                }`}
+              >
+                {/* Animated Checkmark */}
+                <AnimatePresence>
+                  {isSelected && (
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                      className="absolute top-3 right-3 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md"
+                    >
+                      <Check className="w-4 h-4 text-primary-foreground" strokeWidth={3} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <mood.icon className={`w-10 h-10 mx-auto mb-3 transition-colors ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
+                <h3 className={`font-semibold transition-colors ${isSelected ? 'text-primary' : 'text-foreground'}`}>{mood.label}</h3>
+              </motion.div>
+            );
+          })}
         </div>
       ),
     },
@@ -189,28 +209,43 @@ export default function UpdatedOnboarding() {
       subtitle: "Start small, build your creative muscle",
       content: (
         <div className="grid grid-cols-2 gap-4 max-w-xl mx-auto">
-          <GlassCard
-            hover
-            onClick={() => setSessionLength(10)}
-            className={`p-8 text-center cursor-pointer ${
-              sessionLength === 10 ? 'ring-2 ring-primary shadow-glow-primary' : ''
-            }`}
-          >
-            <Clock className="w-12 h-12 mx-auto mb-4 text-primary" />
-            <h3 className="font-display font-bold text-3xl mb-2">10 min</h3>
-            <p className="text-sm text-muted-foreground">Quick & Focused</p>
-          </GlassCard>
-          <GlassCard
-            hover
-            onClick={() => setSessionLength(15)}
-            className={`p-8 text-center cursor-pointer ${
-              sessionLength === 15 ? 'ring-2 ring-primary shadow-glow-primary' : ''
-            }`}
-          >
-            <Clock className="w-12 h-12 mx-auto mb-4 text-secondary" />
-            <h3 className="font-display font-bold text-3xl mb-2">15 min</h3>
-            <p className="text-sm text-muted-foreground">Deep Dive</p>
-          </GlassCard>
+          {[
+            { value: 10 as const, label: '10 min', desc: 'Quick & Focused' },
+            { value: 15 as const, label: '15 min', desc: 'Deep Dive' }
+          ].map((option) => {
+            const isSelected = sessionLength === option.value;
+            return (
+              <motion.div
+                key={option.value}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setSessionLength(option.value)}
+                className={`relative glass rounded-xl p-8 text-center cursor-pointer transition-all duration-200 ${
+                  isSelected
+                    ? 'ring-2 ring-primary shadow-lg shadow-primary/20 bg-primary/10'
+                    : 'border border-border/50 hover:bg-muted/30'
+                }`}
+              >
+                {/* Animated Checkmark */}
+                <AnimatePresence>
+                  {isSelected && (
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                      className="absolute top-3 right-3 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md"
+                    >
+                      <Check className="w-4 h-4 text-primary-foreground" strokeWidth={3} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <Clock className={`w-12 h-12 mx-auto mb-4 transition-colors ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
+                <h3 className={`font-display font-bold text-3xl mb-2 transition-colors ${isSelected ? 'text-primary' : 'text-foreground'}`}>{option.label}</h3>
+                <p className="text-sm text-muted-foreground">{option.desc}</p>
+              </motion.div>
+            );
+          })}
         </div>
       ),
     },
