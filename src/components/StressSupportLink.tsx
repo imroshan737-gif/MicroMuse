@@ -7,7 +7,7 @@ export default function StressSupportLink() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40"
+      className="fixed bottom-0 left-0 right-0 z-40 flex justify-center pb-4 bg-gradient-to-t from-background/80 to-transparent pt-8"
     >
       <a 
         href="https://guardian-aura-72.lovable.app" 
