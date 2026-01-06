@@ -78,7 +78,8 @@ export default function Auth() {
         const validated = signUpSchema.parse({ email, password, fullName });
         const { error } = await signUp(validated.email, validated.password, validated.fullName);
         if (!error) {
-          setIsLogin(true);
+          // After signup, redirect to onboarding
+          navigate('/onboarding');
         }
       }
     } catch (error) {

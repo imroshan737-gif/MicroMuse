@@ -65,7 +65,7 @@ const App = () => {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={user ? <Navigate to="/home" replace /> : <Landing />} />
-          <Route path="/auth" element={user ? <Navigate to="/home" replace /> : <Auth />} />
+          <Route path="/auth" element={<Auth />} />
           
           {/* Protected routes */}
           <Route
