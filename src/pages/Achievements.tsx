@@ -10,6 +10,7 @@ import {
 import { useUserStats } from '@/hooks/useUserStats';
 import { useUserAchievements } from '@/hooks/useUserAchievements';
 import { useUserHobbies } from '@/hooks/useUserHobbies';
+import StressSupportLink from '@/components/StressSupportLink';
 
 const iconMap: Record<string, any> = {
   Star, Flame, Music, Palette, Zap, Calendar, Crown, Clock, Users, Heart, Trophy
@@ -218,6 +219,9 @@ export default function Achievements() {
             ))}
           </div>
         </div>
+
+        {/* Stress Support Link at the end of page content */}
+        <StressSupportLink />
       </div>
     </div>
   );
