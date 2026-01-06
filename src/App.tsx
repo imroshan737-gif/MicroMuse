@@ -2,12 +2,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import ThreeScene from "@/components/ThreeScene";
 import Header from "@/components/Header";
 import AIChatbot from "@/components/AIChatbot";
-import StressSupportLink from "@/components/StressSupportLink";
 
 // Pages
 import Auth from "./pages/Auth";
@@ -42,6 +41,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 const App = () => {
   const { user, loading } = useAuth();
+  const location = useLocation();
+  const isOnboardingRoute = location.pathname === '/onboarding';
   
   if (loading) {
     return (
@@ -53,15 +54,17 @@ const App = () => {
     );
   }
   
+  // Hide header and chatbot during onboarding
+  const showFullUI = user && !isOnboardingRoute;
+  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <ThreeScene />
-        {user && <Header />}
-        {user && <AIChatbot />}
-        {user && <StressSupportLink />}
+        {showFullUI && <Header />}
+        {showFullUI && <AIChatbot />}
         <Routes>
           {/* Public routes */}
           <Route path="/" element={user ? <Navigate to="/home" replace /> : <Landing />} />

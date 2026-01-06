@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useChallenges, Challenge } from '@/hooks/useChallenges';
+import StressSupportLink from '@/components/StressSupportLink';
 
 const categoryColors: Record<string, string> = {
   music: 'bg-primary/10 text-primary border-primary/20',
@@ -287,6 +288,9 @@ export default function Home() {
             </div>
           )}
         </div>
+
+        {/* Stress Support Link at the end of page content */}
+        <StressSupportLink />
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
+import StressSupportLink from '@/components/StressSupportLink';
 
 interface CompletedChallenge {
   id: string;
@@ -191,6 +192,9 @@ export default function Profile() {
             </GlassCard>
           )}
         </div>
+
+        {/* Stress Support Link at the end of page content */}
+        <StressSupportLink />
       </div>
     </div>
   );

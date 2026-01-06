@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useChallenges } from '@/hooks/useChallenges';
 import { toast } from '@/hooks/use-toast';
+import StressSupportLink from '@/components/StressSupportLink';
 
 // Fallback challenges when database is empty or for additional variety
 const defaultDailyChallenges = [
@@ -544,6 +545,9 @@ export default function Challenges() {
             )}
           </TabsContent>
         </Tabs>
+
+        {/* Stress Support Link at the end of page content */}
+        <StressSupportLink />
       </div>
     </div>
   );
