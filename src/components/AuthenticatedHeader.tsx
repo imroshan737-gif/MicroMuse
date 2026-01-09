@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from './NavLink';
 import { Button } from './ui/button';
-import { Sparkles, LogOut, User, ChevronDown, FolderOpen } from 'lucide-react';
+import { Sparkles, LogOut, User, ChevronDown, Music } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,12 +12,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import MusicPlayerDialog from './MusicPlayerDialog';
 
 export default function AuthenticatedHeader() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [profile, setProfile] = useState<any>(null);
+  const [showMusicPlayer, setShowMusicPlayer] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -98,6 +100,10 @@ export default function AuthenticatedHeader() {
               <Sparkles className="w-4 h-4 mr-2" />
               Settings
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setShowMusicPlayer(true)}>
+              <Music className="w-4 h-4 mr-2" />
+              Music
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={signOut}>
               <LogOut className="w-4 h-4 mr-2" />
@@ -105,6 +111,11 @@ export default function AuthenticatedHeader() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <MusicPlayerDialog 
+          open={showMusicPlayer} 
+          onOpenChange={setShowMusicPlayer} 
+        />
       </nav>
     </header>
   );

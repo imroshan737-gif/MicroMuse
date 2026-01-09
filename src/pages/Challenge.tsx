@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import GlassCard from '@/components/GlassCard';
 import { useStore } from '@/store/useStore';
+import { useMusicStore } from '@/store/useMusicStore';
 import { useNavigate } from 'react-router-dom';
 import { useChallengeCompletion } from '@/hooks/useChallengeCompletion';
 import { supabase } from '@/integrations/supabase/client';
@@ -19,6 +20,8 @@ export default function Challenge() {
   const stopRecording = useStore((state) => state.stopRecording);
   const endChallenge = useStore((state) => state.endChallenge);
   const setAudioLevel = useStore((state) => state.setAudioLevel);
+  const musicStop = useMusicStore((state) => state.stop);
+  const isMusicPlaying = useMusicStore((state) => state.isPlaying);
   const navigate = useNavigate();
   const { completeChallenge } = useChallengeCompletion();
   
@@ -106,10 +109,18 @@ export default function Challenge() {
   };
   
   const handleStart = () => {
+    // Stop background music when challenge starts
+    if (isMusicPlaying) {
+      musicStop();
+      toast({
+        title: 'Music paused',
+        description: 'Background music stopped for your challenge focus',
+      });
+    }
     setIsActive(true);
     setPhase('warmup');
   };
-  
+
   const handlePause = () => {
     setIsActive(false);
   };
