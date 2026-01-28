@@ -30,7 +30,7 @@ export function useAuth() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string) => {
+  const signUp = async (email: string, password: string, fullName: string, username?: string) => {
     try {
       const { error } = await supabase.auth.signUp({
         email,
@@ -39,6 +39,7 @@ export function useAuth() {
           emailRedirectTo: `${window.location.origin}/`,
           data: {
             full_name: fullName,
+            username: username?.toLowerCase(),
           },
         },
       });

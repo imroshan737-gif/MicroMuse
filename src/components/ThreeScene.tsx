@@ -81,8 +81,8 @@ function ParticleRing() {
   
   useFrame((state) => {
     if (ref.current) {
-      ref.current.rotation.y += 0.001;
-      ref.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.1) * 0.1;
+      ref.current.rotation.y += 0.0005;
+      ref.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.05) * 0.1;
     }
   });
   
@@ -172,14 +172,14 @@ function Scene() {
         factor={5} 
         saturation={0.5} 
         fade 
-        speed={0.3} 
+        speed={0.15} 
       />
       
       <Sparkles
         count={100}
         size={2}
         scale={30}
-        speed={0.3}
+        speed={0.15}
         opacity={0.5}
         color={colors[0]}
       />
@@ -216,7 +216,7 @@ function Scene() {
         maxPolarAngle={Math.PI / 1.4}
         minPolarAngle={Math.PI / 3.5}
         autoRotate
-        autoRotateSpeed={0.15}
+        autoRotateSpeed={0.08}
         enableDamping
         dampingFactor={0.05}
       />

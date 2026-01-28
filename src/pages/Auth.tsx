@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Sparkles, Mail, Lock, User } from 'lucide-react';
+import { Sparkles, Mail, Lock, User, AtSign } from 'lucide-react';
 import GlassCard from '@/components/GlassCard';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -18,6 +18,14 @@ const signInSchema = z.object({
 });
 
 const signUpSchema = z.object({
+  username: z.string()
+    .min(3, 'Username must be at least 3 characters')
+    .max(30, 'Username too long')
+    .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
+  fullName: z.string()
+    .min(1, 'Full name is required')
+    .max(100, 'Name too long')
+    .regex(/^[a-zA-Z\s'-]+$/, 'Name can only contain letters, spaces, hyphens, and apostrophes'),
   email: z.string().email('Invalid email address').max(255, 'Email too long'),
   password: z.string()
     .min(8, 'Password must be at least 8 characters')
@@ -25,10 +33,6 @@ const signUpSchema = z.object({
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
     .regex(/[0-9]/, 'Password must contain at least one number'),
-  fullName: z.string()
-    .min(1, 'Full name is required')
-    .max(100, 'Name too long')
-    .regex(/^[a-zA-Z\s'-]+$/, 'Name can only contain letters, spaces, hyphens, and apostrophes'),
 });
 
 export default function Auth() {
@@ -37,6 +41,7 @@ export default function Auth() {
   const [isLogin, setIsLogin] = useState(mode !== 'signup');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
@@ -75,8 +80,26 @@ export default function Auth() {
         }
       } else {
         // Validate sign-up input
-        const validated = signUpSchema.parse({ email, password, fullName });
-        const { error } = await signUp(validated.email, validated.password, validated.fullName);
+        const validated = signUpSchema.parse({ username, fullName, email, password });
+        
+        // First check if username is already taken
+        const { data: existingUser } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('username', validated.username.toLowerCase())
+          .maybeSingle();
+        
+        if (existingUser) {
+          toast({
+            title: 'Username Taken',
+            description: 'This username is already in use. Please choose another.',
+            variant: 'destructive',
+          });
+          setLoading(false);
+          return;
+        }
+        
+        const { error } = await signUp(validated.email, validated.password, validated.fullName, validated.username);
         if (!error) {
           // After signup, redirect to onboarding
           navigate('/onboarding');
@@ -132,20 +155,42 @@ export default function Auth() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="space-y-2"
+                  className="space-y-4"
                 >
-                  <Label htmlFor="fullName">Full Name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="fullName"
-                      type="text"
-                      placeholder="Enter your full name"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      className="pl-10 glass"
-                      required={!isLogin}
-                    />
+                  {/* Username field - first */}
+                  <div className="space-y-2">
+                    <Label htmlFor="username">Username</Label>
+                    <div className="relative">
+                      <AtSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="username"
+                        type="text"
+                        placeholder="Choose a unique username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+                        className="pl-10 glass"
+                        required={!isLogin}
+                        maxLength={30}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">Letters, numbers, and underscores only</p>
+                  </div>
+                  
+                  {/* Full Name field - second */}
+                  <div className="space-y-2">
+                    <Label htmlFor="fullName">Full Name</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="fullName"
+                        type="text"
+                        placeholder="Enter your full name"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        className="pl-10 glass"
+                        required={!isLogin}
+                      />
+                    </div>
                   </div>
                 </motion.div>
               )}
