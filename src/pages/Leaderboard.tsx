@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Crown, Medal, Star, Flame, Zap, TrendingUp, Sparkles } from 'lucide-react';
+import { Trophy, Crown, Medal, Star, Flame, Zap, TrendingUp, Sparkles, ChevronDown, User } from 'lucide-react';
 import GlassCard from '@/components/GlassCard';
 import StressSupportLink from '@/components/StressSupportLink';
+import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 interface LeaderboardUser {
   id: string;
@@ -17,9 +19,13 @@ interface LeaderboardUser {
 }
 
 export default function Leaderboard() {
+  const { user } = useAuth();
   const [users, setUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [animateUpdate, setAnimateUpdate] = useState<string | null>(null);
+  const [showCount, setShowCount] = useState(20);
+  const [userRank, setUserRank] = useState<number | null>(null);
+  const [currentUserData, setCurrentUserData] = useState<LeaderboardUser | null>(null);
 
   useEffect(() => {
     fetchLeaderboard();
@@ -36,7 +42,6 @@ export default function Leaderboard() {
         },
         (payload) => {
           console.log('Leaderboard update:', payload);
-          // Animate the updated user
           if (payload.new && typeof payload.new === 'object' && 'id' in payload.new) {
             setAnimateUpdate(payload.new.id as string);
             setTimeout(() => setAnimateUpdate(null), 2000);
@@ -53,19 +58,25 @@ export default function Leaderboard() {
 
   const fetchLeaderboard = async () => {
     try {
-      // Fetch top users by points
+      // Fetch all users by points for ranking
       const { data: profiles, error: profilesError } = await supabase
         .from('public_profiles')
         .select('id, full_name, username, avatar_url, total_points, current_streak')
-        .order('total_points', { ascending: false })
-        .limit(50);
+        .order('total_points', { ascending: false });
 
       if (profilesError) throw profilesError;
+
+      // Find current user's rank
+      if (user && profiles) {
+        const userIndex = profiles.findIndex(p => p.id === user.id);
+        if (userIndex !== -1) {
+          setUserRank(userIndex + 1);
+        }
+      }
 
       // For each user, get their most practiced hobby
       const usersWithHobbies: LeaderboardUser[] = await Promise.all(
         (profiles || []).map(async (profile) => {
-          // Get the user's hobbies
           const { data: userHobbies } = await supabase
             .from('user_hobbies')
             .select('hobby_id')
@@ -103,6 +114,14 @@ export default function Leaderboard() {
       );
 
       setUsers(usersWithHobbies);
+      
+      // Set current user data
+      if (user) {
+        const currentUser = usersWithHobbies.find(u => u.id === user.id);
+        if (currentUser) {
+          setCurrentUserData(currentUser);
+        }
+      }
     } catch (error) {
       console.error('Error fetching leaderboard:', error);
     } finally {
@@ -130,6 +149,9 @@ export default function Leaderboard() {
     if (rank === 3) return 'bg-gradient-to-br from-amber-400 via-amber-600 to-orange-700';
     return 'bg-gradient-primary';
   };
+
+  const visibleUsers = users.slice(0, showCount);
+  const hasMore = users.length > showCount;
 
   return (
     <div className="min-h-screen pt-24 pb-12 px-4">
@@ -180,6 +202,44 @@ export default function Leaderboard() {
           </div>
         </motion.div>
 
+        {/* User's Current Rank Card */}
+        {userRank && currentUserData && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <GlassCard className="p-4 bg-gradient-to-r from-primary/20 via-purple-500/10 to-primary/20 border-primary/30">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center text-lg font-bold text-primary-foreground overflow-hidden">
+                    {currentUserData.avatar_url ? (
+                      <img 
+                        src={currentUserData.avatar_url} 
+                        alt="Your avatar" 
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <User className="w-6 h-6" />
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Your Rank</p>
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl font-bold text-primary">#{userRank}</span>
+                      <span className="text-foreground font-medium">of {users.length}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm text-muted-foreground">Your Points</p>
+                  <p className="text-2xl font-bold text-foreground">{currentUserData.total_points.toLocaleString()}</p>
+                </div>
+              </div>
+            </GlassCard>
+          </motion.div>
+        )}
+
         {/* Leaderboard */}
         <GlassCard className="p-6 overflow-hidden">
           {loading ? (
@@ -197,32 +257,31 @@ export default function Leaderboard() {
           ) : (
             <div className="space-y-3">
               <AnimatePresence mode="popLayout">
-                {users.map((user, index) => {
+                {visibleUsers.map((leaderboardUser, index) => {
                   const rank = index + 1;
-                  const isUpdating = animateUpdate === user.id;
+                  const isUpdating = animateUpdate === leaderboardUser.id;
+                  const isCurrentUser = user?.id === leaderboardUser.id;
                   
                   return (
                     <motion.div
-                      key={user.id}
+                      key={leaderboardUser.id}
                       layout
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ 
                         opacity: 1, 
                         x: 0,
                         scale: isUpdating ? [1, 1.02, 1] : 1,
-                        boxShadow: isUpdating 
-                          ? ['0 0 0 rgba(168, 85, 247, 0)', '0 0 30px rgba(168, 85, 247, 0.5)', '0 0 0 rgba(168, 85, 247, 0)']
-                          : 'none',
                       }}
                       exit={{ opacity: 0, x: 20 }}
                       transition={{ 
-                        delay: index * 0.05,
+                        delay: index * 0.03,
                         layout: { type: 'spring', stiffness: 300, damping: 30 },
                       }}
                       className={`
                         relative p-4 rounded-xl glass-strong
                         ${getRankGlow(rank)}
                         ${rank <= 3 ? 'bg-gradient-to-r from-white/10 to-transparent' : ''}
+                        ${isCurrentUser ? 'ring-2 ring-primary/50 bg-primary/10' : ''}
                         transition-all duration-300 hover:scale-[1.02] hover:bg-white/10
                       `}
                     >
@@ -248,14 +307,14 @@ export default function Leaderboard() {
                           w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold
                           ${getAvatarGradient(rank)} text-white shadow-lg overflow-hidden
                         `}>
-                          {user.avatar_url ? (
+                          {leaderboardUser.avatar_url ? (
                             <img 
-                              src={user.avatar_url} 
-                              alt={user.full_name || 'User'} 
+                              src={leaderboardUser.avatar_url} 
+                              alt={leaderboardUser.full_name || 'User'} 
                               className="w-full h-full object-cover"
                             />
                           ) : (
-                            user.full_name?.charAt(0) || user.username?.charAt(0) || '?'
+                            leaderboardUser.full_name?.charAt(0) || leaderboardUser.username?.charAt(0) || '?'
                           )}
                         </div>
 
@@ -263,25 +322,26 @@ export default function Leaderboard() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
                             <h3 className="font-semibold text-foreground truncate">
-                              {user.full_name || 'Anonymous'}
+                              {leaderboardUser.full_name || 'Anonymous'}
+                              {isCurrentUser && <span className="text-primary ml-1">(You)</span>}
                             </h3>
-                            {user.username && (
+                            {leaderboardUser.username && (
                               <span className="text-sm text-primary/80 truncate">
-                                @{user.username}
+                                @{leaderboardUser.username}
                               </span>
                             )}
                           </div>
                           <div className="flex items-center gap-3 mt-1 flex-wrap">
-                            {user.top_hobby && (
+                            {leaderboardUser.top_hobby && (
                               <span className="text-xs px-2 py-1 rounded-full bg-primary/20 text-primary flex items-center gap-1">
-                                {user.top_hobby_emoji && <span>{user.top_hobby_emoji}</span>}
-                                {user.top_hobby}
+                                {leaderboardUser.top_hobby_emoji && <span>{leaderboardUser.top_hobby_emoji}</span>}
+                                {leaderboardUser.top_hobby}
                               </span>
                             )}
-                            {user.current_streak > 0 && (
+                            {leaderboardUser.current_streak > 0 && (
                               <span className="text-xs text-orange-400 flex items-center gap-1">
                                 <Flame className="w-3 h-3" />
-                                {user.current_streak} day streak
+                                {leaderboardUser.current_streak} day streak
                               </span>
                             )}
                           </div>
@@ -297,7 +357,7 @@ export default function Leaderboard() {
                                 rank === 2 ? 'text-gray-300' : 
                                 rank === 3 ? 'text-amber-500' : 'text-foreground'}
                             `}>
-                              {user.total_points.toLocaleString()}
+                              {leaderboardUser.total_points.toLocaleString()}
                             </span>
                           </div>
                           <span className="text-xs text-muted-foreground">points</span>
@@ -317,6 +377,29 @@ export default function Leaderboard() {
                   );
                 })}
               </AnimatePresence>
+
+              {/* Show More Button */}
+              {hasMore && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="pt-4"
+                >
+                  <Button
+                    variant="outline"
+                    className="w-full glass hover:bg-white/10"
+                    onClick={() => setShowCount(prev => prev + 20)}
+                  >
+                    <ChevronDown className="w-4 h-4 mr-2" />
+                    Show More ({users.length - showCount} remaining)
+                  </Button>
+                </motion.div>
+              )}
+
+              {/* Total count */}
+              <div className="text-center pt-4 text-sm text-muted-foreground">
+                Showing {Math.min(showCount, users.length)} of {users.length} users
+              </div>
             </div>
           )}
         </GlassCard>
