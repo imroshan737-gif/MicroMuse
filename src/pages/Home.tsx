@@ -132,7 +132,7 @@ export default function Home() {
               <blockquote className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-foreground leading-tight">
                 "{randomQuote}"
               </blockquote>
-              <p className="mt-4 text-sm text-muted-foreground">Daily Motivation</p>
+              
             </div>
           </GlassCard>
         </motion.div>

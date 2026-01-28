@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from './NavLink';
 import { Button } from './ui/button';
-import { Sparkles, LogOut, User, ChevronDown, Music } from 'lucide-react';
+import { Sparkles, LogOut, User, ChevronDown, Music, Trophy } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -82,6 +82,15 @@ export default function Header() {
             className={location.pathname === '/your-work' ? 'bg-primary/10 text-primary' : ''}
           >
             Your Work
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/leaderboard')}
+            className={location.pathname === '/leaderboard' ? 'bg-primary/10 text-primary' : ''}
+          >
+            <Trophy className="w-4 h-4 mr-1" />
+            Leaderboard
           </Button>
         </div>
 
