@@ -8,8 +8,6 @@ import { useAuth } from '@/hooks/useAuth';
 import LeaderboardHeader from '@/components/leaderboard/LeaderboardHeader';
 import LeaderboardUserCard from '@/components/leaderboard/LeaderboardUserCard';
 import CurrentUserRankCard from '@/components/leaderboard/CurrentUserRankCard';
-import LeaderboardFooter from '@/components/leaderboard/LeaderboardFooter';
-
 interface LeaderboardUser {
   id: string;
   full_name: string | null;
@@ -286,9 +284,6 @@ export default function Leaderboard() {
             </div>
           )}
         </GlassCard>
-
-        {/* Footer */}
-        <LeaderboardFooter />
       </div>
     </div>
   );
