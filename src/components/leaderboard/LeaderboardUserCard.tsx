@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
-import { Crown, Medal, Star, Flame, TrendingUp, TrendingDown, Minus, User, Sparkles } from 'lucide-react';
+import { Crown, Medal, Star, Flame, TrendingUp, TrendingDown, Sparkles } from 'lucide-react';
 
-interface LeaderboardUser {
+export interface LeaderboardUser {
   id: string;
   full_name: string | null;
   username: string | null;
@@ -19,6 +19,7 @@ interface LeaderboardUserCardProps {
   isUpdating: boolean;
   index: number;
   rankChange?: number; // positive = moved up, negative = moved down, 0 = no change
+  onClick?: () => void;
 }
 
 export default function LeaderboardUserCard({
@@ -28,6 +29,7 @@ export default function LeaderboardUserCard({
   isUpdating,
   index,
   rankChange = 0,
+  onClick,
 }: LeaderboardUserCardProps) {
   const getRankIcon = (rank: number) => {
     if (rank === 1) return <Crown className="w-7 h-7 text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]" />;
@@ -107,6 +109,7 @@ export default function LeaderboardUserCard({
         rotateY: { duration: 0.5 }
       }}
       style={{ transformStyle: 'preserve-3d' }}
+      onClick={onClick}
       className={`
         relative p-4 rounded-2xl backdrop-blur-xl border border-white/10
         ${getRankGlow(rank)}
@@ -114,7 +117,7 @@ export default function LeaderboardUserCard({
         ${isCurrentUser ? 'ring-2 ring-primary/60 bg-primary/15' : ''}
         transition-all duration-300 hover:scale-[1.02] hover:bg-white/10
         hover:shadow-[0_10px_40px_rgba(0,0,0,0.3)] hover:border-white/20
-        transform-gpu
+        transform-gpu cursor-pointer
       `}
     >
       <RankChangeIndicator />

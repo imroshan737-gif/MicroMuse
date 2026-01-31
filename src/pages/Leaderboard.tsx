@@ -6,18 +6,9 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import LeaderboardHeader from '@/components/leaderboard/LeaderboardHeader';
-import LeaderboardUserCard from '@/components/leaderboard/LeaderboardUserCard';
+import LeaderboardUserCard, { LeaderboardUser } from '@/components/leaderboard/LeaderboardUserCard';
 import CurrentUserRankCard from '@/components/leaderboard/CurrentUserRankCard';
-interface LeaderboardUser {
-  id: string;
-  full_name: string | null;
-  username: string | null;
-  avatar_url: string | null;
-  total_points: number;
-  current_streak: number;
-  top_hobby: string | null;
-  top_hobby_emoji: string | null;
-}
+import UserProfileModal from '@/components/leaderboard/UserProfileModal';
 
 export default function Leaderboard() {
   const { user } = useAuth();
@@ -29,6 +20,9 @@ export default function Leaderboard() {
   const [currentUserData, setCurrentUserData] = useState<LeaderboardUser | null>(null);
   const [rankChanges, setRankChanges] = useState<Record<string, number>>({});
   const previousRanksRef = useRef<Record<string, number>>({});
+  const [selectedUser, setSelectedUser] = useState<LeaderboardUser | null>(null);
+  const [selectedUserRank, setSelectedUserRank] = useState<number>(0);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   useEffect(() => {
     fetchLeaderboard();
@@ -153,6 +147,12 @@ export default function Leaderboard() {
   // Check if current user is outside visible list
   const isUserOutsideVisible = userRank && userRank > showCount && currentUserData;
 
+  const handleUserClick = (leaderboardUser: LeaderboardUser, rank: number) => {
+    setSelectedUser(leaderboardUser);
+    setSelectedUserRank(rank);
+    setIsProfileModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen pt-24 pb-12 px-4">
       <div className="container mx-auto max-w-4xl">
@@ -230,6 +230,7 @@ export default function Leaderboard() {
                       isUpdating={isUpdating}
                       index={index}
                       rankChange={rankChanges[leaderboardUser.id]}
+                      onClick={() => handleUserClick(leaderboardUser, rank)}
                     />
                   );
                 })}
@@ -250,6 +251,7 @@ export default function Leaderboard() {
                     isUpdating={animateUpdate === currentUserData.id}
                     index={0}
                     rankChange={rankChanges[currentUserData.id]}
+                    onClick={() => handleUserClick(currentUserData, userRank)}
                   />
                 </>
               )}
@@ -284,6 +286,14 @@ export default function Leaderboard() {
             </div>
           )}
         </GlassCard>
+
+        {/* User Profile Modal */}
+        <UserProfileModal
+          user={selectedUser}
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+          rank={selectedUserRank}
+        />
       </div>
     </div>
   );
