@@ -10,6 +10,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useChallenges, Challenge } from '@/hooks/useChallenges';
 import StressSupportLink from '@/components/StressSupportLink';
+import TypewriterQuote from '@/components/home/TypewriterQuote';
 
 const categoryColors: Record<string, string> = {
   music: 'bg-primary/10 text-primary border-primary/20',
@@ -25,16 +26,7 @@ const categoryColors: Record<string, string> = {
   studies: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
 };
 
-const motivationalQuotes = [
-  "Small daily improvements lead to stunning results.",
-  "Your hobby today is your legacy tomorrow.",
-  "Consistency beats intensity. Show up every day.",
-  "Every expert was once a beginner.",
-  "The secret to getting ahead is getting started.",
-  "Passion + Persistence = Progress.",
-  "Your creative spark can light up the world.",
-  "One challenge at a time, one day at a time.",
-];
+// Moved to TypewriterQuote component
 
 export default function Home() {
   const user = useStore((state) => state.user);
@@ -49,9 +41,6 @@ export default function Home() {
     badgesCount: 0,
   });
 
-  const randomQuote = useMemo(() => {
-    return motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-  }, []);
 
   const fetchProfileData = useCallback(async () => {
     if (!authUser) return;
@@ -79,13 +68,16 @@ export default function Home() {
     refreshChallenges();
   }, [authUser, fetchProfileData]);
 
-  // Show first 4 challenges by default, 14 when expanded
+  // Show first 4 challenges by default, show all when expanded
   const visibleChallenges = useMemo(() => {
     if (showAllChallenges) {
-      return dailyChallenges.slice(0, 14);
+      return dailyChallenges; // Show all available challenges
     }
     return dailyChallenges.slice(0, 4);
   }, [dailyChallenges, showAllChallenges]);
+
+  // Calculate remaining challenges after the first 4
+  const remainingChallengesCount = Math.max(0, dailyChallenges.length - 4);
 
   const handleStartChallenge = (challenge: Challenge) => {
     startChallenge({
@@ -119,23 +111,8 @@ export default function Home() {
           </p>
         </motion.div>
 
-        {/* Motivational Quote Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <GlassCard className="relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10" />
-            <div className="relative py-8 px-6 text-center">
-              <Sparkles className="w-8 h-8 mx-auto mb-4 text-primary animate-pulse" />
-              <blockquote className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-foreground leading-tight">
-                "{randomQuote}"
-              </blockquote>
-              
-            </div>
-          </GlassCard>
-        </motion.div>
+        {/* Motivational Quote Section with Typewriter Effect */}
+        <TypewriterQuote />
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <GlassCard className="flex items-center gap-4">
@@ -179,7 +156,7 @@ export default function Home() {
                 Handpicked for your creative journey • <span className="text-primary font-medium">{dailyChallenges.length} {dailyChallenges.length === 1 ? 'challenge' : 'challenges'} left</span>
               </p>
             </div>
-            {dailyChallenges.length > 4 && (
+            {remainingChallengesCount > 0 && (
               <Button 
                 variant="outline" 
                 className="glass"
@@ -192,7 +169,7 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    View All ({dailyChallenges.length - 4} more)
+                    View All ({remainingChallengesCount} more)
                     <ChevronDown className="w-4 h-4 ml-2" />
                   </>
                 )}
