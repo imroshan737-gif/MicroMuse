@@ -304,7 +304,16 @@ export default function Challenges() {
              </div>
               <GlassCard className="text-center py-8 mt-6">
                 <p className="text-muted-foreground text-lg">
-                  Not your hobby? Create your own challenges in <span className="text-primary font-semibold">'Personal Challenges'</span>
+                  Not your hobby? Create your own challenges in{' '}
+                  <button 
+                    onClick={() => {
+                      const personalTab = document.querySelector('[value="personal"]') as HTMLButtonElement;
+                      personalTab?.click();
+                    }}
+                    className="text-primary font-semibold hover:underline cursor-pointer"
+                  >
+                    'Personal Challenges'
+                  </button>
                 </p>
               </GlassCard>
               </>
@@ -393,7 +402,16 @@ export default function Challenges() {
              </div>
               <GlassCard className="text-center py-8 mt-6">
                 <p className="text-muted-foreground text-lg">
-                  Not your hobby? Create your own challenges in <span className="text-primary font-semibold">'Personal Challenges'</span>
+                  Not your hobby? Create your own challenges in{' '}
+                  <button 
+                    onClick={() => {
+                      const personalTab = document.querySelector('[value="personal"]') as HTMLButtonElement;
+                      personalTab?.click();
+                    }}
+                    className="text-primary font-semibold hover:underline cursor-pointer"
+                  >
+                    'Personal Challenges'
+                  </button>
                 </p>
               </GlassCard>
               </>
