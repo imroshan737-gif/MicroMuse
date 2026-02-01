@@ -42,7 +42,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return user ? <>{children}</> : <Navigate to="/" replace />;
 }
 
-// Component to check if user has completed onboarding
+// Component to check if user has completed onboarding and redirect accordingly
 function OnboardingGuard({ children }: { children: React.ReactNode }) {
   const { user, loading: authLoading } = useAuth();
   const [hasHobbies, setHasHobbies] = useState<boolean | null>(null);
@@ -93,6 +93,56 @@ function OnboardingGuard({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// Root redirect component that checks onboarding status
+function AuthenticatedRedirect() {
+  const { user, loading: authLoading } = useAuth();
+  const [hasHobbies, setHasHobbies] = useState<boolean | null>(null);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      if (!user) {
+        setChecking(false);
+        return;
+      }
+
+      const { data: userHobbies } = await supabase
+        .from('user_hobbies')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1);
+
+      setHasHobbies(userHobbies && userHobbies.length > 0);
+      setChecking(false);
+    };
+
+    if (!authLoading && user) {
+      checkOnboarding();
+    } else if (!authLoading) {
+      setChecking(false);
+    }
+  }, [user, authLoading]);
+
+  if (authLoading || checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Landing />;
+  }
+
+  // Redirect based on onboarding status
+  if (hasHobbies === false) {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  return <Navigate to="/home" replace />;
+}
+
 const App = () => {
   const { user, loading } = useAuth();
   const location = useLocation();
@@ -121,8 +171,8 @@ const App = () => {
         {showFullUI && <AIChatbot />}
         <Routes>
           {/* Public routes */}
-          <Route path="/" element={user ? <Navigate to="/home" replace /> : <Landing />} />
-          <Route path="/auth" element={<Auth />} />
+          <Route path="/" element={<AuthenticatedRedirect />} />
+          <Route path="/auth" element={user ? <AuthenticatedRedirect /> : <Auth />} />
           
           {/* Protected routes */}
           <Route
