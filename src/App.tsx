@@ -7,6 +7,8 @@ import { useAuth } from "@/hooks/useAuth";
 import ThreeScene from "@/components/ThreeScene";
 import Header from "@/components/Header";
 import AIChatbot from "@/components/AIChatbot";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 // Pages
 import Auth from "./pages/Auth";
@@ -38,6 +40,57 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
   
   return user ? <>{children}</> : <Navigate to="/" replace />;
+}
+
+// Component to check if user has completed onboarding
+function OnboardingGuard({ children }: { children: React.ReactNode }) {
+  const { user, loading: authLoading } = useAuth();
+  const [hasHobbies, setHasHobbies] = useState<boolean | null>(null);
+  const [checking, setChecking] = useState(true);
+  const location = useLocation();
+
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      if (!user) {
+        setChecking(false);
+        return;
+      }
+
+      const { data: userHobbies } = await supabase
+        .from('user_hobbies')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1);
+
+      setHasHobbies(userHobbies && userHobbies.length > 0);
+      setChecking(false);
+    };
+
+    if (!authLoading && user) {
+      checkOnboarding();
+    } else if (!authLoading) {
+      setChecking(false);
+    }
+  }, [user, authLoading]);
+
+  if (authLoading || checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+
+  // If user hasn't completed onboarding, redirect to onboarding
+  if (hasHobbies === false && location.pathname !== '/onboarding') {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  return <>{children}</>;
 }
 
 const App = () => {
@@ -83,9 +136,9 @@ const App = () => {
           <Route
             path="/home"
             element={
-              <ProtectedRoute>
+              <OnboardingGuard>
                 <Home />
-              </ProtectedRoute>
+              </OnboardingGuard>
             }
           />
           <Route
