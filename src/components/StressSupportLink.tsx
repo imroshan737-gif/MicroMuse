@@ -10,7 +10,7 @@ export default function StressSupportLink() {
       className="w-full flex justify-center py-8 mt-8"
     >
       <a 
-        href="https://guardian-aura-72.lovable.app" 
+        href="https://senseu.lovable.app" 
         target="_blank" 
         rel="noopener noreferrer"
         className="group flex items-center gap-3 px-8 py-4 rounded-2xl glass border-2 border-primary/30 hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 bg-gradient-to-r from-primary/5 to-primary/10"
