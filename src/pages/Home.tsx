@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useChallenges, Challenge } from '@/hooks/useChallenges';
 import StressSupportLink from '@/components/StressSupportLink';
 import TypewriterQuote from '@/components/home/TypewriterQuote';
+import LandingFooter from '@/components/LandingFooter';
 
 const categoryColors: Record<string, string> = {
   music: 'bg-primary/10 text-primary border-primary/20',
@@ -269,6 +270,9 @@ export default function Home() {
         {/* Stress Support Link at the end of page content */}
         <StressSupportLink />
       </div>
+
+      {/* Footer with Privacy, Terms, Contact */}
+      <LandingFooter />
     </div>
   );
 }
