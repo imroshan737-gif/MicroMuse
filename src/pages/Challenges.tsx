@@ -308,7 +308,12 @@ export default function Challenges() {
                   <button 
                     onClick={() => {
                       const personalTab = document.querySelector('[value="personal"]') as HTMLButtonElement;
-                      personalTab?.click();
+                      if (personalTab) {
+                        personalTab.click();
+                        setTimeout(() => {
+                          personalTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                      }
                     }}
                     className="text-primary font-semibold hover:underline cursor-pointer"
                   >
@@ -406,7 +411,12 @@ export default function Challenges() {
                   <button 
                     onClick={() => {
                       const personalTab = document.querySelector('[value="personal"]') as HTMLButtonElement;
-                      personalTab?.click();
+                      if (personalTab) {
+                        personalTab.click();
+                        setTimeout(() => {
+                          personalTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                      }
                     }}
                     className="text-primary font-semibold hover:underline cursor-pointer"
                   >
@@ -520,14 +530,19 @@ export default function Challenges() {
                   >
                     <GlassCard hover className="h-full">
                       <div className="flex items-start gap-4 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-accent flex items-center justify-center">
-                          <Target className="w-6 h-6 text-white" />
+                        <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center">
+                          {(() => { const Icon = getCategoryIcon(challenge.category); return <Icon className="w-6 h-6 text-primary-foreground" />; })()}
                         </div>
                         <div className="flex-1">
-                          <Badge className={categoryColors[challenge.category as keyof typeof categoryColors]}>
-                            {challenge.category}
-                          </Badge>
-                          <h3 className="text-xl font-display font-semibold mt-2 mb-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge className={categoryColors[challenge.category as keyof typeof categoryColors] || 'bg-muted/10 text-muted-foreground border-muted/20'}>
+                              {challenge.category}
+                            </Badge>
+                            <Badge variant="outline" className="glass">
+                              {challenge.difficulty}
+                            </Badge>
+                          </div>
+                          <h3 className="text-xl font-display font-semibold mb-1">
                             {challenge.title}
                           </h3>
                         </div>
