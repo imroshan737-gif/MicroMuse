@@ -51,10 +51,6 @@ export default function LandingFooter() {
                 <span>Contact</span>
               </motion.button>
             </div>
-
-            <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} MicroMuse. Empowering learners worldwide.
-            </p>
           </div>
         </div>
       </footer>

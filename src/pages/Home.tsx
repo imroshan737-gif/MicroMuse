@@ -98,8 +98,9 @@ export default function Home() {
   };
   
   return (
-    <div className="min-h-screen pt-24 pb-12 px-4">
-      <div className="container mx-auto max-w-6xl space-y-8">
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1 pt-24 pb-12 px-4">
+        <div className="container mx-auto max-w-6xl space-y-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -267,11 +268,12 @@ export default function Home() {
           )}
         </div>
 
-        {/* Stress Support Link at the end of page content */}
-        <StressSupportLink />
+          {/* Stress Support Link at the end of page content */}
+          <StressSupportLink />
+        </div>
       </div>
 
-      {/* Footer with Privacy, Terms, Contact */}
+      {/* Footer with Privacy, Terms, Contact - at extreme bottom */}
       <LandingFooter />
     </div>
   );
