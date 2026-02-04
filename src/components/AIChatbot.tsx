@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Image, Loader2, User, Trash2, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -381,7 +382,9 @@ export default function AIChatbot() {
                           className="max-w-full rounded-xl mb-2 max-h-32 object-cover"
                         />
                       )}
-                      <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                      <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert prose-headings:text-base prose-headings:font-bold prose-headings:mt-2 prose-headings:mb-1 prose-p:my-1 prose-ul:my-1 prose-ol:my-1 max-w-none">
+                        <ReactMarkdown>{message.content}</ReactMarkdown>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
