@@ -140,7 +140,11 @@ export default function UserProfileModal({ user, isOpen, onClose, rank }: UserPr
                 <img 
                   src={user.avatar_url} 
                   alt={user.full_name || 'User'} 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-full"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    (e.target as HTMLImageElement).parentElement!.textContent = user?.full_name?.charAt(0) || user?.username?.charAt(0) || '?';
+                  }}
                 />
               ) : (
                 user?.full_name?.charAt(0) || user?.username?.charAt(0) || '?'
