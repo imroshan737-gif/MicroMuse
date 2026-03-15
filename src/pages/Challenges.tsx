@@ -481,7 +481,7 @@ export default function Challenges() {
                         <SelectItem value="cooking">Cooking</SelectItem>
                         <SelectItem value="gaming">Gaming</SelectItem>
                         <SelectItem value="design">Design</SelectItem>
-                        <SelectItem value="others">Others</SelectItem>
+                        <SelectItem value="studies">Studies</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

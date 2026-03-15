@@ -142,41 +142,49 @@ export function useChallenges() {
     if (!user) return null;
 
     try {
-      // Create challenge in database
-      const { data: newChallenge, error } = await supabase
+      // Map 'others' to 'studies' since 'others' is not in the enum
+      const categoryMap: Record<string, string> = { others: 'studies' };
+      const dbCategory = categoryMap[challenge.category] || challenge.category;
+
+      const challengeId = crypto.randomUUID();
+      const points = challenge.duration * 5;
+
+      // Create challenge in database (without .select() to avoid RLS SELECT conflict)
+      const { error } = await supabase
         .from('challenges')
         .insert({
+          id: challengeId,
           title: challenge.title,
           description: challenge.description,
-          category: challenge.category as any,
+          category: dbCategory as any,
           duration_minutes: challenge.duration,
           difficulty: 'beginner',
           type: 'personal',
-          points: challenge.duration * 5,
-          is_active: false, // Personal challenges are not shown in main lists
-        })
-        .select()
-        .single();
+          points,
+          is_active: false,
+        });
 
       if (error) throw error;
 
       // Create user_challenge record to link it to the user
-      await supabase
+      const { error: linkError } = await supabase
         .from('user_challenges')
         .insert({
           user_id: user.id,
-          challenge_id: newChallenge.id,
+          challenge_id: challengeId,
           is_completed: false,
         });
 
+      if (linkError) throw linkError;
+
       const transformedChallenge: Challenge = {
-        id: newChallenge.id,
-        title: newChallenge.title,
-        description: newChallenge.description,
-        category: newChallenge.category,
-        duration: newChallenge.duration_minutes || 10,
-        difficulty: newChallenge.difficulty as 'beginner' | 'moderate' | 'expert',
-        points: newChallenge.points || 10,
+        id: challengeId,
+        title: challenge.title,
+        description: challenge.description,
+        category: challenge.category,
+        duration: challenge.duration,
+        difficulty: 'beginner',
+        points,
         type: 'personal',
       };
 
