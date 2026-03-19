@@ -127,34 +127,34 @@ export default function UserProfileModal({ user, isOpen, onClose, rank }: UserPr
           >
             <Sparkles className="w-6 h-6 text-white/50" />
           </motion.div>
-          
-          {/* Avatar positioned at bottom of header */}
-          <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
-              className="w-24 h-24 rounded-full bg-gradient-primary flex items-center justify-center text-3xl font-bold text-primary-foreground border-4 border-background shadow-xl overflow-hidden"
-            >
-              {user?.avatar_url ? (
-                <img 
-                  src={user.avatar_url} 
-                  alt={user.full_name || 'User'} 
-                  className="w-full h-full object-cover rounded-full"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none';
-                    (e.target as HTMLImageElement).parentElement!.textContent = user?.full_name?.charAt(0) || user?.username?.charAt(0) || '?';
-                  }}
-                />
-              ) : (
-                user?.full_name?.charAt(0) || user?.username?.charAt(0) || '?'
-              )}
-            </motion.div>
-          </div>
+        </div>
+
+        {/* Avatar between header and content - not clipped */}
+        <div className="flex justify-center -mt-12 relative z-10">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
+            className="w-24 h-24 rounded-full bg-gradient-primary flex items-center justify-center text-3xl font-bold text-primary-foreground border-4 border-background shadow-xl overflow-hidden shrink-0"
+          >
+            {user?.avatar_url ? (
+              <img 
+                src={user.avatar_url} 
+                alt={user.full_name || 'User'} 
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                  (e.target as HTMLImageElement).parentElement!.textContent = user?.full_name?.charAt(0) || user?.username?.charAt(0) || '?';
+                }}
+              />
+            ) : (
+              user?.full_name?.charAt(0) || user?.username?.charAt(0) || '?'
+            )}
+          </motion.div>
         </div>
 
         {/* Content */}
-        <div className="pt-14 pb-6 px-6">
+        <div className="pt-4 pb-6 px-6">
           {/* Name and username */}
           <div className="text-center mb-4">
             <h2 className="text-2xl font-bold text-foreground">
