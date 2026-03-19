@@ -336,7 +336,6 @@ export default function Leaderboard() {
     </div>
   );
 }
-  const [users, setUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [animateUpdate, setAnimateUpdate] = useState<string | null>(null);
   const [showCount, setShowCount] = useState(20);
