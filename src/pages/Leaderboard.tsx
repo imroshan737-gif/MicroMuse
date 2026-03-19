@@ -336,7 +336,6 @@ export default function Leaderboard() {
     </div>
   );
 }
-  const { user } = useAuth();
   const [users, setUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [animateUpdate, setAnimateUpdate] = useState<string | null>(null);
