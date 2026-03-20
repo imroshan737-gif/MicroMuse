@@ -18,8 +18,26 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    // Use gemini-2.5-flash for text, gemini-2.5-pro for images (better vision)
-    const model = hasImage ? "google/gemini-2.5-pro" : "google/gemini-2.5-flash";
+    // Determine complexity: images need pro, complex questions need flash, simple ones use flash-lite
+    let model = "google/gemini-2.5-flash-lite"; // fastest for simple questions
+    
+    if (hasImage) {
+      model = "google/gemini-2.5-pro"; // best vision model
+    } else {
+      // Check if the last user message is complex
+      const lastUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
+      const userText = typeof lastUserMsg?.content === "string" ? lastUserMsg.content : "";
+      const wordCount = userText.trim().split(/\s+/).length;
+      
+      // Complex indicators: long messages, code, technical terms, multi-part questions
+      const isComplex = wordCount > 40 
+        || /```|code|debug|explain.*detail|how does.*work|compare|analyze|algorithm|implement/i.test(userText)
+        || (userText.match(/\?/g) || []).length > 1;
+      
+      if (isComplex) {
+        model = "google/gemini-2.5-flash"; // stronger model for complex questions
+      }
+    }
 
     const systemPrompt = `You are MicroMuse AI, a helpful and encouraging assistant for a skill-building and hobby platform called MicroMuse. 
 
