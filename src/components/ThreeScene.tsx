@@ -194,6 +194,7 @@ function Scene() {
       />
       
       <NetworkNodes />
+      <FloatingParticles />
       
       {/* Subtle ambient glows */}
       <SubtleGlow position={[-10, 4, -18]} color="#4ECDC4" size={3} />
