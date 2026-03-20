@@ -148,10 +148,10 @@ function FloatingParticles() {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.08}
+        size={0.25}
         color="#E8927C"
         transparent
-        opacity={0.35}
+        opacity={0.4}
         sizeAttenuation
         depthWrite={false}
       />
