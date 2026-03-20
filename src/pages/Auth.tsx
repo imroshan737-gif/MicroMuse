@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Sparkles, Mail, Lock, User, AtSign, Chrome } from 'lucide-react';
-import { lovable } from '@/integrations/lovable/index';
+import { supabase } from '@/integrations/supabase/client';
 import GlassCard from '@/components/GlassCard';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -120,29 +120,32 @@ export default function Auth() {
     setLoading(false);
   };
 
-  const handleGoogleSignIn = async () => {
-    setGoogleLoading(true);
-    try {
-      const { error } = await lovable.auth.signInWithOAuth('google', {
-        redirect_uri: window.location.origin,
-      });
-      
-      if (error) {
-        toast({
-          title: 'Google Sign In Failed',
-          description: error.message,
-          variant: 'destructive',
-        });
-      }
-    } catch (error: any) {
+const handleGoogleSignIn = async () => {
+  setGoogleLoading(true);
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
+
+    if (error) {
       toast({
         title: 'Google Sign In Failed',
-        description: error.message || 'An unexpected error occurred',
+        description: error.message,
         variant: 'destructive',
       });
     }
-    setGoogleLoading(false);
-  };
+  } catch (error: any) {
+    toast({
+      title: 'Google Sign In Failed',
+      description: error.message || 'An unexpected error occurred',
+      variant: 'destructive',
+    });
+  }
+  setGoogleLoading(false);
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
