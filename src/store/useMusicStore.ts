@@ -5,17 +5,17 @@ const DEFAULT_TRACKS = [
   {
     id: '1',
     name: 'Peaceful Mind',
-    url: 'https://cdn.pixabay.com/audio/2024/11/28/audio_a0865015da.mp3',
+    url: 'https://cdn.pixabay.com/audio/2022/02/22/audio_d1718ab41b.mp3',
   },
   {
     id: '2', 
     name: 'Calm Waters',
-    url: 'https://cdn.pixabay.com/audio/2024/09/10/audio_6e5d7d1aaa.mp3',
+    url: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
   },
   {
     id: '3',
     name: 'Gentle Breeze',
-    url: 'https://cdn.pixabay.com/audio/2024/04/17/audio_80b4f87f6a.mp3',
+    url: 'https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3',
   },
 ];
 
