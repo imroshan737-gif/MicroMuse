@@ -101,6 +101,65 @@ function NetworkNodes() {
   );
 }
 
+function FloatingParticles() {
+  const count = 60;
+  const ref = useRef<THREE.Points>(null);
+
+  const { positions, speeds } = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const spd = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 40;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 30;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 20 - 5;
+      // Each particle gets a unique slow drift direction
+      spd[i * 3] = (Math.random() - 0.5) * 0.008;
+      spd[i * 3 + 1] = (Math.random() - 0.5) * 0.006;
+      spd[i * 3 + 2] = (Math.random() - 0.5) * 0.004;
+    }
+    return { positions: pos, speeds: spd };
+  }, []);
+
+  useFrame(() => {
+    if (!ref.current) return;
+    const posAttr = ref.current.geometry.attributes.position as THREE.BufferAttribute;
+    const arr = posAttr.array as Float32Array;
+    for (let i = 0; i < count; i++) {
+      arr[i * 3] += speeds[i * 3];
+      arr[i * 3 + 1] += speeds[i * 3 + 1];
+      arr[i * 3 + 2] += speeds[i * 3 + 2];
+      // Wrap around edges so particles never disappear
+      if (arr[i * 3] > 20) arr[i * 3] = -20;
+      if (arr[i * 3] < -20) arr[i * 3] = 20;
+      if (arr[i * 3 + 1] > 15) arr[i * 3 + 1] = -15;
+      if (arr[i * 3 + 1] < -15) arr[i * 3 + 1] = 15;
+    }
+    posAttr.needsUpdate = true;
+  });
+
+  return (
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={count}
+          array={positions}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.08}
+        color="#E8927C"
+        transparent
+        opacity={0.35}
+        sizeAttenuation
+        depthWrite={false}
+      />
+    </points>
+  );
+}
+
+
 function SubtleGlow({ position, color, size }: { position: [number, number, number]; color: string; size: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
   
