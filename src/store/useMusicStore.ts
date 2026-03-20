@@ -62,6 +62,10 @@ export const useMusicStore = create<MusicState>((set, get) => ({
       audio.addEventListener('ended', () => {
         get().nextTrack();
       });
+      audio.addEventListener('error', () => {
+        console.warn('Track failed to load, skipping to next');
+        setTimeout(() => get().nextTrack(), 500);
+      });
       set({ audioElement: audio });
     }
   },
