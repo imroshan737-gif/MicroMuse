@@ -148,10 +148,10 @@ function FloatingParticles() {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.08}
+        size={0.25}
         color="#E8927C"
         transparent
-        opacity={0.35}
+        opacity={0.4}
         sizeAttenuation
         depthWrite={false}
       />
@@ -159,24 +159,6 @@ function FloatingParticles() {
   );
 }
 
-
-function SubtleGlow({ position, color, size }: { position: [number, number, number]; color: string; size: number }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      const pulse = Math.sin(state.clock.elapsedTime * 0.8 + position[0]) * 0.15;
-      meshRef.current.scale.setScalar(size + pulse);
-    }
-  });
-  
-  return (
-    <mesh ref={meshRef} position={position}>
-      <sphereGeometry args={[1, 16, 16]} />
-      <meshBasicMaterial color={color} transparent opacity={0.06} />
-    </mesh>
-  );
-}
 
 function Scene() {
   return (
@@ -195,11 +177,6 @@ function Scene() {
       
       <NetworkNodes />
       <FloatingParticles />
-      
-      {/* Subtle ambient glows */}
-      <SubtleGlow position={[-10, 4, -18]} color="#4ECDC4" size={3} />
-      <SubtleGlow position={[8, -3, -22]} color="#FF6B6B" size={2.5} />
-      <SubtleGlow position={[0, 6, -25]} color="#667EEA" size={3.5} />
       
       <OrbitControls 
         enableZoom={false} 
