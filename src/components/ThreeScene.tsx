@@ -160,7 +160,23 @@ function FloatingParticles() {
 }
 
 
-
+function Scene() {
+  return (
+    <>
+      <ambientLight intensity={0.1} />
+      
+      <Stars 
+        radius={120} 
+        depth={60} 
+        count={800} 
+        factor={3} 
+        saturation={0.3} 
+        fade 
+        speed={0.1} 
+      />
+      
+      <NetworkNodes />
+      <FloatingParticles />
       
       <OrbitControls 
         enableZoom={false} 
