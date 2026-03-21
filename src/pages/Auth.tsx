@@ -18,21 +18,10 @@ const signInSchema = z.object({
 });
 
 const signUpSchema = z.object({
-  username: z.string()
-    .min(3, 'Username must be at least 3 characters')
-    .max(30, 'Username too long')
-    .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
-  fullName: z.string()
-    .min(1, 'Full name is required')
-    .max(100, 'Name too long')
-    .regex(/^[a-zA-Z\s'-]+$/, 'Name can only contain letters, spaces, hyphens, and apostrophes'),
-  email: z.string().email('Invalid email address').max(255, 'Email too long'),
-  password: z.string()
-    .min(8, 'Password must be at least 8 characters')
-    .max(128, 'Password too long')
-    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .regex(/[0-9]/, 'Password must contain at least one number'),
+  username: z.string().min(1, 'Username is required').max(30),
+  fullName: z.string().min(1, 'Full name is required').max(100),
+  email: z.string().email('Invalid email address').max(255),
+  password: z.string().min(1, 'Password is required').max(128),
 });
 
 export default function Auth() {
