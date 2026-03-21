@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, FileText, Mail, ExternalLink, Sparkles } from 'lucide-react';
+import { Shield, FileText, Mail, ExternalLink, Heart } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 export default function LandingFooter() {
@@ -11,13 +11,21 @@ export default function LandingFooter() {
       <footer className="py-12 px-4 border-t border-border/50">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col items-center gap-8">
-            {/* Logo */}
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary to-accent flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-display font-bold">MicroMuse</span>
-            </div>
+            {/* Stress Support Link */}
+            <a 
+              href="https://senseu.vercel.app" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="group flex items-center gap-3 px-8 py-4 rounded-2xl glass border-2 border-primary/30 hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 bg-gradient-to-r from-primary/5 to-primary/10"
+            >
+              <Heart className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
+              <span className="text-lg font-semibold text-foreground">
+                Not able to manage stress?{' '}
+                <span className="text-primary underline underline-offset-4 group-hover:text-primary/80 transition-colors font-bold">
+                  Click here
+                </span>
+              </span>
+            </a>
 
             {/* Legal Links */}
             <div className="flex flex-wrap items-center justify-center gap-6">
