@@ -59,6 +59,7 @@ export default function Leaderboard() {
       const { data: profiles, error: profilesError } = await supabase
         .from('public_profiles')
         .select('id, full_name, username, avatar_url, total_points, current_streak')
+        .gt('total_points', 0)
         .order('total_points', { ascending: false });
 
       if (profilesError) throw profilesError;
