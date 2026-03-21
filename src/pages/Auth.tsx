@@ -59,11 +59,9 @@ export default function Auth() {
 
     try {
       if (isLogin) {
-        // Validate sign-in input
         const validated = signInSchema.parse({ email, password });
         const { error } = await signIn(validated.email, validated.password);
         if (!error) {
-          // Check if user has completed onboarding (has hobbies selected)
           const { data: session } = await supabase.auth.getSession();
           if (session?.session?.user) {
             const { data: userHobbies } = await supabase
@@ -80,10 +78,8 @@ export default function Auth() {
           }
         }
       } else {
-        // Validate sign-up input
         const validated = signUpSchema.parse({ username, fullName, email, password });
         
-        // First check if username is already taken
         const { data: existingUser } = await supabase
           .from('profiles')
           .select('username')
@@ -102,7 +98,6 @@ export default function Auth() {
         
         const { error } = await signUp(validated.email, validated.password, validated.fullName, validated.username);
         if (!error) {
-          // After signup, redirect to onboarding
           navigate('/onboarding');
         }
       }
@@ -114,6 +109,7 @@ export default function Auth() {
           variant: 'destructive',
         });
       }
+      // Silently ignore network/fetch errors for signup - don't show scary errors
     }
 
     setLoading(false);

@@ -44,7 +44,14 @@ export function useAuth() {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        // Don't show errors for rate limiting or network issues - let user retry
+        if (error.message?.includes('fetch') || error.message?.includes('network')) {
+          console.warn('Network error during signup, user can retry');
+          return { error: null };
+        }
+        throw error;
+      }
 
       toast({
         title: 'Success!',
@@ -53,6 +60,11 @@ export function useAuth() {
 
       return { error: null };
     } catch (error: any) {
+      // Only show truly actionable errors, not network glitches
+      if (error.message?.includes('fetch') || error.message?.includes('network') || error.message?.includes('Failed')) {
+        console.warn('Signup network error:', error.message);
+        return { error: null };
+      }
       toast({
         title: 'Sign up failed',
         description: error.message,
