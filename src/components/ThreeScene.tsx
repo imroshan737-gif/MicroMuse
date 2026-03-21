@@ -4,100 +4,76 @@ import { Suspense, useRef, useMemo } from 'react';
 import { useStore } from '@/store/useStore';
 import * as THREE from 'three';
 
-function NetworkNodes() {
-  const ref = useRef<THREE.Group>(null);
-  
-  const { positions, connections } = useMemo(() => {
-    const count = 40;
-    const pos: [number, number, number][] = [];
-    const conn: [number, number][] = [];
-    
+function FloatingCircles() {
+  const count = 80;
+  const ref = useRef<THREE.Points>(null);
+
+  const { positions, speeds } = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const spd = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      pos.push([
-        (Math.random() - 0.5) * 30,
-        (Math.random() - 0.5) * 20,
-        (Math.random() - 0.5) * 15 - 10,
-      ]);
+      pos[i * 3] = (Math.random() - 0.5) * 40;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 30;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 20 - 5;
+      spd[i * 3] = (Math.random() - 0.5) * 0.008;
+      spd[i * 3 + 1] = (Math.random() - 0.5) * 0.006;
+      spd[i * 3 + 2] = (Math.random() - 0.5) * 0.004;
     }
-    
-    // Connect nearby nodes
-    for (let i = 0; i < count; i++) {
-      for (let j = i + 1; j < count; j++) {
-        const dx = pos[i][0] - pos[j][0];
-        const dy = pos[i][1] - pos[j][1];
-        const dz = pos[i][2] - pos[j][2];
-        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (dist < 8) conn.push([i, j]);
-      }
-    }
-    
-    return { positions: pos, connections: conn };
+    return { positions: pos, speeds: spd };
   }, []);
 
-  const linePositions = useMemo(() => {
-    const arr = new Float32Array(connections.length * 6);
-    connections.forEach(([a, b], i) => {
-      arr[i * 6] = positions[a][0];
-      arr[i * 6 + 1] = positions[a][1];
-      arr[i * 6 + 2] = positions[a][2];
-      arr[i * 6 + 3] = positions[b][0];
-      arr[i * 6 + 4] = positions[b][1];
-      arr[i * 6 + 5] = positions[b][2];
-    });
-    return arr;
-  }, [positions, connections]);
-
-  const nodePositions = useMemo(() => {
-    const arr = new Float32Array(positions.length * 3);
-    positions.forEach((p, i) => {
-      arr[i * 3] = p[0];
-      arr[i * 3 + 1] = p[1];
-      arr[i * 3 + 2] = p[2];
-    });
-    return arr;
-  }, [positions]);
-
-  useFrame((state) => {
-    if (ref.current) {
-      ref.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.03) * 0.1;
-      ref.current.rotation.x = Math.cos(state.clock.elapsedTime * 0.02) * 0.05;
+  useFrame(() => {
+    if (!ref.current) return;
+    const posAttr = ref.current.geometry.attributes.position as THREE.BufferAttribute;
+    const arr = posAttr.array as Float32Array;
+    for (let i = 0; i < count; i++) {
+      arr[i * 3] += speeds[i * 3];
+      arr[i * 3 + 1] += speeds[i * 3 + 1];
+      arr[i * 3 + 2] += speeds[i * 3 + 2];
+      if (arr[i * 3] > 20) arr[i * 3] = -20;
+      if (arr[i * 3] < -20) arr[i * 3] = 20;
+      if (arr[i * 3 + 1] > 15) arr[i * 3 + 1] = -15;
+      if (arr[i * 3 + 1] < -15) arr[i * 3 + 1] = 15;
     }
+    posAttr.needsUpdate = true;
   });
 
+  // Create a circle texture for round particles
+  const circleTexture = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext('2d')!;
+    ctx.beginPath();
+    ctx.arc(32, 32, 30, 0, Math.PI * 2);
+    ctx.fillStyle = 'white';
+    ctx.fill();
+    const texture = new THREE.CanvasTexture(canvas);
+    return texture;
+  }, []);
+
   return (
-    <group ref={ref}>
-      {/* Connection lines */}
-      <lineSegments>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={connections.length * 2}
-            array={linePositions}
-            itemSize={3}
-          />
-        </bufferGeometry>
-        <lineBasicMaterial color="#4ECDC4" transparent opacity={0.12} />
-      </lineSegments>
-      
-      {/* Nodes */}
-      <points>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={positions.length}
-            array={nodePositions}
-            itemSize={3}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.15}
-          color="#4ECDC4"
-          transparent
-          opacity={0.5}
-          sizeAttenuation
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={count}
+          array={positions}
+          itemSize={3}
         />
-      </points>
-    </group>
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.3}
+        color="#4ECDC4"
+        transparent
+        opacity={0.5}
+        sizeAttenuation
+        depthWrite={false}
+        map={circleTexture}
+        alphaMap={circleTexture}
+        alphaTest={0.1}
+      />
+    </points>
   );
 }
 
