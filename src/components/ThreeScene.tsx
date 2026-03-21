@@ -151,8 +151,7 @@ function Scene() {
         speed={0.1} 
       />
       
-      <NetworkNodes />
-      <FloatingParticles />
+      <FloatingCircles />
       
       <OrbitControls 
         enableZoom={false} 
