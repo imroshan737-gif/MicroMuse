@@ -81,7 +81,7 @@ function NetworkNodes() {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial color="#666666" transparent opacity={0.15} />
+        <lineBasicMaterial color="#888888" transparent opacity={0.35} />
       </lineSegments>
 
       {/* Node dots */}
