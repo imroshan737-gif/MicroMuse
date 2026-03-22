@@ -95,10 +95,10 @@ function NetworkNodes() {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.4}
-          color="#888888"
+          size={0.6}
+          color="#aaaaaa"
           transparent
-          opacity={0.6}
+          opacity={0.8}
           sizeAttenuation
           depthWrite={false}
           map={circleTexture}
