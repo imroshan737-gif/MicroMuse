@@ -84,13 +84,14 @@ export default function AuthenticatedHeader() {
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Music Icon - standalone button next to profile */}
+          {/* Music Icon - visible standalone button next to profile */}
           <button
+            type="button"
             onClick={() => setShowMusicPlayer(true)}
-            className="w-10 h-10 rounded-full border border-border/50 bg-muted/30 flex items-center justify-center hover:bg-primary/20 transition-colors"
+            className="flex items-center justify-center w-10 h-10 rounded-full border border-border bg-background/60 hover:bg-primary/20 transition-colors"
             aria-label="Open music player"
           >
-            <Music className="w-5 h-5 text-muted-foreground" />
+            <Music className="w-5 h-5 text-foreground" />
           </button>
 
           <DropdownMenu>

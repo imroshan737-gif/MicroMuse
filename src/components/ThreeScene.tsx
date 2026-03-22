@@ -154,10 +154,10 @@ function FloatingCircles() {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.5}
-        color="#4ECDC4"
+        size={0.3}
+        color="#7eeee6"
         transparent
-        opacity={0.5}
+        opacity={0.6}
         sizeAttenuation
         depthWrite={false}
         map={circleTexture}
