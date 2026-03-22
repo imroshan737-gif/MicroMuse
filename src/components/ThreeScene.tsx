@@ -71,20 +71,7 @@ function NetworkNodes() {
 
   return (
     <group ref={ref}>
-      {/* Network lines */}
-      <lineSegments>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={linePositions.length / 3}
-            array={linePositions}
-            itemSize={3}
-          />
-        </bufferGeometry>
-        <lineBasicMaterial color="#888888" transparent opacity={0.35} />
-      </lineSegments>
-
-      {/* Node dots */}
+      {/* Node dots only - no connecting lines */}
       <points>
         <bufferGeometry>
           <bufferAttribute
