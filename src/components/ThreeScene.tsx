@@ -4,6 +4,112 @@ import { Suspense, useRef, useMemo } from 'react';
 import { useStore } from '@/store/useStore';
 import * as THREE from 'three';
 
+function NetworkNodes() {
+  const count = 40;
+  const ref = useRef<THREE.Group>(null);
+
+  const { nodes, edges } = useMemo(() => {
+    const nodePositions: THREE.Vector3[] = [];
+    for (let i = 0; i < count; i++) {
+      nodePositions.push(
+        new THREE.Vector3(
+          (Math.random() - 0.5) * 50,
+          (Math.random() - 0.5) * 35,
+          (Math.random() - 0.5) * 20 - 5
+        )
+      );
+    }
+
+    const edgePairs: [number, number][] = [];
+    for (let i = 0; i < count; i++) {
+      for (let j = i + 1; j < count; j++) {
+        if (nodePositions[i].distanceTo(nodePositions[j]) < 12) {
+          edgePairs.push([i, j]);
+        }
+      }
+    }
+
+    return { nodes: nodePositions, edges: edgePairs };
+  }, []);
+
+  const linePositions = useMemo(() => {
+    const positions: number[] = [];
+    edges.forEach(([a, b]) => {
+      positions.push(nodes[a].x, nodes[a].y, nodes[a].z);
+      positions.push(nodes[b].x, nodes[b].y, nodes[b].z);
+    });
+    return new Float32Array(positions);
+  }, [nodes, edges]);
+
+  const nodePositionsArray = useMemo(() => {
+    const arr = new Float32Array(count * 3);
+    nodes.forEach((n, i) => {
+      arr[i * 3] = n.x;
+      arr[i * 3 + 1] = n.y;
+      arr[i * 3 + 2] = n.z;
+    });
+    return arr;
+  }, [nodes]);
+
+  const circleTexture = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext('2d')!;
+    ctx.beginPath();
+    ctx.arc(32, 32, 30, 0, Math.PI * 2);
+    ctx.fillStyle = 'white';
+    ctx.fill();
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  useFrame((state) => {
+    if (ref.current) {
+      ref.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.02) * 0.1;
+    }
+  });
+
+  return (
+    <group ref={ref}>
+      {/* Network lines */}
+      <lineSegments>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={linePositions.length / 3}
+            array={linePositions}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <lineBasicMaterial color="#666666" transparent opacity={0.15} />
+      </lineSegments>
+
+      {/* Node dots */}
+      <points>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={count}
+            array={nodePositionsArray}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.4}
+          color="#888888"
+          transparent
+          opacity={0.6}
+          sizeAttenuation
+          depthWrite={false}
+          map={circleTexture}
+          alphaMap={circleTexture}
+          alphaTest={0.1}
+        />
+      </points>
+    </group>
+  );
+}
+
 function FloatingCircles() {
   const count = 80;
   const ref = useRef<THREE.Points>(null);
@@ -38,7 +144,6 @@ function FloatingCircles() {
     posAttr.needsUpdate = true;
   });
 
-  // Create a circle texture for round particles
   const circleTexture = useMemo(() => {
     const canvas = document.createElement('canvas');
     canvas.width = 64;
@@ -48,8 +153,7 @@ function FloatingCircles() {
     ctx.arc(32, 32, 30, 0, Math.PI * 2);
     ctx.fillStyle = 'white';
     ctx.fill();
-    const texture = new THREE.CanvasTexture(canvas);
-    return texture;
+    return new THREE.CanvasTexture(canvas);
   }, []);
 
   return (
@@ -77,9 +181,6 @@ function FloatingCircles() {
   );
 }
 
-
-
-
 function Scene() {
   return (
     <>
@@ -95,6 +196,7 @@ function Scene() {
         speed={0.1} 
       />
       
+      <NetworkNodes />
       <FloatingCircles />
       
       <OrbitControls 

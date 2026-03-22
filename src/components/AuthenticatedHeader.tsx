@@ -128,12 +128,12 @@ export default function AuthenticatedHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-
-        <MusicPlayerDialog 
-          open={showMusicPlayer} 
-          onOpenChange={setShowMusicPlayer} 
-        />
       </nav>
+
+      <MusicPlayerDialog 
+        open={showMusicPlayer} 
+        onOpenChange={setShowMusicPlayer} 
+      />
     </header>
   );
 }

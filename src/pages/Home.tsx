@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useChallenges, Challenge } from '@/hooks/useChallenges';
-import StressSupportLink from '@/components/StressSupportLink';
+
 import TypewriterQuote from '@/components/home/TypewriterQuote';
 import LandingFooter from '@/components/LandingFooter';
 
@@ -268,8 +268,8 @@ export default function Home() {
           )}
         </div>
 
-          {/* Stress Support Link at the end of page content */}
-          <StressSupportLink />
+
+
         </div>
       </div>
 
