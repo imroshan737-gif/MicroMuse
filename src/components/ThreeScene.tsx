@@ -41,28 +41,6 @@ function NetworkNodes() {
     return new Float32Array(positions);
   }, [nodes, edges]);
 
-  const nodePositionsArray = useMemo(() => {
-    const arr = new Float32Array(count * 3);
-    nodes.forEach((n, i) => {
-      arr[i * 3] = n.x;
-      arr[i * 3 + 1] = n.y;
-      arr[i * 3 + 2] = n.z;
-    });
-    return arr;
-  }, [nodes]);
-
-  const circleTexture = useMemo(() => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 64;
-    canvas.height = 64;
-    const ctx = canvas.getContext('2d')!;
-    ctx.beginPath();
-    ctx.arc(32, 32, 30, 0, Math.PI * 2);
-    ctx.fillStyle = 'white';
-    ctx.fill();
-    return new THREE.CanvasTexture(canvas);
-  }, []);
-
   useFrame((state) => {
     if (ref.current) {
       ref.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.02) * 0.1;
@@ -71,100 +49,19 @@ function NetworkNodes() {
 
   return (
     <group ref={ref}>
-      {/* Node dots only - no connecting lines */}
-      <points>
+      {/* Thin network lines only */}
+      <lineSegments>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            count={count}
-            array={nodePositionsArray}
+            count={linePositions.length / 3}
+            array={linePositions}
             itemSize={3}
           />
         </bufferGeometry>
-        <pointsMaterial
-          size={0.6}
-          color="#aaaaaa"
-          transparent
-          opacity={0.8}
-          sizeAttenuation
-          depthWrite={false}
-          map={circleTexture}
-          alphaMap={circleTexture}
-          alphaTest={0.1}
-        />
-      </points>
+        <lineBasicMaterial color="#8a8a8a" transparent opacity={0.45} />
+      </lineSegments>
     </group>
-  );
-}
-
-function FloatingCircles() {
-  const count = 80;
-  const ref = useRef<THREE.Points>(null);
-
-  const { positions, speeds } = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    const spd = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 40;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 30;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 20 - 5;
-      spd[i * 3] = (Math.random() - 0.5) * 0.008;
-      spd[i * 3 + 1] = (Math.random() - 0.5) * 0.006;
-      spd[i * 3 + 2] = (Math.random() - 0.5) * 0.004;
-    }
-    return { positions: pos, speeds: spd };
-  }, []);
-
-  useFrame(() => {
-    if (!ref.current) return;
-    const posAttr = ref.current.geometry.attributes.position as THREE.BufferAttribute;
-    const arr = posAttr.array as Float32Array;
-    for (let i = 0; i < count; i++) {
-      arr[i * 3] += speeds[i * 3];
-      arr[i * 3 + 1] += speeds[i * 3 + 1];
-      arr[i * 3 + 2] += speeds[i * 3 + 2];
-      if (arr[i * 3] > 20) arr[i * 3] = -20;
-      if (arr[i * 3] < -20) arr[i * 3] = 20;
-      if (arr[i * 3 + 1] > 15) arr[i * 3 + 1] = -15;
-      if (arr[i * 3 + 1] < -15) arr[i * 3 + 1] = 15;
-    }
-    posAttr.needsUpdate = true;
-  });
-
-  const circleTexture = useMemo(() => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 64;
-    canvas.height = 64;
-    const ctx = canvas.getContext('2d')!;
-    ctx.beginPath();
-    ctx.arc(32, 32, 30, 0, Math.PI * 2);
-    ctx.fillStyle = 'white';
-    ctx.fill();
-    return new THREE.CanvasTexture(canvas);
-  }, []);
-
-  return (
-    <points ref={ref}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={count}
-          array={positions}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.3}
-        color="#7eeee6"
-        transparent
-        opacity={0.6}
-        sizeAttenuation
-        depthWrite={false}
-        map={circleTexture}
-        alphaMap={circleTexture}
-        alphaTest={0.1}
-      />
-    </points>
   );
 }
 
@@ -184,7 +81,7 @@ function Scene() {
       />
       
       <NetworkNodes />
-      <FloatingCircles />
+      
       
       <OrbitControls 
         enableZoom={false} 
