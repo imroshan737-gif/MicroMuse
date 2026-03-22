@@ -81,7 +81,7 @@ function NetworkNodes() {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial color="#666666" transparent opacity={0.15} />
+        <lineBasicMaterial color="#888888" transparent opacity={0.35} />
       </lineSegments>
 
       {/* Node dots */}
@@ -95,10 +95,10 @@ function NetworkNodes() {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.4}
-          color="#888888"
+          size={0.6}
+          color="#aaaaaa"
           transparent
-          opacity={0.6}
+          opacity={0.8}
           sizeAttenuation
           depthWrite={false}
           map={circleTexture}
@@ -167,7 +167,7 @@ function FloatingCircles() {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.3}
+        size={0.5}
         color="#4ECDC4"
         transparent
         opacity={0.5}

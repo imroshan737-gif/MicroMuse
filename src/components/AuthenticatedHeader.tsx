@@ -83,16 +83,15 @@ export default function AuthenticatedHeader() {
           </NavLink>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Music Icon */}
-          <Button
-            variant="ghost"
-            size="icon"
+        <div className="flex items-center gap-3">
+          {/* Music Icon - standalone button next to profile */}
+          <button
             onClick={() => setShowMusicPlayer(true)}
-            className="hover:bg-primary/20"
+            className="w-10 h-10 rounded-full border border-border/50 bg-muted/30 flex items-center justify-center hover:bg-primary/20 transition-colors"
+            aria-label="Open music player"
           >
-            <Music className="w-5 h-5 text-muted-foreground hover:text-primary transition-colors" />
-          </Button>
+            <Music className="w-5 h-5 text-muted-foreground" />
+          </button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
