@@ -81,7 +81,7 @@ function Scene() {
       />
       
       <NetworkNodes />
-      <FloatingCircles />
+      
       
       <OrbitControls 
         enableZoom={false} 
