@@ -268,8 +268,8 @@ export default function Home() {
           )}
         </div>
 
-          {/* Stress Support Link at the end of page content */}
-          <StressSupportLink />
+
+
         </div>
       </div>
 
