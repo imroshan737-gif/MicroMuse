@@ -167,7 +167,7 @@ function FloatingCircles() {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.3}
+        size={0.5}
         color="#4ECDC4"
         transparent
         opacity={0.5}
