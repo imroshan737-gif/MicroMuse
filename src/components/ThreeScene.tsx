@@ -5,17 +5,24 @@ import { useStore } from '@/store/useStore';
 import * as THREE from 'three';
 
 function NetworkNodes() {
-  const count = 40;
+  const count = 80;
   const ref = useRef<THREE.Group>(null);
 
   const { nodes, edges } = useMemo(() => {
     const nodePositions: THREE.Vector3[] = [];
+    // Use a grid-based approach to spread nodes evenly across the screen
+    const cols = 10;
+    const rows = 8;
+    const spacingX = 90 / cols;
+    const spacingY = 60 / rows;
     for (let i = 0; i < count; i++) {
+      const col = i % cols;
+      const row = Math.floor(i / cols) % rows;
       nodePositions.push(
         new THREE.Vector3(
-          (Math.random() - 0.5) * 50,
-          (Math.random() - 0.5) * 35,
-          (Math.random() - 0.5) * 20 - 5
+          -45 + col * spacingX + (Math.random() - 0.5) * spacingX * 0.7,
+          -30 + row * spacingY + (Math.random() - 0.5) * spacingY * 0.7,
+          (Math.random() - 0.5) * 15 - 5
         )
       );
     }
@@ -23,7 +30,7 @@ function NetworkNodes() {
     const edgePairs: [number, number][] = [];
     for (let i = 0; i < count; i++) {
       for (let j = i + 1; j < count; j++) {
-        if (nodePositions[i].distanceTo(nodePositions[j]) < 12) {
+        if (nodePositions[i].distanceTo(nodePositions[j]) < 14) {
           edgePairs.push([i, j]);
         }
       }
@@ -49,7 +56,6 @@ function NetworkNodes() {
 
   return (
     <group ref={ref}>
-      {/* Thin network lines only */}
       <lineSegments>
         <bufferGeometry>
           <bufferAttribute
@@ -59,7 +65,7 @@ function NetworkNodes() {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial color="#8a8a8a" transparent opacity={0.45} />
+        <lineBasicMaterial color="#6a6a6a" transparent opacity={0.25} />
       </lineSegments>
     </group>
   );
@@ -73,11 +79,11 @@ function Scene() {
       <Stars 
         radius={120} 
         depth={60} 
-        count={800} 
-        factor={3} 
-        saturation={0.3} 
+        count={1200} 
+        factor={4.5} 
+        saturation={0.5} 
         fade 
-        speed={0.1} 
+        speed={0.15} 
       />
       
       <NetworkNodes />

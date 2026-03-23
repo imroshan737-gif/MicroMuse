@@ -88,10 +88,10 @@ export default function AuthenticatedHeader() {
           <button
             type="button"
             onClick={() => setShowMusicPlayer(true)}
-            className="flex items-center justify-center w-10 h-10 rounded-full border border-border bg-background/60 hover:bg-primary/20 transition-colors"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-500 hover:bg-orange-400 shadow-lg shadow-orange-500/30 transition-all duration-200"
             aria-label="Open music player"
           >
-            <Music className="w-5 h-5 text-foreground" />
+            <Music className="w-5 h-5 text-white" />
           </button>
 
           <DropdownMenu>
