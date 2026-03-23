@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, FileText, Mail, ExternalLink, Heart } from 'lucide-react';
+import { Shield, FileText, Mail, Heart } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { PrivacyContent, TermsContent } from './PolicyModalContent';
+import ContactModalContent from './ContactModalContent';
 
 export default function LandingFooter() {
   const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | 'contact' | null>(null);
