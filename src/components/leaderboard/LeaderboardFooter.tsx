@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, FileText, Mail, X, ExternalLink } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { PrivacyContent, TermsContent } from '@/components/PolicyModalContent';
 
 export default function LeaderboardFooter() {
   const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | 'contact' | null>(null);
