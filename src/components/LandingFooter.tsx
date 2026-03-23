@@ -15,7 +15,7 @@ export default function LandingFooter() {
           <div className="flex flex-col items-center gap-8">
             {/* Stress Support Link */}
             <a 
-              href="https://senseu.vercel.app" 
+              href="https://sense-u.vercel.app" 
               target="_blank" 
               rel="noopener noreferrer"
               className="group flex items-center gap-3 px-8 py-4 rounded-2xl glass border-2 border-primary/30 hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 bg-gradient-to-r from-primary/5 to-primary/10"
