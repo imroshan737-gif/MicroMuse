@@ -61,28 +61,7 @@ export default function LeaderboardFooter() {
               Privacy Policy
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 text-muted-foreground max-h-[60vh] overflow-y-auto pr-2">
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Data Collection</h3>
-              <p>We collect minimal personal information necessary to provide our services, including your username, email address, and activity data within the platform.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Data Usage</h3>
-              <p>Your data is used to personalize your experience, track your progress, display leaderboard rankings, and improve our services. We never sell your personal information to third parties.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Data Security</h3>
-              <p>We implement industry-standard security measures including encryption, secure authentication, and regular security audits to protect your information.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Your Rights</h3>
-              <p>You have the right to access, modify, or delete your personal data at any time. Contact us for any privacy-related requests.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Cookies</h3>
-              <p>We use essential cookies for authentication and session management. No tracking cookies are used without your consent.</p>
-            </section>
-          </div>
+          <PrivacyContent />
         </DialogContent>
       </Dialog>
 
