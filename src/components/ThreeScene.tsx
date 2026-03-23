@@ -79,11 +79,11 @@ function Scene() {
       <Stars 
         radius={120} 
         depth={60} 
-        count={800} 
-        factor={3} 
-        saturation={0.3} 
+        count={1200} 
+        factor={4.5} 
+        saturation={0.5} 
         fade 
-        speed={0.1} 
+        speed={0.15} 
       />
       
       <NetworkNodes />
