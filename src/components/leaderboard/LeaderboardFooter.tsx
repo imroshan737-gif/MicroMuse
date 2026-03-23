@@ -74,32 +74,7 @@ export default function LeaderboardFooter() {
               Terms of Service
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 text-muted-foreground max-h-[60vh] overflow-y-auto pr-2">
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Acceptance of Terms</h3>
-              <p>By using MicroMuse, you agree to these terms. If you disagree with any part, please do not use our services.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">User Conduct</h3>
-              <p>Users must maintain respectful behavior, not engage in cheating or manipulation of rankings, and not share inappropriate content. Violations may result in account suspension.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Intellectual Property</h3>
-              <p>Content you create remains yours. By sharing, you grant us a license to display it within the platform. Our platform design, code, and branding are protected.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Points & Rankings</h3>
-              <p>Points are earned through legitimate participation. We reserve the right to adjust or remove points gained through abuse or exploitation of the system.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Modifications</h3>
-              <p>We may update these terms periodically. Continued use after changes constitutes acceptance of the new terms.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Limitation of Liability</h3>
-              <p>MicroMuse is provided "as is" without warranties. We are not liable for any damages arising from platform use.</p>
-            </section>
-          </div>
+          <TermsContent />
         </DialogContent>
       </Dialog>
 
