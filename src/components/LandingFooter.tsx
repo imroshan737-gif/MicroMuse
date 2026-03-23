@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, FileText, Mail, ExternalLink, Heart } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { PrivacyContent, TermsContent } from './PolicyModalContent';
 
 export default function LandingFooter() {
   const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | 'contact' | null>(null);
@@ -72,28 +73,7 @@ export default function LandingFooter() {
               Privacy Policy
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 text-muted-foreground max-h-[60vh] overflow-y-auto pr-2">
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Data Collection</h3>
-              <p>We collect minimal personal information necessary to provide our services, including your username, email address, and activity data within the platform.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Data Usage</h3>
-              <p>Your data is used to personalize your experience, track your progress, display leaderboard rankings, and improve our services. We never sell your personal information to third parties.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Data Security</h3>
-              <p>We implement industry-standard security measures including encryption, secure authentication, and regular security audits to protect your information.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Your Rights</h3>
-              <p>You have the right to access, modify, or delete your personal data at any time. Contact us for any privacy-related requests.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Cookies</h3>
-              <p>We use essential cookies for authentication and session management. No tracking cookies are used without your consent.</p>
-            </section>
-          </div>
+          <PrivacyContent />
         </DialogContent>
       </Dialog>
 
@@ -106,32 +86,7 @@ export default function LandingFooter() {
               Terms of Service
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 text-muted-foreground max-h-[60vh] overflow-y-auto pr-2">
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Acceptance of Terms</h3>
-              <p>By using MicroMuse, you agree to these terms. If you disagree with any part, please do not use our services.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">User Conduct</h3>
-              <p>Users must maintain respectful behavior, not engage in cheating or manipulation of rankings, and not share inappropriate content. Violations may result in account suspension.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Intellectual Property</h3>
-              <p>Content you create remains yours. By sharing, you grant us a license to display it within the platform. Our platform design, code, and branding are protected.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Points & Rankings</h3>
-              <p>Points are earned through legitimate participation. We reserve the right to adjust or remove points gained through abuse or exploitation of the system.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Modifications</h3>
-              <p>We may update these terms periodically. Continued use after changes constitutes acceptance of the new terms.</p>
-            </section>
-            <section>
-              <h3 className="text-foreground font-semibold mb-2">Limitation of Liability</h3>
-              <p>MicroMuse is provided "as is" without warranties. We are not liable for any damages arising from platform use.</p>
-            </section>
-          </div>
+          <TermsContent />
         </DialogContent>
       </Dialog>
 
