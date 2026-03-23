@@ -88,16 +88,16 @@ export default function AuthenticatedHeader() {
           <button
             type="button"
             onClick={() => setShowMusicPlayer(true)}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-500 hover:bg-orange-400 shadow-lg shadow-orange-500/30 transition-all duration-200"
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-orange-500 hover:bg-orange-400 ring-2 ring-white transition-all duration-200"
             aria-label="Open music player"
           >
-            <Music className="w-5 h-5 text-white" />
+            <Music className="w-4 h-4 text-white" />
           </button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center text-sm font-bold text-primary-foreground overflow-hidden">
+                <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center text-sm font-bold text-primary-foreground overflow-hidden ring-2 ring-white">
                   {profile?.avatar_url ? (
                     <img
                       src={profile.avatar_url}
