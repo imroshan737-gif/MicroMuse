@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, FileText, Mail, ExternalLink, Heart } from 'lucide-react';
+import { Shield, FileText, Mail, Heart } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { PrivacyContent, TermsContent } from './PolicyModalContent';
+import ContactModalContent from './ContactModalContent';
 
 export default function LandingFooter() {
   const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | 'contact' | null>(null);
@@ -14,7 +15,7 @@ export default function LandingFooter() {
           <div className="flex flex-col items-center gap-8">
             {/* Stress Support Link */}
             <a 
-              href="https://senseu.vercel.app" 
+              href="https://sense-u.vercel.app" 
               target="_blank" 
               rel="noopener noreferrer"
               className="group flex items-center gap-3 px-8 py-4 rounded-2xl glass border-2 border-primary/30 hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 bg-gradient-to-r from-primary/5 to-primary/10"
@@ -96,53 +97,10 @@ export default function LandingFooter() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl">
               <Mail className="w-6 h-6 text-primary" />
-              Contact Us
+              Contact
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-6 py-4">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
-              className="glass p-4 rounded-xl"
-            >
-              <p className="text-sm text-muted-foreground mb-1">Owner</p>
-              <p className="text-lg font-semibold text-foreground">Roshan Gowda J</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="glass p-4 rounded-xl"
-            >
-              <p className="text-sm text-muted-foreground mb-1">Contact</p>
-              <a 
-                href="mailto:roshangowda737@gmail.com" 
-                className="text-lg font-semibold text-primary hover:underline"
-              >
-                roshangowda737@gmail.com
-              </a>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-              className="glass p-4 rounded-xl"
-            >
-              <p className="text-sm text-muted-foreground mb-1">LinkedIn</p>
-              <a 
-                href="https://www.linkedin.com/in/roshan-gowda" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-lg font-semibold text-primary hover:underline group"
-              >
-                Connect
-                <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </a>
-            </motion.div>
-          </div>
+          <ContactModalContent />
         </DialogContent>
       </Dialog>
     </>

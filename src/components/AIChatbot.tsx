@@ -253,12 +253,7 @@ export default function AIChatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.8 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-6 right-6 z-50 w-[400px] h-[580px] rounded-3xl overflow-hidden shadow-2xl flex flex-col"
-            style={{
-              background: 'linear-gradient(145deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.05))',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(139, 92, 246, 0.3)',
-            }}
+            className="fixed bottom-6 right-6 z-50 w-[400px] h-[580px] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-primary/30 bg-background"
           >
             {/* Header */}
             <div className="relative p-4 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400">
