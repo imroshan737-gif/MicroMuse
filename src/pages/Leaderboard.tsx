@@ -179,7 +179,7 @@ export default function Leaderboard() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-4">
+    <div className="min-h-screen pt-6 pb-12 px-4">
       <div className="container mx-auto max-w-4xl">
         <LeaderboardHeader />
 
