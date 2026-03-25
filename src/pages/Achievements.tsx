@@ -65,14 +65,14 @@ export default function Achievements() {
 
   if (statsLoading || achievementsLoading || hobbiesLoading) {
     return (
-      <div className="min-h-screen pt-24 pb-12 px-4 flex items-center justify-center">
+      <div className="min-h-screen pt-6 pb-12 px-4 flex items-center justify-center">
         <div className="animate-pulse text-lg">Loading achievements...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-4">
+    <div className="min-h-screen pt-6 pb-12 px-4">
       <div className="container mx-auto max-w-6xl space-y-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
