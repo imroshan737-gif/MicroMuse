@@ -37,8 +37,8 @@ export default function AuthenticatedHeader() {
 
   return (
     <div className="flex items-center w-full">
-      {/* Top nav links */}
-      <nav className="flex items-center gap-1 overflow-x-auto">
+      {/* Top nav links - centered */}
+      <nav className="flex items-center gap-1 overflow-x-auto absolute left-1/2 -translate-x-1/2">
         {topNavItems.map((item) => (
           <NavLink
             key={item.title}

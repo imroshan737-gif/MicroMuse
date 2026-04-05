@@ -64,7 +64,7 @@ export default function AppSidebar() {
   }, [user]);
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-border/50 bg-background/95 backdrop-blur-xl">
+    <Sidebar collapsible="icon" className="border-r border-border/50 bg-background/95 backdrop-blur-xl w-56">
       <SidebarHeader className="p-4">
         <div
           className="flex items-center gap-2 cursor-pointer"
