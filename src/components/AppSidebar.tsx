@@ -1,4 +1,4 @@
-import { Home, Search, MessageCircle, Trophy, Target, Award, Briefcase, Settings, User, Sparkles } from 'lucide-react';
+import { Search, MessageCircle } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,17 +15,11 @@ import {
   SidebarHeader,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { Sparkles } from 'lucide-react';
 
 const navItems = [
-  { title: 'Home', url: '/home', icon: Home },
   { title: 'Search', url: '/search', icon: Search },
   { title: 'Messages', url: '/messages', icon: MessageCircle },
-  { title: 'Challenges', url: '/challenges', icon: Target },
-  { title: 'Achievements', url: '/achievements', icon: Award },
-  { title: 'Your Work', url: '/your-work', icon: Briefcase },
-  { title: 'Leaderboard', url: '/leaderboard', icon: Trophy },
-  { title: 'Profile', url: '/profile', icon: User },
-  { title: 'Settings', url: '/settings', icon: Settings },
 ];
 
 export default function AppSidebar() {
