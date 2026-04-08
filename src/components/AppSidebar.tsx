@@ -30,6 +30,8 @@ export default function AppSidebar() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
+  const { pendingCount } = useMessageRequests();
+  const totalBadge = unreadCount + pendingCount;
 
   useEffect(() => {
     if (!user) return;
