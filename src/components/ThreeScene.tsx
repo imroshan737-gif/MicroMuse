@@ -5,57 +5,71 @@ import { useStore } from '@/store/useStore';
 import * as THREE from 'three';
 
 function NetworkNodes() {
-  const count = 80;
+  const count = 60;
   const ref = useRef<THREE.Group>(null);
 
-  const { nodes, edges } = useMemo(() => {
+  const nodes = useMemo(() => {
     const nodePositions: THREE.Vector3[] = [];
-    // Use a grid-based approach to spread nodes evenly across the screen
-    const cols = 10;
+    // Spread nodes evenly across the entire screen using a larger grid
+    const cols = 12;
     const rows = 8;
-    const spacingX = 90 / cols;
-    const spacingY = 60 / rows;
+    const spacingX = 120 / cols;
+    const spacingY = 80 / rows;
     for (let i = 0; i < count; i++) {
       const col = i % cols;
       const row = Math.floor(i / cols) % rows;
       nodePositions.push(
         new THREE.Vector3(
-          -45 + col * spacingX + (Math.random() - 0.5) * spacingX * 0.7,
-          -30 + row * spacingY + (Math.random() - 0.5) * spacingY * 0.7,
-          (Math.random() - 0.5) * 15 - 5
+          -60 + col * spacingX + (Math.random() - 0.5) * spacingX * 0.6,
+          -40 + row * spacingY + (Math.random() - 0.5) * spacingY * 0.6,
+          (Math.random() - 0.5) * 20 - 5
         )
       );
     }
+    return nodePositions;
+  }, []);
 
+  // Build edges connecting nearby nodes - thin lines only
+  const linePositions = useMemo(() => {
     const edgePairs: [number, number][] = [];
     for (let i = 0; i < count; i++) {
+      let connections = 0;
       for (let j = i + 1; j < count; j++) {
-        if (nodePositions[i].distanceTo(nodePositions[j]) < 14) {
+        if (connections >= 3) break; // limit connections per node
+        if (nodes[i].distanceTo(nodes[j]) < 18) {
           edgePairs.push([i, j]);
+          connections++;
         }
       }
     }
-
-    return { nodes: nodePositions, edges: edgePairs };
-  }, []);
-
-  const linePositions = useMemo(() => {
     const positions: number[] = [];
-    edges.forEach(([a, b]) => {
+    edgePairs.forEach(([a, b]) => {
       positions.push(nodes[a].x, nodes[a].y, nodes[a].z);
       positions.push(nodes[b].x, nodes[b].y, nodes[b].z);
     });
     return new Float32Array(positions);
-  }, [nodes, edges]);
+  }, [nodes]);
+
+  // Small glowing dots at node intersections
+  const dotPositions = useMemo(() => {
+    const positions: number[] = [];
+    // Only place dots at every 3rd node for subtlety
+    for (let i = 0; i < count; i += 3) {
+      positions.push(nodes[i].x, nodes[i].y, nodes[i].z);
+    }
+    return new Float32Array(positions);
+  }, [nodes]);
 
   useFrame((state) => {
     if (ref.current) {
-      ref.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.02) * 0.1;
+      ref.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.015) * 0.08;
+      ref.current.rotation.x = Math.cos(state.clock.elapsedTime * 0.01) * 0.03;
     }
   });
 
   return (
     <group ref={ref}>
+      {/* Network lines - thin and spread evenly */}
       <lineSegments>
         <bufferGeometry>
           <bufferAttribute
@@ -65,8 +79,21 @@ function NetworkNodes() {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial color="#6a6a6a" transparent opacity={0.25} />
+        <lineBasicMaterial color="#4a5568" transparent opacity={0.35} />
       </lineSegments>
+
+      {/* Small glowing dots at some intersections */}
+      <points>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={dotPositions.length / 3}
+            array={dotPositions}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <pointsMaterial color="#63b3ed" size={0.4} transparent opacity={0.6} sizeAttenuation />
+      </points>
     </group>
   );
 }
@@ -74,20 +101,19 @@ function NetworkNodes() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.1} />
+      <ambientLight intensity={0.08} />
       
       <Stars 
-        radius={120} 
-        depth={60} 
-        count={1200} 
-        factor={4.5} 
-        saturation={0.5} 
+        radius={150} 
+        depth={80} 
+        count={800} 
+        factor={3.5} 
+        saturation={0.3} 
         fade 
-        speed={0.15} 
+        speed={0.1} 
       />
       
       <NetworkNodes />
-      
       
       <OrbitControls 
         enableZoom={false} 
@@ -95,7 +121,7 @@ function Scene() {
         maxPolarAngle={Math.PI / 1.4}
         minPolarAngle={Math.PI / 3.5}
         autoRotate
-        autoRotateSpeed={0.05}
+        autoRotateSpeed={0.04}
         enableDamping
         dampingFactor={0.05}
       />
@@ -112,7 +138,7 @@ export default function ThreeScene() {
   return (
     <div className="fixed inset-0 -z-10">
       <Canvas
-        camera={{ position: [0, 0, 15], fov: 45 }}
+        camera={{ position: [0, 0, 20], fov: 50 }}
         dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       >
@@ -120,7 +146,7 @@ export default function ThreeScene() {
           <Scene />
         </Suspense>
       </Canvas>
-      <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-background/40 to-background/80 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/5 via-background/30 to-background/70 pointer-events-none" />
     </div>
   );
 }
