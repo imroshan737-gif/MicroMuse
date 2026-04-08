@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useConversations, useChat, Conversation, Message, getOrCreateConversation } from '@/hooks/useMessages';
+import { useMessageRequests, MessageRequest } from '@/hooks/useMessageRequests';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Send, Paperclip, FileText, ArrowLeft, MessageCircle, Plus, X } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Send, Paperclip, FileText, ArrowLeft, MessageCircle, Plus, Check, X, Bell } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, isToday, isYesterday } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
+import { toast } from '@/hooks/use-toast';
 import {
   Dialog,
   DialogContent,
@@ -179,34 +182,56 @@ function NewChatDialog({ open, onOpenChange, userId, onStartChat }: {
 }) {
   const [users, setUsers] = useState<FollowUser[]>([]);
   const [loading, setLoading] = useState(true);
+  const { sendRequest, checkRequestStatus } = useMessageRequests();
+  const [sendingTo, setSendingTo] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) return;
-    const fetchMutuals = async () => {
+    const fetchFollowing = async () => {
       setLoading(true);
       // Get people I follow
       const { data: following } = await supabase.from('follows').select('following_id').eq('follower_id', userId);
       if (!following || following.length === 0) { setUsers([]); setLoading(false); return; }
       const followingIds = following.map(f => f.following_id);
 
-      // Get who follows me back (mutual)
-      const { data: followedBy } = await supabase.from('follows').select('follower_id').eq('following_id', userId).in('follower_id', followingIds);
-      const mutualIds = followedBy?.map(f => f.follower_id) || [];
-      if (mutualIds.length === 0) { setUsers([]); setLoading(false); return; }
-
-      const { data: profiles } = await supabase.from('public_profiles').select('id, full_name, username, avatar_url').in('id', mutualIds);
+      const { data: profiles } = await supabase.from('public_profiles').select('id, full_name, username, avatar_url').in('id', followingIds);
       setUsers((profiles as FollowUser[]) || []);
       setLoading(false);
     };
-    fetchMutuals();
+    fetchFollowing();
   }, [open, userId]);
 
   const handleSelect = async (otherUserId: string) => {
-    const convoId = await getOrCreateConversation(userId, otherUserId);
-    if (convoId) {
-      onOpenChange(false);
-      onStartChat(convoId);
+    setSendingTo(otherUserId);
+    // Check if already accepted
+    const status = await checkRequestStatus(otherUserId);
+    
+    if (status === 'accepted') {
+      // Already approved, go straight to conversation
+      const convoId = await getOrCreateConversation(userId, otherUserId);
+      if (convoId) {
+        onOpenChange(false);
+        onStartChat(convoId);
+      }
+    } else if (status === 'pending') {
+      toast({ title: 'Request Pending', description: 'Your message request is still pending approval.' });
+    } else {
+      // Send a new request
+      const result = await sendRequest(otherUserId);
+      if (result.alreadyAccepted) {
+        const convoId = await getOrCreateConversation(userId, otherUserId);
+        if (convoId) {
+          onOpenChange(false);
+          onStartChat(convoId);
+        }
+      } else if (result.error) {
+        toast({ title: 'Error', description: result.error, variant: 'destructive' });
+      } else {
+        toast({ title: 'Request Sent!', description: 'The user will be notified. You can chat once they accept.' });
+        onOpenChange(false);
+      }
     }
+    setSendingTo(null);
   };
 
   return (
@@ -219,14 +244,14 @@ function NewChatDialog({ open, onOpenChange, userId, onStartChat }: {
           <div className="py-8 text-center text-muted-foreground animate-pulse">Loading contacts...</div>
         ) : users.length === 0 ? (
           <div className="py-8 text-center text-muted-foreground">
-            <p className="font-medium">No mutual followers yet</p>
-            <p className="text-sm mt-1">Follow people and have them follow you back to chat</p>
+            <p className="font-medium">No one to message yet</p>
+            <p className="text-sm mt-1">Follow people to send them a message request</p>
           </div>
         ) : (
           <ScrollArea className="max-h-80">
             <div className="space-y-1">
               {users.map(u => (
-                <button key={u.id} onClick={() => handleSelect(u.id!)} className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors text-left">
+                <button key={u.id} onClick={() => handleSelect(u.id!)} disabled={sendingTo === u.id} className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors text-left disabled:opacity-50">
                   <Avatar className="w-10 h-10">
                     <AvatarImage src={u.avatar_url || ''} />
                     <AvatarFallback className="bg-primary/10 text-primary text-sm font-bold">{u.full_name?.charAt(0) || '?'}</AvatarFallback>
@@ -245,12 +270,53 @@ function NewChatDialog({ open, onOpenChange, userId, onStartChat }: {
   );
 }
 
+function RequestsPanel({ requests, onAccept, onDecline }: {
+  requests: MessageRequest[];
+  onAccept: (id: string, senderId: string) => void;
+  onDecline: (id: string) => void;
+}) {
+  if (requests.length === 0) return null;
+
+  return (
+    <div className="p-3 border-b border-border/50">
+      <p className="text-xs font-semibold text-muted-foreground uppercase mb-2 flex items-center gap-1">
+        <Bell className="w-3 h-3" /> Message Requests ({requests.length})
+      </p>
+      <div className="space-y-2">
+        {requests.map(req => (
+          <div key={req.id} className="flex items-center gap-3 p-2 rounded-lg bg-primary/5 border border-primary/10">
+            <Avatar className="w-9 h-9">
+              <AvatarImage src={req.sender?.avatar_url || ''} />
+              <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
+                {req.sender?.full_name?.charAt(0) || '?'}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-sm truncate">{req.sender?.full_name || 'User'}</p>
+              <p className="text-xs text-muted-foreground">wants to message you</p>
+            </div>
+            <div className="flex gap-1">
+              <Button size="icon" variant="ghost" className="w-8 h-8 text-green-500 hover:bg-green-500/10" onClick={() => onAccept(req.id, req.sender_id)}>
+                <Check className="w-4 h-4" />
+              </Button>
+              <Button size="icon" variant="ghost" className="w-8 h-8 text-red-500 hover:bg-red-500/10" onClick={() => onDecline(req.id)}>
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Messages() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { conversations, loading } = useConversations();
   const [selectedId, setSelectedId] = useState<string | null>(searchParams.get('conversation'));
   const { user } = useAuth();
   const [showNewChat, setShowNewChat] = useState(false);
+  const { pendingRequests, acceptRequest, declineRequest } = useMessageRequests();
 
   useEffect(() => {
     const convoParam = searchParams.get('conversation');
@@ -269,7 +335,19 @@ export default function Messages() {
     setSearchParams({});
   };
 
-  // If a conversation is selected, show chat view
+  const handleAccept = async (requestId: string, senderId: string) => {
+    const convoId = await acceptRequest(requestId, senderId);
+    if (convoId) {
+      toast({ title: 'Request Accepted', description: 'You can now start chatting!' });
+      handleSelect(convoId);
+    }
+  };
+
+  const handleDecline = async (requestId: string) => {
+    await declineRequest(requestId);
+    toast({ title: 'Request Declined' });
+  };
+
   if (selectedId && selectedConvo) {
     return (
       <div className="h-[calc(100vh-3.5rem)] flex flex-col">
@@ -278,12 +356,14 @@ export default function Messages() {
     );
   }
 
-  // Conversation list view (single pane)
   return (
     <div className="h-[calc(100vh-3.5rem)] flex flex-col relative">
       <div className="p-4 border-b border-border/50">
         <h2 className="text-xl font-display font-bold">Messages</h2>
       </div>
+
+      {/* Message Requests */}
+      <RequestsPanel requests={pendingRequests} onAccept={handleAccept} onDecline={handleDecline} />
 
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
@@ -293,7 +373,7 @@ export default function Messages() {
         <div className="flex-1 flex flex-col items-center justify-center text-center p-6">
           <MessageCircle className="w-16 h-16 text-muted-foreground mb-4" />
           <h3 className="text-lg font-semibold mb-1">No conversations yet</h3>
-          <p className="text-sm text-muted-foreground">Search for people and follow each other to start messaging</p>
+          <p className="text-sm text-muted-foreground">Follow people and send a message request to start chatting</p>
         </div>
       ) : (
         <ScrollArea className="flex-1">
@@ -332,7 +412,6 @@ export default function Messages() {
         </ScrollArea>
       )}
 
-      {/* New chat FAB */}
       <button
         onClick={() => setShowNewChat(true)}
         className="absolute bottom-6 left-6 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:scale-105 transition-transform"

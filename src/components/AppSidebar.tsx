@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useEffect, useState } from 'react';
+import { useMessageRequests } from '@/hooks/useMessageRequests';
 import {
   Sidebar,
   SidebarContent,
@@ -29,6 +30,8 @@ export default function AppSidebar() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
+  const { pendingCount } = useMessageRequests();
+  const totalBadge = unreadCount + pendingCount;
 
   useEffect(() => {
     if (!user) return;
@@ -97,9 +100,9 @@ export default function AppSidebar() {
                     >
                       <div className="relative">
                         <item.icon className="w-5 h-5 shrink-0" />
-                        {item.title === 'Messages' && unreadCount > 0 && (
+                        {item.title === 'Messages' && totalBadge > 0 && (
                           <span className="absolute -top-1 -right-1 w-4 h-4 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-                            {unreadCount > 9 ? '9+' : unreadCount}
+                            {totalBadge > 9 ? '9+' : totalBadge}
                           </span>
                         )}
                       </div>

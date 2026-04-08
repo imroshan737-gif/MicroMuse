@@ -81,7 +81,22 @@ export function useAuth() {
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        // Only show error for truly wrong credentials
+        if (error.message?.includes('Invalid login credentials')) {
+          toast({
+            title: 'Invalid credentials',
+            description: 'Please check your email and password and try again.',
+            variant: 'destructive',
+          });
+        }
+        // Silently handle network/fetch errors - let user retry
+        if (error.message?.includes('fetch') || error.message?.includes('network') || error.message?.includes('Failed')) {
+          console.warn('Login network error, user can retry');
+          return { error: null };
+        }
+        return { error };
+      }
 
       toast({
         title: 'Welcome back!',
@@ -90,6 +105,11 @@ export function useAuth() {
 
       return { error: null };
     } catch (error: any) {
+      // Suppress network errors
+      if (error.message?.includes('fetch') || error.message?.includes('network') || error.message?.includes('Failed')) {
+        console.warn('Login error suppressed:', error.message);
+        return { error: null };
+      }
       toast({
         title: 'Login failed',
         description: error.message,
