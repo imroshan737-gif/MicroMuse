@@ -105,8 +105,6 @@ export default function AppSidebar() {
                             {totalBadge > 9 ? '9+' : totalBadge}
                           </span>
                         )}
-                          </span>
-                        )}
                       </div>
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
