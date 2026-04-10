@@ -202,20 +202,27 @@ export default function Landing() {
         </motion.div>
       </section>
 
-      {/* ═══════════════════ STATS BAR ═══════════════════ */}
+      {/* ═══════════════════ HIGHLIGHTS BAR ═══════════════════ */}
       <section id="stats" className="py-20 px-4 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.03] to-transparent" />
-        <div className="container mx-auto max-w-5xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {stats.map((stat, i) => (
-              <AnimatedSection key={stat.label} delay={i * 0.1}>
-                <div className="text-center group">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary/10 mb-4 group-hover:scale-110 transition-transform">
-                    <stat.icon className="w-6 h-6 text-primary" />
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {highlights.map((item, i) => (
+              <AnimatedSection key={item.title} delay={i * 0.1}>
+                <motion.div
+                  whileHover={{ y: -4, scale: 1.03 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  className="relative group rounded-2xl p-5 border border-border/40 bg-card/40 backdrop-blur-sm hover:border-primary/30 transition-colors overflow-hidden"
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-[0.07] transition-opacity duration-500`} />
+                  <div className="relative z-10 flex flex-col items-center text-center gap-3">
+                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg`}>
+                      <item.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-base font-display font-semibold text-foreground">{item.title}</h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
                   </div>
-                  <p className="text-3xl md:text-4xl font-display font-bold text-foreground mb-1">{stat.value}</p>
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
-                </div>
+                </motion.div>
               </AnimatedSection>
             ))}
           </div>
