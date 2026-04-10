@@ -26,11 +26,11 @@ const howItWorks = [
   { step: 4, title: 'Track Your Progress', description: 'Build streaks, earn achievements, and watch yourself improve', icon: Trophy },
 ];
 
-const stats = [
-  { value: '10K+', label: 'Active Creators', icon: Users },
-  { value: '50+', label: 'Hobby Categories', icon: Zap },
-  { value: '100K+', label: 'Challenges Done', icon: Star },
-  { value: '99.9%', label: 'Uptime & Security', icon: Shield },
+const highlights = [
+  { icon: Zap, title: 'Micro Challenges', desc: 'Bite-sized daily tasks that fit any schedule', gradient: 'from-amber-500 to-orange-500' },
+  { icon: Shield, title: 'E2E Encrypted', desc: 'Your data stays private with zero-knowledge security', gradient: 'from-emerald-500 to-teal-500' },
+  { icon: Brain, title: 'AI-Powered', desc: 'Smart personalization that adapts to your growth', gradient: 'from-violet-500 to-purple-500' },
+  { icon: Trophy, title: 'Streak System', desc: 'Build consistency with gamified progress tracking', gradient: 'from-pink-500 to-rose-500' },
 ];
 
 function AnimatedSection({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
