@@ -56,12 +56,6 @@ export default function Landing() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.7], [1, 0.95]);
 
-  const hobbies = useMemo(() => [
-    { name: 'Studies', emoji: '📚' }, { name: 'Music', emoji: '🎵' },
-    { name: 'Art', emoji: '🎨' }, { name: 'Coding', emoji: '💻' },
-    { name: 'Writing', emoji: '✍️' }, { name: 'Fitness', emoji: '💪' },
-    { name: 'Dance', emoji: '💃' }, { name: 'Photography', emoji: '📷' },
-  ], []);
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
