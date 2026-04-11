@@ -161,26 +161,6 @@ export default function Landing() {
             </Button>
           </motion.div>
 
-          {/* Hobby Pills */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
-            className="flex flex-wrap justify-center gap-3"
-          >
-            {hobbies.map((h, i) => (
-              <motion.span
-                key={h.name}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 1 + i * 0.08, type: 'spring', stiffness: 300, damping: 15 }}
-                whileHover={{ scale: 1.1, y: -3 }}
-                className="px-4 py-2 rounded-full bg-muted/60 backdrop-blur-sm border border-border/40 text-sm font-medium text-foreground/80 cursor-default select-none"
-              >
-                {h.emoji} {h.name}
-              </motion.span>
-            ))}
-          </motion.div>
 
           {/* Scroll Indicator */}
           <motion.div
