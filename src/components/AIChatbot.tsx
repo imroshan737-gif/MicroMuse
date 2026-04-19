@@ -191,6 +191,8 @@ export default function AIChatbot() {
       ]);
     } finally {
       setIsLoading(false);
+      // Return focus to the input so the user can type the next question right away
+      requestAnimationFrame(() => inputRef.current?.focus());
     }
   };
 
