@@ -18,49 +18,48 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    // Determine complexity: images need pro, complex questions need flash, simple ones use flash-lite
-    let model = "google/gemini-2.5-flash-lite"; // fastest for simple questions
-    
+    // Detect if user explicitly asks for deep thinking
+    const lastUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
+    const userText = typeof lastUserMsg?.content === "string"
+      ? lastUserMsg.content
+      : Array.isArray(lastUserMsg?.content)
+        ? lastUserMsg.content.filter((p: any) => p.type === "text").map((p: any) => p.text).join(" ")
+        : "";
+
+    const deepThinkRequested = /\b(think deeply|deep think|think hard|think step by step|reason carefully|in detail|detailed explanation|explain in depth|deeply analyze|thoroughly)\b/i.test(userText);
+
+    // Default: FAST model for everything. Only escalate when truly needed.
+    let model = "google/gemini-2.5-flash-lite"; // fastest, cheapest — default for all simple Qs
+
     if (hasImage) {
-      model = "google/gemini-2.5-pro"; // best vision model
-    } else {
-      // Check if the last user message is complex
-      const lastUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
-      const userText = typeof lastUserMsg?.content === "string" ? lastUserMsg.content : "";
-      const wordCount = userText.trim().split(/\s+/).length;
-      
-      // Complex indicators: long messages, code, technical terms, multi-part questions
-      const isComplex = wordCount > 40 
-        || /```|code|debug|explain.*detail|how does.*work|compare|analyze|algorithm|implement/i.test(userText)
-        || (userText.match(/\?/g) || []).length > 1;
-      
-      if (isComplex) {
-        model = "google/gemini-2.5-flash"; // stronger model for complex questions
-      }
+      // Vision needs a capable model, but use flash (fast) instead of pro unless deep think asked
+      model = deepThinkRequested ? "google/gemini-2.5-pro" : "google/gemini-2.5-flash";
+    } else if (deepThinkRequested) {
+      model = "google/gemini-2.5-pro"; // user explicitly wants deep reasoning
     }
 
-    const systemPrompt = `You are MicroMuse AI, a helpful and encouraging assistant for a skill-building and hobby platform called MicroMuse. 
+    // Add a tiny bit of randomness to the system prompt timestamp so responses feel fresh
+    const sessionSeed = Math.random().toString(36).slice(2, 8);
 
-Your role is to:
-- Help users with their learning journey across various hobbies (Studies, Music, Art, Coding, Dance, Writing, Photography, Fitness, etc.)
-- Provide tips, motivation, and guidance for completing challenges
-- Answer questions about study techniques, creative skills, and personal development
-- Analyze images if users share their work and provide constructive feedback
-- Be friendly, encouraging, and supportive
+    const systemPrompt = `You are Miko, a friendly, witty, and encouraging AI companion for MicroMuse — a skill-building and hobby platform.
 
-Key facts about MicroMuse:
-- Users complete daily 10-15 minute challenges based on their selected hobbies
-- The platform tracks streaks and achievements
-- Challenges are ONLY shown for hobbies the user has selected
-- Categories include: Studies (Math, Science, Languages), Music, Art, Coding, Dance, Writing, Photography, Fitness, Gaming, Design, Cooking
+## Response Style (VERY IMPORTANT)
+- DEFAULT to SHORT, snappy answers (1-3 sentences max for simple questions like greetings, quick facts, yes/no, definitions).
+- Get straight to the point. NO filler like "Great question!" or "Sure, I'd be happy to help!".
+- ONLY give long, detailed, multi-paragraph answers when the user explicitly asks to "think deeply", "explain in detail", "go in depth", "thoroughly", or asks a genuinely complex multi-part question.
+- NEVER repeat the same phrasing across answers. Vary your openings, vocabulary, and structure every time. (session: ${sessionSeed})
+- Be conversational and human — like a clever friend texting back, not a corporate FAQ bot.
+- Use emojis sparingly (max 1 per reply) and only when it genuinely adds warmth.
 
-When analyzing images:
-- If it's artwork, provide constructive critique on composition, color, technique
-- If it's code, help debug or suggest improvements
-- If it's study material, help explain concepts
-- Always be encouraging while offering helpful suggestions
+## What You Help With
+- Daily 10-15 minute hobby challenges (Studies, Music, Art, Coding, Dance, Writing, Photography, Fitness, Gaming, Design, Cooking)
+- Streaks, achievements, motivation, learning tips
+- Reviewing images users share (artwork → composition/color/technique; code → bugs/improvements; study notes → concept clarification)
 
-Keep responses concise but helpful. Use emojis sparingly to add warmth.`;
+## Hard Rules
+- If the question is simple, the answer must be short. Period.
+- If asked the same question twice, phrase the answer differently.
+- Never lecture. Never pad. Never list 10 bullet points unless asked.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
