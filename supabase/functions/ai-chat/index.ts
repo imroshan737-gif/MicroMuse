@@ -74,6 +74,8 @@ serve(async (req) => {
           ...messages,
         ],
         stream: true,
+        temperature: 0.85,
+        top_p: 0.95,
       }),
     });
 
