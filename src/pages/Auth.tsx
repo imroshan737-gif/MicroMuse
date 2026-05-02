@@ -133,40 +133,33 @@ const handleGoogleSignIn = async () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Cinematic background */}
+      {/* Subtle minimal background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <motion.div
-          className="absolute -top-40 -left-40 w-[36rem] h-[36rem] rounded-full bg-primary/30 blur-3xl"
-          animate={{ x: [0, 60, 0], y: [0, 40, 0], scale: [1, 1.1, 1] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        {/* Faint grid */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
         />
-        <motion.div
-          className="absolute top-1/3 -right-40 w-[34rem] h-[34rem] rounded-full bg-accent/30 blur-3xl"
-          animate={{ x: [0, -50, 0], y: [0, 60, 0], scale: [1, 1.15, 1] }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-0 left-1/4 w-[28rem] h-[28rem] rounded-full bg-secondary/25 blur-3xl"
-          animate={{ x: [0, 40, 0], y: [0, -50, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        {/* Floating sparkles */}
-        {[...Array(12)].map((_, i) => (
+        {/* Soft vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background))_85%)]" />
+        {/* Quiet drifting sparkles */}
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 rounded-full bg-primary/60"
+            className="absolute w-[3px] h-[3px] rounded-full bg-foreground/30"
             style={{
-              left: `${(i * 37) % 100}%`,
-              top: `${(i * 53) % 100}%`,
+              left: `${(i * 41 + 7) % 100}%`,
+              top: `${(i * 59 + 11) % 100}%`,
             }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0.2, 1, 0.2],
-            }}
+            animate={{ opacity: [0.1, 0.5, 0.1] }}
             transition={{
-              duration: 4 + (i % 4),
+              duration: 5 + (i % 3),
               repeat: Infinity,
-              delay: i * 0.3,
+              delay: i * 0.4,
               ease: 'easeInOut',
             }}
           />
