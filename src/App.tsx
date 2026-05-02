@@ -9,7 +9,8 @@ import AuthenticatedHeader from "@/components/AuthenticatedHeader";
 import AIChatbot from "@/components/AIChatbot";
 import AppSidebar from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 
 // Pages
@@ -83,16 +84,49 @@ function AuthenticatedRedirect() {
 }
 
 function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
+  const mainRef = useRef<HTMLElement>(null);
+  const [showHeader, setShowHeader] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const el = mainRef.current;
+    if (!el) return;
+    const handler = () => {
+      const y = el.scrollTop;
+      if (y < 10) {
+        setShowHeader(true);
+      } else if (y > lastScrollY.current + 6) {
+        setShowHeader(false);
+      } else if (y < lastScrollY.current - 6) {
+        setShowHeader(true);
+      }
+      lastScrollY.current = y;
+    };
+    el.addEventListener('scroll', handler, { passive: true });
+    return () => el.removeEventListener('scroll', handler);
+  }, []);
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0">
-          <header className="h-14 flex items-center border-b border-border/50 px-4 glass shrink-0 z-30">
-            <SidebarTrigger className="mr-3" />
-            <AuthenticatedHeader />
-          </header>
-          <main className="flex-1 overflow-auto">
+          <AnimatePresence initial={false}>
+            {showHeader && (
+              <motion.header
+                key="app-header"
+                initial={{ y: -64, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -64, opacity: 0 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="h-14 flex items-center border-b border-border/50 px-4 glass-strong shrink-0 sticky top-0 z-30"
+              >
+                <SidebarTrigger className="mr-3" />
+                <AuthenticatedHeader />
+              </motion.header>
+            )}
+          </AnimatePresence>
+          <main ref={mainRef} className="flex-1 overflow-auto">
             {children}
           </main>
         </div>
