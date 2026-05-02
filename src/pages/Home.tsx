@@ -78,7 +78,25 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="flex-1 pb-12 px-4">
+      <div className="flex-1 pb-12 px-4 relative overflow-hidden">
+        {/* Ambient animated orbs */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+          <motion.div
+            className="absolute -top-32 -left-24 w-[28rem] h-[28rem] rounded-full bg-primary/20 blur-3xl"
+            animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
+            transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute top-40 -right-32 w-[26rem] h-[26rem] rounded-full bg-accent/20 blur-3xl"
+            animate={{ x: [0, -30, 0], y: [0, 40, 0] }}
+            transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute bottom-0 left-1/3 w-[22rem] h-[22rem] rounded-full bg-secondary/20 blur-3xl"
+            animate={{ x: [0, 20, 0], y: [0, -30, 0] }}
+            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
         <div className="container mx-auto max-w-5xl">
 
           {/* Hero Section */}
@@ -86,7 +104,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
-            className="pt-8 pb-6"
+            className="pt-10 pb-6"
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -94,15 +112,30 @@ export default function Home() {
               transition={{ delay: 0.1 }}
               className="mb-2"
             >
-              <p className="text-sm font-medium text-primary tracking-widest uppercase mb-2">
-                {greeting} ✨
-              </p>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-2 glass px-4 py-1.5 rounded-full mb-4 border border-primary/20"
+              >
+                <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+                <span className="text-xs font-semibold text-primary tracking-widest uppercase">
+                  {greeting}
+                </span>
+              </motion.div>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.05] tracking-tight">
                 Welcome back,{' '}
-                <span className="gradient-text">{user?.name || 'Creative'}</span>
+                <span className="gradient-text relative inline-block">
+                  {user?.name || 'Creative'}
+                  <motion.span
+                    className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-primary rounded-full origin-left"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
+                  />
+                </span>
               </h1>
-              <p className="text-lg text-muted-foreground mt-3 max-w-xl">
-                Your creative journey continues. Let's make today count.
+              <p className="text-lg md:text-xl text-muted-foreground mt-4 max-w-xl">
+                Your creative journey continues. Let's make today <span className="text-foreground font-semibold">count</span>.
               </p>
             </motion.div>
           </motion.section>

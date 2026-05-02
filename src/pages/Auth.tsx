@@ -132,34 +132,81 @@ const handleGoogleSignIn = async () => {
 };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Cinematic background */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <motion.div
+          className="absolute -top-40 -left-40 w-[36rem] h-[36rem] rounded-full bg-primary/30 blur-3xl"
+          animate={{ x: [0, 60, 0], y: [0, 40, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute top-1/3 -right-40 w-[34rem] h-[34rem] rounded-full bg-accent/30 blur-3xl"
+          animate={{ x: [0, -50, 0], y: [0, 60, 0], scale: [1, 1.15, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute bottom-0 left-1/4 w-[28rem] h-[28rem] rounded-full bg-secondary/25 blur-3xl"
+          animate={{ x: [0, 40, 0], y: [0, -50, 0] }}
+          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        {/* Floating sparkles */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-primary/60"
+            style={{
+              left: `${(i * 37) % 100}%`,
+              top: `${(i * 53) % 100}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              opacity: [0.2, 1, 0.2],
+            }}
+            transition={{
+              duration: 4 + (i % 4),
+              repeat: Infinity,
+              delay: i * 0.3,
+              ease: 'easeInOut',
+            }}
+          />
+        ))}
+      </div>
+
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="w-full max-w-md relative"
       >
         <div className="text-center mb-8">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring' }}
-            className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-4"
+            className="inline-flex items-center gap-2 glass-strong px-5 py-2 rounded-full mb-5 border border-primary/30 shadow-lg shadow-primary/10"
           >
             <Sparkles className="w-5 h-5 text-primary animate-pulse-glow" />
-            <span className="text-sm font-medium">Welcome to MicroMuse</span>
+            <span className="text-sm font-semibold tracking-wide">Welcome to MicroMuse</span>
           </motion.div>
-          <h1 className="text-4xl font-display font-bold mb-2">
-            {isLogin ? 'Welcome Back' : 'Create Account'}
-          </h1>
-          <p className="text-muted-foreground">
+          <motion.h1
+            key={isLogin ? 'login' : 'signup'}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-5xl md:text-6xl font-display font-bold mb-3 leading-tight"
+          >
+            <span className="gradient-text">
+              {isLogin ? 'Welcome Back' : 'Begin Your Story'}
+            </span>
+          </motion.h1>
+          <p className="text-muted-foreground text-base">
             {isLogin
-              ? 'Sign in to continue your creative journey'
-              : 'Start your 10-minute daily creative practice'}
+              ? 'Sign in to continue your creative journey ✨'
+              : 'Where 10 minutes a day sparks a lifetime of art 🎨'}
           </p>
         </div>
 
-        <GlassCard className="p-6 space-y-6">
+        <GlassCard className="p-6 space-y-6 border border-white/20 shadow-2xl shadow-primary/10 backdrop-blur-2xl">
           <form onSubmit={handleSubmit} className="space-y-4">
             <AnimatePresence mode="wait">
               {!isLogin && (
