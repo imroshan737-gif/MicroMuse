@@ -125,7 +125,20 @@ const termsSections = [
 
 export function PrivacyContent() {
   return (
-    <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1 scrollbar-thin">
+    <div className="relative space-y-3 max-h-[65vh] overflow-y-auto pr-1 scrollbar-thin">
+      {/* Ambient decoration */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <motion.div
+          className="absolute top-10 -left-10 w-40 h-40 rounded-full bg-primary/10 blur-3xl"
+          animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.7, 0.4] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute bottom-10 -right-10 w-40 h-40 rounded-full bg-accent/10 blur-3xl"
+          animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 10, repeat: Infinity }}
+        />
+      </div>
       {/* Hero banner */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -148,13 +161,38 @@ export function PrivacyContent() {
       {privacySections.map((section, i) => (
         <PolicySection key={section.title} index={i} {...section} />
       ))}
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="mt-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/5 p-4 text-center"
+      >
+        <p className="text-sm text-foreground font-semibold flex items-center justify-center gap-2">
+          <Sparkles className="w-4 h-4 text-primary" />
+          Crafted with care for your trust
+          <Sparkles className="w-4 h-4 text-primary" />
+        </p>
+      </motion.div>
     </div>
   );
 }
 
 export function TermsContent() {
   return (
-    <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1 scrollbar-thin">
+    <div className="relative space-y-3 max-h-[65vh] overflow-y-auto pr-1 scrollbar-thin">
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <motion.div
+          className="absolute top-10 -right-10 w-40 h-40 rounded-full bg-accent/10 blur-3xl"
+          animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.7, 0.4] }}
+          transition={{ duration: 9, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute bottom-10 -left-10 w-40 h-40 rounded-full bg-primary/10 blur-3xl"
+          animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 11, repeat: Infinity }}
+        />
+      </div>
       {/* Hero banner */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -177,6 +215,19 @@ export function TermsContent() {
       {termsSections.map((section, i) => (
         <PolicySection key={section.title} index={i} {...section} />
       ))}
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7 }}
+        className="mt-4 rounded-2xl border border-accent/20 bg-gradient-to-r from-accent/10 via-primary/10 to-accent/5 p-4 text-center"
+      >
+        <p className="text-sm text-foreground font-semibold flex items-center justify-center gap-2">
+          <Sparkles className="w-4 h-4 text-accent" />
+          Together we make MicroMuse magical
+          <Sparkles className="w-4 h-4 text-accent" />
+        </p>
+      </motion.div>
     </div>
   );
 }
