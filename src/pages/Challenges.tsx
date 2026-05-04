@@ -215,15 +215,21 @@ export default function Challenges() {
     <div className="min-h-screen pt-6 pb-12 px-4">
       <div className="container mx-auto max-w-6xl">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          transition={{ duration: 0.5 }}
+          className="mb-8 text-center"
         >
-          <h1 className="text-4xl md:text-5xl font-display font-bold mb-2">
+          <div className="flex items-center gap-3 mb-2 justify-center">
+            <div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/40" />
+            <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Today</span>
+            <div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/40" />
+          </div>
+          <h1 className="text-4xl md:text-6xl font-display font-semibold tracking-tight mb-3">
             Challenges
           </h1>
-          <p className="text-lg text-muted-foreground">
-            Push your creative boundaries with daily, weekly, and personal challenges
+          <p className="text-base text-muted-foreground max-w-xl mx-auto">
+            Small prompts. Big sparks. Pick one and begin — daily, weekly, or made by you.
           </p>
         </motion.div>
 
