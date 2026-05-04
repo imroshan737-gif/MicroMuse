@@ -193,18 +193,7 @@ export default function Leaderboard() {
         )}
 
         <GlassCard className="p-6 overflow-hidden relative">
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <motion.div
-              animate={{ rotate: 360, scale: [1, 1.1, 1] }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-              className="absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br from-primary/10 to-purple-500/10 rounded-full blur-3xl"
-            />
-            <motion.div
-              animate={{ rotate: -360, scale: [1, 1.2, 1] }}
-              transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-              className="absolute -bottom-20 -left-20 w-60 h-60 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 rounded-full blur-3xl"
-            />
-          </div>
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent pointer-events-none" />
 
           {loading ? (
             <div className="space-y-4">

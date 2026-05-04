@@ -113,14 +113,21 @@ export default function YourWork() {
     <div className="min-h-screen pt-6 pb-12 px-4">
       <div className="container mx-auto max-w-6xl space-y-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center"
         >
-          <h1 className="text-4xl md:text-5xl font-display font-bold mb-2">
-            Your Work 📁
+          <div className="flex items-center gap-3 mb-2 justify-center">
+            <div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/40" />
+            <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Archive</span>
+            <div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/40" />
+          </div>
+          <h1 className="text-4xl md:text-6xl font-display font-semibold tracking-tight mb-3">
+            Your Work
           </h1>
-          <p className="text-lg text-muted-foreground">
-            All your challenge submissions in one place
+          <p className="text-base text-muted-foreground max-w-xl mx-auto">
+            A quiet gallery of everything you've made — saved, sorted, and yours.
           </p>
         </motion.div>
 

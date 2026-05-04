@@ -75,31 +75,39 @@ export default function Achievements() {
     <div className="min-h-screen pt-6 pb-12 px-4">
       <div className="container mx-auto max-w-6xl space-y-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          <h1 className="text-4xl md:text-5xl font-display font-bold mb-2">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent to-primary/40" />
+            <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Your Journey</span>
+            <div className="h-px flex-1 bg-gradient-to-l from-transparent to-primary/40" />
+          </div>
+          <h1 className="text-4xl md:text-6xl font-display font-semibold tracking-tight text-center mb-3">
             Achievements
           </h1>
-          <p className="text-lg text-muted-foreground mb-6">
-            Track your creative milestones and unlock new badges
+          <p className="text-base text-muted-foreground text-center mb-8 max-w-xl mx-auto">
+            Quiet milestones, bright proof. Every badge below is a moment you showed up.
           </p>
-          
-          <GlassCard className="mb-8">
-            <div className="flex items-center justify-between mb-4">
+
+          <GlassCard className="mb-8 relative overflow-hidden">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+            <div className="flex items-center justify-between mb-4 relative z-10">
               <div>
-                <h3 className="text-2xl font-display font-bold">
-                  {earnedCount} / {totalCount} Unlocked
+                <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-1">Unlocked</p>
+                <h3 className="text-3xl font-display font-semibold">
+                  <span className="text-primary">{earnedCount}</span>
+                  <span className="text-muted-foreground/60"> / {totalCount}</span>
                 </h3>
-                <p className="text-muted-foreground">
-                  Keep creating to unlock more achievements
-                </p>
               </div>
-              <div className="w-20 h-20 rounded-full bg-gradient-primary flex items-center justify-center">
-                <Trophy className="w-10 h-10 text-primary-foreground" />
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl glass-strong border border-primary/20 flex items-center justify-center">
+                  <Trophy className="w-7 h-7 text-primary" strokeWidth={1.75} />
+                </div>
               </div>
             </div>
-            <Progress value={(earnedCount / totalCount) * 100} className="h-3" />
+            <Progress value={(earnedCount / totalCount) * 100} className="h-1.5" />
           </GlassCard>
         </motion.div>
 
