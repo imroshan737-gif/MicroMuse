@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import GlassCard from '@/components/GlassCard';
 import { Clock, Trophy, Target, Play, Plus, Calendar, Music, Palette, PenTool, Zap, CheckCircle } from 'lucide-react';
 import { useStore } from '@/store/useStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
@@ -142,6 +142,8 @@ const getCategoryIcon = (category: string) => {
 
 export default function Challenges() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'daily';
   const startChallenge = useStore((state) => state.startChallenge);
   const { 
     dailyChallenges: dbDailyChallenges, 
@@ -233,7 +235,7 @@ export default function Challenges() {
           </p>
         </motion.div>
 
-        <Tabs defaultValue="daily" className="space-y-8">
+        <Tabs value={activeTab} onValueChange={(v) => setSearchParams({ tab: v })} className="space-y-8">
           <TabsList className="glass-strong">
             <TabsTrigger value="daily">Daily Challenges</TabsTrigger>
             <TabsTrigger value="weekly">Weekly Challenges</TabsTrigger>
@@ -414,20 +416,12 @@ export default function Challenges() {
               <GlassCard className="text-center py-8 mt-6">
                 <p className="text-muted-foreground text-lg">
                   Not your hobby? Create your own challenges in{' '}
-                  <button 
-                    onClick={() => {
-                      const personalTab = document.querySelector('[value="personal"]') as HTMLButtonElement;
-                      if (personalTab) {
-                        personalTab.click();
-                        setTimeout(() => {
-                          personalTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 100);
-                      }
-                    }}
-                    className="text-primary font-semibold hover:underline cursor-pointer"
+                  <Link
+                    to="/challenges?tab=personal"
+                    className="text-primary font-semibold hover:underline"
                   >
-                    'Personal Challenges'
-                  </button>
+                    Personal Challenges
+                  </Link>
                 </p>
               </GlassCard>
               </>
