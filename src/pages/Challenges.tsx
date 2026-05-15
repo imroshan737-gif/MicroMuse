@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import GlassCard from '@/components/GlassCard';
 import { Clock, Trophy, Target, Play, Plus, Calendar, Music, Palette, PenTool, Zap, CheckCircle } from 'lucide-react';
 import { useStore } from '@/store/useStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
