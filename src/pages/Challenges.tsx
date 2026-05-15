@@ -142,6 +142,8 @@ const getCategoryIcon = (category: string) => {
 
 export default function Challenges() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'daily';
   const startChallenge = useStore((state) => state.startChallenge);
   const { 
     dailyChallenges: dbDailyChallenges, 
