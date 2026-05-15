@@ -416,20 +416,12 @@ export default function Challenges() {
               <GlassCard className="text-center py-8 mt-6">
                 <p className="text-muted-foreground text-lg">
                   Not your hobby? Create your own challenges in{' '}
-                  <button 
-                    onClick={() => {
-                      const personalTab = document.querySelector('[value="personal"]') as HTMLButtonElement;
-                      if (personalTab) {
-                        personalTab.click();
-                        setTimeout(() => {
-                          personalTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 100);
-                      }
-                    }}
-                    className="text-primary font-semibold hover:underline cursor-pointer"
+                  <Link
+                    to="/challenges?tab=personal"
+                    className="text-primary font-semibold hover:underline"
                   >
-                    'Personal Challenges'
-                  </button>
+                    Personal Challenges
+                  </Link>
                 </p>
               </GlassCard>
               </>
