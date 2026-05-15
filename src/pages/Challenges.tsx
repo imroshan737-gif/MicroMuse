@@ -235,7 +235,7 @@ export default function Challenges() {
           </p>
         </motion.div>
 
-        <Tabs defaultValue="daily" className="space-y-8">
+        <Tabs value={activeTab} onValueChange={(v) => setSearchParams({ tab: v })} className="space-y-8">
           <TabsList className="glass-strong">
             <TabsTrigger value="daily">Daily Challenges</TabsTrigger>
             <TabsTrigger value="weekly">Weekly Challenges</TabsTrigger>
