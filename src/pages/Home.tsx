@@ -240,7 +240,7 @@ export default function Home() {
         </div>
       </div>
 
-      <LandingFooter />
+      <div className="relative z-10"><LandingFooter /></div>
     </div>
   );
 }
