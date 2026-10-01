@@ -151,7 +151,7 @@ export default function Landing() {
             <Button
               size="lg"
               variant="outline"
-              className="text-lg px-10 py-7 rounded-2xl border-border/50 hover:bg-muted/30 backdrop-blur-sm"
+              className="text-lg px-10 py-7 rounded-2xl bg-card/90 border-2 border-foreground/40 text-foreground hover:bg-card shadow-md"
               onClick={() => navigate('/auth?mode=login')}
             >
               I have an account
@@ -193,7 +193,7 @@ export default function Landing() {
                 >
                   <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-[0.05] transition-opacity duration-500" />
                   <div className="relative z-10 flex flex-col items-center text-center gap-3">
-                    <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <div className="w-11 h-11 rounded-xl bg-card/90 border-2 border-primary/50 shadow-sm flex items-center justify-center">
                       <item.icon className="w-5 h-5 text-primary" strokeWidth={1.75} />
 
                     </div>
@@ -266,7 +266,7 @@ export default function Landing() {
                   <motion.div
                     whileHover={{ scale: 1.08, rotate: 3 }}
                     transition={{ type: 'spring', stiffness: 300 }}
-                    className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20 flex items-center justify-center mx-auto mb-6 relative"
+                    className="w-20 h-20 rounded-2xl bg-card/90 border-2 border-primary/50 shadow-md flex items-center justify-center mx-auto mb-6 relative"
                   >
                     <item.icon className="w-8 h-8 text-primary" />
                     <div className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold shadow-lg shadow-primary/30">

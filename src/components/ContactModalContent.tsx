@@ -1,3 +1,4 @@
+import ownerPhoto from '@/assets/owner.jpg.asset.json';
 import { motion } from 'framer-motion';
 import { User, Mail, Linkedin, MapPin, ExternalLink } from 'lucide-react';
 
@@ -28,8 +29,8 @@ export default function ContactModalContent() {
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="text-center"
       >
-        <div className="w-16 h-16 mx-auto rounded-2xl glass-strong border border-primary/20 flex items-center justify-center mb-4">
-          <User className="w-7 h-7 text-primary" strokeWidth={1.75} />
+        <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border-2 border-primary/40 shadow-md mb-4">
+          <img src={ownerPhoto.url} alt="Roshan Gowda J" className="w-full h-full object-cover" />
         </div>
         <p className="eyebrow mb-2">Get in touch</p>
         <h3 className="text-2xl font-display font-semibold tracking-tight">Roshan Gowda J</h3>
