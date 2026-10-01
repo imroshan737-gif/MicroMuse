@@ -8,39 +8,40 @@
 
 @layer base {
   :root {
-    /* Refined light surfaces */
-    --background: 40 12% 97%;
-    --foreground: 30 8% 10%;
+    /* Warm light product surfaces */
+    --background: 48 26% 96%;
+    --foreground: 0 0% 9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 30 8% 10%;
+    --card-foreground: 0 0% 9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 30 8% 10%;
+    --popover-foreground: 0 0% 9%;
 
-    /* MicroMuse orange — the single accent */
-    --primary: 18 90% 53%;
+    /* MicroMuse orange — accent only */
+    --primary: 19 89% 54%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 22 92% 62%;
+    --primary-glow: 18 81% 47%;
+    --primary-hover: 18 81% 47%;
+    --primary-soft: 21 100% 95%;
 
-    /* Secondary = quiet neutral, not a second brand color */
-    --secondary: 36 10% 92%;
-    --secondary-foreground: 30 8% 14%;
-    --secondary-glow: 36 10% 86%;
+    --secondary: 45 22% 93%;
+    --secondary-foreground: 0 0% 9%;
+    --secondary-glow: 44 16% 86%;
 
-    /* Accent stays within the orange family */
-    --accent: 26 88% 58%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 21 100% 95%;
+    --accent-foreground: 18 81% 40%;
 
-    --muted: 36 10% 93%;
-    --muted-foreground: 30 6% 42%;
+    --muted: 45 22% 93%;
+    --muted-foreground: 43 4% 39%;
+    --subtle-foreground: 45 3% 53%;
 
     --destructive: 4 72% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 34 10% 88%;
-    --input: 34 10% 88%;
-    --ring: 18 90% 53%;
+    --border: 44 16% 86%;
+    --input: 44 16% 86%;
+    --ring: 19 89% 54%;
 
     --radius: 0.75rem;
 
