@@ -1,3 +1,4 @@
+import PageBackground from '@/components/PageBackground';
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import GlassCard from '@/components/GlassCard';

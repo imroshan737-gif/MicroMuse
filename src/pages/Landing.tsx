@@ -1,3 +1,4 @@
+import PageBackground from '@/components/PageBackground';
 import { Button } from '@/components/ui/button';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import {
