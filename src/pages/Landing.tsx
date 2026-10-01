@@ -59,7 +59,8 @@ export default function Landing() {
 
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background">
+    <div className="min-h-screen overflow-x-hidden bg-background relative isolate [&>*:not(.fixed)]:relative">
+      <PageBackground />
       {/* Ambient Background Glow */}
       <div className="fixed inset-0 pointer-events-none -z-5">
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px]" />

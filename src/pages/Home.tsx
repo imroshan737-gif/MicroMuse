@@ -77,8 +77,9 @@ export default function Home() {
   })();
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex-1 pb-12 px-4 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col relative isolate">
+      <PageBackground />
+      <div className="flex-1 pb-12 px-4 relative overflow-hidden z-10">
         {/* Quiet ambient light */}
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute -top-40 left-1/4 w-[36rem] h-[36rem] rounded-full bg-primary/[0.06] blur-[140px]" />
