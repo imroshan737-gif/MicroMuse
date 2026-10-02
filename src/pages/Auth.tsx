@@ -132,20 +132,10 @@ const handleGoogleSignIn = async () => {
 };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Subtle minimal background */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        {/* Faint grid */}
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
-        {/* Soft vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background))_85%)]" />
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-muted">
+      {/* Calm, low-glare background */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-muted">
+
         {/* Quiet drifting sparkles */}
         {[...Array(8)].map((_, i) => (
           <motion.div
@@ -199,7 +189,7 @@ const handleGoogleSignIn = async () => {
           </p>
         </div>
 
-        <GlassCard className="p-6 space-y-6 border border-white/20 shadow-2xl shadow-primary/10 backdrop-blur-2xl">
+        <GlassCard className="p-6 space-y-6 !bg-background border border-border shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
             <AnimatePresence mode="wait">
               {!isLogin && (
