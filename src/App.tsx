@@ -12,6 +12,8 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import PageBackground from "@/components/PageBackground";
+import appBg from "@/assets/app-bg.png.asset.json";
 
 // Pages
 import Auth from "./pages/Auth";
@@ -108,7 +110,8 @@ function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
+      <PageBackground src={appBg.url} opacity="opacity-100" />
+      <div className="min-h-screen flex w-full relative z-10">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0">
           <AnimatePresence initial={false}>
