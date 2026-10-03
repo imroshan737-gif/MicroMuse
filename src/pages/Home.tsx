@@ -81,8 +81,6 @@ export default function Home() {
       <div className="flex-1 pb-12 px-4 relative overflow-hidden z-10">
         {/* Quiet ambient light */}
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute -top-40 left-1/4 w-[36rem] h-[36rem] rounded-full bg-primary/[0.06] blur-[140px]" />
-          <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] rounded-full bg-primary/[0.04] blur-[140px]" />
         </div>
 
         <div className="container mx-auto max-w-5xl">

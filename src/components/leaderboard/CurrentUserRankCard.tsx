@@ -52,7 +52,7 @@ export default function CurrentUserRankCard({
               whileHover={{ scale: 1.1, rotateY: 180 }}
               transition={{ duration: 0.5 }}
               style={{ transformStyle: 'preserve-3d' }}
-              className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center text-xl font-bold text-primary-foreground overflow-hidden shadow-[0_0_20px_rgba(139,92,246,0.5)] border-2 border-white/20"
+              className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center text-xl font-bold text-primary-foreground overflow-hidden border-2 border-white/20"
             >
               {currentUserData.avatar_url ? (
                 <img 

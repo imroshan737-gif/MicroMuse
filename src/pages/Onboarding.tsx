@@ -93,7 +93,7 @@ export default function Onboarding() {
                 onClick={() => toggleInterest(category.id)}
                 className={`p-4 text-center cursor-pointer ${
                   selectedInterests.includes(category.id)
-                    ? 'ring-2 ring-primary shadow-glow-primary'
+                    ? 'ring-2 ring-primary'
                     : ''
                 }`}
               >
@@ -163,7 +163,7 @@ export default function Onboarding() {
               hover
               onClick={() => setSelectedMood(mood.id)}
               className={`p-6 text-center ${
-                selectedMood === mood.id ? 'ring-2 ring-primary shadow-glow-primary' : ''
+                selectedMood === mood.id ? 'ring-2 ring-primary' : ''
               }`}
             >
               <mood.icon className="w-10 h-10 mx-auto mb-3 text-primary" />
@@ -182,7 +182,7 @@ export default function Onboarding() {
             hover
             onClick={() => setSessionLength(10)}
             className={`p-8 text-center ${
-              sessionLength === 10 ? 'ring-2 ring-primary shadow-glow-primary' : ''
+              sessionLength === 10 ? 'ring-2 ring-primary' : ''
             }`}
           >
             <Clock className="w-12 h-12 mx-auto mb-4 text-primary" />
@@ -193,7 +193,7 @@ export default function Onboarding() {
             hover
             onClick={() => setSessionLength(15)}
             className={`p-8 text-center ${
-              sessionLength === 15 ? 'ring-2 ring-primary shadow-glow-primary' : ''
+              sessionLength === 15 ? 'ring-2 ring-primary' : ''
             }`}
           >
             <Clock className="w-12 h-12 mx-auto mb-4 text-secondary" />
