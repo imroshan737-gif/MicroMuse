@@ -103,10 +103,8 @@ export default function UpdatedOnboarding() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => toggleHobby(hobby.id)}
-                  className={`relative glass rounded-xl border cursor-pointer transition-all duration-200 aspect-square flex flex-col items-center justify-center gap-2 p-3 ${
-                    isSelected
-                      ? 'bg-primary/15 border-primary ring-2 ring-primary shadow-lg shadow-primary/20'
-                      : 'border-border/50 hover:bg-muted/30 hover:border-border'
+                  className={`relative ob-option cursor-pointer aspect-square flex flex-col items-center justify-center gap-2 p-3 ${
+                    isSelected ? 'ob-selected' : ''
                   }`}
                 >
                   {/* Checkmark indicator */}
@@ -117,7 +115,7 @@ export default function UpdatedOnboarding() {
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                        className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center shadow-md"
+                        className="absolute top-2 right-2 w-5 h-5 rounded-full ob-check flex items-center justify-center "
                       >
                         <Check className="w-3 h-3 text-primary-foreground" strokeWidth={3} />
                       </motion.div>
@@ -125,16 +123,16 @@ export default function UpdatedOnboarding() {
                   </AnimatePresence>
                   
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${
-                    isSelected ? 'bg-primary/20 shadow-inner' : 'bg-muted/50'
+                    isSelected ? 'ob-icon-sel' : 'ob-icon'
                   }`}>
                     <IconComponent className={`w-6 h-6 transition-colors duration-200 ${
-                      isSelected ? 'text-primary' : 'text-muted-foreground'
+                      isSelected ? 'ob-accent' : 'ob-ink'
                     }`} />
                   </div>
                   <span className={`font-medium text-xs sm:text-sm text-center leading-tight transition-colors duration-200 line-clamp-2 ${
-                    isSelected ? 'text-primary' : 'text-foreground'
+                    isSelected ? 'ob-accent' : 'ob-ink'
                   }`}>
-                    {hobby.emoji} {hobby.name}
+                    {hobby.name}
                   </span>
                 </motion.div>
               );
@@ -147,14 +145,14 @@ export default function UpdatedOnboarding() {
               animate={{ opacity: 1, y: 0 }}
               className="flex flex-wrap gap-2 justify-center max-w-3xl mx-auto"
             >
-              <span className="text-sm text-muted-foreground mr-2 self-center">
+              <span className="text-sm ob-muted mr-2 self-center">
                 Selected ({selectedHobbies.length}):
               </span>
               {selectedHobbies.map((hobbyId) => {
                 const hobby = hobbies.find(h => h.id === hobbyId);
                 return (
-                  <Badge key={hobbyId} variant="secondary" className="bg-secondary text-secondary-foreground">
-                    {hobby?.emoji} {hobby?.name}
+                  <Badge key={hobbyId} variant="secondary" className="ob-chip">
+                    {hobby?.name}
                   </Badge>
                 );
               })}
@@ -176,10 +174,8 @@ export default function UpdatedOnboarding() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedMood(mood.id)}
-                className={`relative glass rounded-xl p-6 text-center cursor-pointer transition-all duration-200 ${
-                  isSelected
-                    ? 'ring-2 ring-primary shadow-lg shadow-primary/20 bg-primary/10'
-                    : 'border border-border/50 hover:bg-muted/30'
+                className={`relative ob-option p-6 text-center cursor-pointer ${
+                  isSelected ? 'ob-selected' : ''
                 }`}
               >
                 {/* Animated Checkmark */}
@@ -190,14 +186,14 @@ export default function UpdatedOnboarding() {
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0, opacity: 0 }}
                       transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                      className="absolute top-3 right-3 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md"
+                      className="absolute top-3 right-3 w-6 h-6 rounded-full ob-check flex items-center justify-center "
                     >
                       <Check className="w-4 h-4 text-primary-foreground" strokeWidth={3} />
                     </motion.div>
                   )}
                 </AnimatePresence>
-                <mood.icon className={`w-10 h-10 mx-auto mb-3 transition-colors ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
-                <h3 className={`font-semibold transition-colors ${isSelected ? 'text-primary' : 'text-foreground'}`}>{mood.label}</h3>
+                <mood.icon className={`w-10 h-10 mx-auto mb-3 transition-colors ${isSelected ? 'ob-accent' : 'ob-ink'}`} />
+                <h3 className={`font-semibold transition-colors ${isSelected ? 'ob-accent' : 'ob-ink'}`}>{mood.label}</h3>
               </motion.div>
             );
           })}
@@ -220,10 +216,8 @@ export default function UpdatedOnboarding() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSessionLength(option.value)}
-                className={`relative glass rounded-xl p-8 text-center cursor-pointer transition-all duration-200 ${
-                  isSelected
-                    ? 'ring-2 ring-primary shadow-lg shadow-primary/20 bg-primary/10'
-                    : 'border border-border/50 hover:bg-muted/30'
+                className={`relative ob-option p-8 text-center cursor-pointer ${
+                  isSelected ? 'ob-selected' : ''
                 }`}
               >
                 {/* Animated Checkmark */}
@@ -234,15 +228,15 @@ export default function UpdatedOnboarding() {
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0, opacity: 0 }}
                       transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                      className="absolute top-3 right-3 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md"
+                      className="absolute top-3 right-3 w-6 h-6 rounded-full ob-check flex items-center justify-center "
                     >
                       <Check className="w-4 h-4 text-primary-foreground" strokeWidth={3} />
                     </motion.div>
                   )}
                 </AnimatePresence>
-                <Clock className={`w-12 h-12 mx-auto mb-4 transition-colors ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
-                <h3 className={`font-display font-bold text-3xl mb-2 transition-colors ${isSelected ? 'text-primary' : 'text-foreground'}`}>{option.label}</h3>
-                <p className="text-sm text-muted-foreground">{option.desc}</p>
+                <Clock className={`w-12 h-12 mx-auto mb-4 transition-colors ${isSelected ? 'ob-accent' : 'ob-ink'}`} />
+                <h3 className={`font-bold text-3xl mb-2 transition-colors ${isSelected ? 'ob-accent' : 'ob-ink'}`}>{option.label}</h3>
+                <p className="text-sm ob-muted">{option.desc}</p>
               </motion.div>
             );
           })}
@@ -258,7 +252,7 @@ export default function UpdatedOnboarding() {
     step === 2;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 pt-6">
+    <div className="ob-page min-h-screen flex flex-col items-center justify-center p-4 pt-6 relative z-10">
       <div className="w-full max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -271,18 +265,18 @@ export default function UpdatedOnboarding() {
                 key={index}
                 className={`h-2 rounded-full transition-all ${
                   index === step
-                    ? 'w-12 bg-gradient-primary'
+                    ? 'w-12 ob-step-on'
                     : index < step
-                    ? 'w-8 bg-primary/50'
-                    : 'w-8 bg-muted'
+                    ? 'w-8 ob-step-done'
+                    : 'w-8 ob-step-off'
                 }`}
               />
             ))}
           </div>
-          <h1 className="text-4xl md:text-5xl font-display font-bold mb-3">
+          <h1 className="ob-h1 mb-3">
             {currentStep.title}
           </h1>
-          <p className="text-lg text-muted-foreground">{currentStep.subtitle}</p>
+          <p className="ob-sub text-base md:text-lg">{currentStep.subtitle}</p>
         </motion.div>
 
         <AnimatePresence mode="wait">
@@ -304,7 +298,7 @@ export default function UpdatedOnboarding() {
               variant="outline"
               size="lg"
               onClick={() => setStep(step - 1)}
-              className="glass"
+              className="ob-btn-outline"
               disabled={loading}
             >
               Back
@@ -316,7 +310,7 @@ export default function UpdatedOnboarding() {
               step === steps.length - 1 ? completeOnboarding() : setStep(step + 1)
             }
             disabled={!canProceed || loading}
-            className="bg-gradient-primary hover:opacity-90 text-primary-foreground px-8"
+            className="ob-btn px-8"
           >
             {loading ? 'Setting up...' : step === steps.length - 1 ? "Let's Create!" : 'Continue'}
           </Button>

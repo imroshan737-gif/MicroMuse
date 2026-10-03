@@ -244,3 +244,32 @@
     animation: pulse-glow 2.4s ease-in-out infinite;
   }
 }
+
+/* Onboarding/auth visual system (auth, hobbies, mood, session) */
+.ob-page { background: #F4F1EB; color: #171717; font-family: 'Inter', sans-serif; }
+.ob-page * { font-family: 'Inter', sans-serif; }
+.ob-h1 { font-size: 2.375rem; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #171717; }
+@media (min-width: 768px) { .ob-h1 { font-size: 3.25rem; } }
+.ob-sub { color: #5F5C56; }
+.ob-muted { color: #817D76 !important; }
+.ob-label { font-size: 0.875rem; font-weight: 600; color: #171717; }
+.ob-ink { color: #171717; }
+.ob-accent { color: #F26422; }
+.ob-card { background: #FFFFFF; border: 1px solid #DCD7CE; border-radius: 16px; box-shadow: 0 1px 3px rgb(23 23 23 / 0.04); }
+.ob-input { background: #FCFBF9 !important; border: 1px solid #D8D3CA !important; border-radius: 11px !important; color: #171717 !important; }
+.ob-input::placeholder { color: #817D76 !important; }
+.ob-input:focus, .ob-input:focus-visible { border-color: #F26422 !important; box-shadow: 0 0 0 3px #FFF0E8 !important; outline: none !important; --tw-ring-shadow: 0 0 #0000 !important; }
+.ob-btn { background: #F26422 !important; color: #FFFFFF !important; border-radius: 11px !important; font-weight: 600; box-shadow: none !important; background-image: none !important; }
+.ob-btn:hover:not(:disabled) { background: #D95117 !important; }
+.ob-btn-outline { background: #FFFFFF !important; color: #171717 !important; border: 1px solid #DCD7CE !important; border-radius: 11px !important; font-weight: 600; box-shadow: none !important; background-image: none !important; }
+.ob-btn-outline:hover:not(:disabled) { background: #FCFBF9 !important; border-color: #B9B3A8 !important; }
+.ob-option { background: #FFFFFF; border: 1px solid #DCD7CE; border-radius: 14px; transition: border-color .15s, background-color .15s; }
+.ob-option:hover { border-color: #B9B3A8; }
+.ob-option.ob-selected { background: #FFF0E8; border: 2px solid #F26422; }
+.ob-icon { background: #F4F1EB; }
+.ob-icon-sel { background: #FFFFFF; }
+.ob-check { background: #F26422; }
+.ob-chip { background: #FFF0E8 !important; color: #171717 !important; border: 1px solid #F26422 !important; border-radius: 8px !important; }
+.ob-step-on { background: #F26422; }
+.ob-step-done { background: #F2642280; }
+.ob-step-off { background: #DCD7CE; }
