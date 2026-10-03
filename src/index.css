@@ -46,7 +46,7 @@
     --radius: 0.75rem;
 
     /* Restrained gradients */
-    --gradient-primary: linear-gradient(120deg, hsl(18 90% 53%) 0%, hsl(28 90% 58%) 100%);
+    --gradient-primary: linear-gradient(0deg, hsl(19 89% 54%), hsl(19 89% 54%));
     --gradient-secondary: linear-gradient(120deg, hsl(30 8% 18%) 0%, hsl(30 8% 28%) 100%);
     --gradient-cosmic: linear-gradient(180deg, hsl(40 12% 97%) 0%, hsl(36 10% 94%) 100%);
 
@@ -58,8 +58,8 @@
 
     --shadow-soft: 0 1px 2px hsla(30, 8%, 10%, 0.05);
     --shadow-medium: 0 2px 4px hsla(30, 8%, 10%, 0.05), 0 12px 32px -16px hsla(30, 8%, 10%, 0.16);
-    --glow-primary: 0 8px 28px -12px hsla(18, 90%, 53%, 0.45);
-    --glow-secondary: 0 8px 28px -12px hsla(30, 8%, 10%, 0.25);
+    --glow-primary: none;
+    --glow-secondary: none;
 
     --transition-smooth: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-spring: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
@@ -142,16 +142,14 @@
   /* Layered surfaces (replaces heavy glassmorphism) */
   .glass {
     background: var(--surface);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    
     border: 1px solid var(--surface-border);
     box-shadow: var(--surface-shadow);
   }
 
   .glass-strong {
     background: var(--surface-strong);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    
     border: 1px solid var(--surface-border);
     box-shadow: var(--surface-shadow);
   }
@@ -230,7 +228,7 @@
 
   @keyframes pulse-glow {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.55; }
+    50% { opacity: 1; }
   }
 
   @keyframes shimmer {

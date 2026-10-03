@@ -14,7 +14,7 @@ export default function LeaderboardHeader() {
           <div className="relative w-11 h-11 rounded-xl glass-strong flex items-center justify-center border border-primary/20">
             <Trophy className="w-5 h-5 text-primary" strokeWidth={1.75} />
             <motion.div
-              animate={{ opacity: [0.15, 0.4, 0.15] }}
+              animate={{ opacity: 0 }}
               transition={{ duration: 3, repeat: Infinity }}
               className="absolute inset-0 rounded-xl bg-primary/10 blur-xl -z-10"
             />

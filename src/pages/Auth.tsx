@@ -167,9 +167,9 @@ const handleGoogleSignIn = async () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring' }}
-            className="inline-flex items-center gap-2 glass-strong px-5 py-2 rounded-full mb-5 border border-primary/30 shadow-lg shadow-primary/10"
+            className="inline-flex items-center gap-2 glass-strong px-5 py-2 rounded-full mb-5 border border-primary/30"
           >
-            <Sparkles className="w-5 h-5 text-primary animate-pulse-glow" />
+            <Sparkles className="w-5 h-5 text-primary" />
             <span className="text-sm font-semibold tracking-wide">Welcome to MicroMuse</span>
           </motion.div>
           <motion.h1
@@ -296,7 +296,7 @@ const handleGoogleSignIn = async () => {
 
           <Button
             type="button"
-            className="w-full bg-gradient-to-r from-primary to-accent text-primary-foreground hover:opacity-90 shadow-lg hover:shadow-xl transition-all duration-300 font-semibold"
+            className="w-full bg-gradient-to-r bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 font-semibold"
             onClick={handleGoogleSignIn}
             disabled={loading || googleLoading}
           >

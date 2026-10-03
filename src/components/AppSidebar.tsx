@@ -73,7 +73,7 @@ export default function AppSidebar() {
           className="flex items-center gap-2 cursor-pointer"
           onClick={() => navigate('/home')}
         >
-          <Sparkles className="w-6 h-6 text-primary animate-pulse-glow shrink-0" />
+          <Sparkles className="w-6 h-6 text-primary shrink-0" />
           {!collapsed && (
             <span className="text-xl font-display font-bold gradient-text">
               MicroMuse

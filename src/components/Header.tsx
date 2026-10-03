@@ -44,7 +44,7 @@ export default function Header() {
           className="flex items-center gap-2 cursor-pointer hover-scale"
           onClick={() => navigate('/home')}
         >
-          <Sparkles className="w-6 h-6 text-primary animate-pulse-glow" />
+          <Sparkles className="w-6 h-6 text-primary" />
           <span className="text-xl font-display font-bold gradient-text">
             MicroMuse
           </span>

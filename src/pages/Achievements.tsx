@@ -183,7 +183,7 @@ export default function Achievements() {
                   <div className="flex items-start gap-3 mb-3">
                   <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
                       achievement.earned 
-                        ? 'bg-gradient-primary shadow-glow-primary' 
+                        ? 'bg-gradient-primary' 
                         : 'bg-muted'
                     }`}>
                       {(() => {

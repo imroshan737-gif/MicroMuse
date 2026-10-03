@@ -414,8 +414,6 @@ export default function AIChatbot() {
           >
             {/* Header */}
             <div className="relative p-4 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400">
-              <div className="absolute top-2 left-2 w-20 h-20 bg-white/10 rounded-full blur-xl" />
-              <div className="absolute bottom-0 right-10 w-16 h-16 bg-white/10 rounded-full blur-lg" />
 
               <div className="relative flex items-center justify-between">
                 <div className="flex items-center gap-3">

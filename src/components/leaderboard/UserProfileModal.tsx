@@ -118,7 +118,7 @@ export default function UserProfileModal({ user, isOpen, onClose, rank }: UserPr
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"
+            className="absolute -top-10 -right-10 w-40 h-40 hidden"
           />
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
