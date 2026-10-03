@@ -160,7 +160,7 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <ThreeScene />
+        {!['/auth','/onboarding'].includes(location.pathname) && <ThreeScene />}
         {showFullUI ? (
           <AuthenticatedLayout>
             <AIChatbot />
