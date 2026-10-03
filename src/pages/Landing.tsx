@@ -71,14 +71,14 @@ export default function Landing() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-background/60 border-b border-border/30"
+        className="fixed top-0 left-0 right-0 z-50 bg-transparent"
       >
         <div className="container mx-auto flex items-center justify-between px-6 py-4">
           <motion.div className="flex items-center gap-2.5" whileHover={{ scale: 1.03 }}>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="text-2xl font-display font-bold gradient-text">MicroMuse</span>
+            <span className="text-2xl font-display font-bold text-primary">MicroMuse</span>
           </motion.div>
           <div className="flex items-center gap-3">
             <Button variant="ghost" className="text-foreground/70 hover:text-foreground" onClick={() => navigate('/auth?mode=login')}>
