@@ -81,7 +81,7 @@ export default function Landing() {
             <span className="text-2xl font-display font-bold text-primary">MicroMuse</span>
           </motion.div>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" className="text-foreground/70 hover:text-foreground" onClick={() => navigate('/auth?mode=login')}>
+            <Button variant="ghost" className="text-foreground border-2 border-card hover:bg-card/20" onClick={() => navigate('/auth?mode=login')}>
               Log In
             </Button>
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-6 shadow-lg shadow-primary/20" onClick={() => navigate('/auth?mode=signup')}>

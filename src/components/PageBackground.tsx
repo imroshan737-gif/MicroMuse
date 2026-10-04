@@ -1,4 +1,4 @@
-import bg from "@/assets/home-bg.png.asset.json";
+import bg from "@/assets/landing-bg.png.asset.json";
 
 /** Fixed full-page photo background shown at full strength (no white wash), with a light neutral tint for text readability. */
 export default function PageBackground({ src = bg.url, opacity = "opacity-100" }: { src?: string; opacity?: string }) {
