@@ -273,3 +273,28 @@
 .ob-step-on { background: #F26422; }
 .ob-step-done { background: #F2642280; }
 .ob-step-off { background: #DCD7CE; }
+
+/* Miko AI assistant panel */
+.mk-panel, .mk-panel *, .mk-launcher { font-family: 'Inter', sans-serif; }
+.mk-panel { background: #FFFFFF; border: 1px solid #DCD7CE; color: #171717; }
+.mk-header { background: #F4F1EB; border-bottom: 1px solid #DCD7CE; }
+.mk-divider { border-top: 1px solid #DCD7CE; }
+.mk-text { color: #171717; }
+.mk-sub { color: #5F5C56; }
+.mk-icon-btn { color: #5F5C56; }
+.mk-icon-btn:hover:not(:disabled) { color: #171717; background: #EAE6DE; }
+.mk-recording { color: #F26422 !important; background: #FFF0E8 !important; }
+.mk-launcher { background: #F26422; color: #FFFFFF; }
+.mk-launcher:hover { background: #D95117; }
+.mk-chip { background: #FFFFFF; color: #171717; border: 1px solid #DCD7CE; }
+.mk-chip:hover { border-color: #F26422; color: #D95117; }
+.mk-user { background: #171717; color: #FFFFFF; }
+.mk-assistant { background: #F4F1EB; color: #171717; border: 1px solid #DCD7CE; }
+.mk-listen { color: #D95117; background: #FFFFFF; border: 1px solid #DCD7CE; }
+.mk-listen:hover { border-color: #F26422; }
+.mk-input { background: #FFFFFF; color: #171717; border: 1px solid #DCD7CE; outline: none; }
+.mk-input::placeholder { color: #5F5C56; }
+.mk-input:focus { border-color: #F26422; }
+.mk-send { background: #F26422; color: #FFFFFF; }
+.mk-send:hover:not(:disabled) { background: #D95117; }
+.mk-remove { background: #171717; color: #FFFFFF; }
