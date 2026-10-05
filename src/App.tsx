@@ -110,7 +110,7 @@ function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <PageBackground src={appBg.url} opacity="opacity-100" />
+      <PageBackground src="/app-bg.png" opacity="opacity-100" />
       <div className="min-h-screen flex w-full relative z-10">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0">
@@ -122,7 +122,7 @@ function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -64, opacity: 0 }}
                 transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="h-14 flex items-center px-4 bg-transparent shrink-0 sticky top-0 z-30"
+                className="h-14 flex items-center px-4 shrink-0 sticky top-0 z-30 bg-background/55 backdrop-blur-xl border-b border-foreground/10"
               >
                 <SidebarTrigger className="mr-3" />
                 <AuthenticatedHeader />

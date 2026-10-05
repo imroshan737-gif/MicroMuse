@@ -17,7 +17,7 @@ export default function StatsSection({ currentStreak, totalSessions, badgesCount
   const values = [currentStreak, totalSessions, badgesCount];
 
   return (
-    <div className="glass rounded-xl divide-y divide-border/60 sm:grid sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+    <div className="glass rounded-2xl divide-y divide-foreground/10 sm:grid sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
       {stats.map((stat, i) => (
         <motion.div
           key={stat.key}
@@ -26,7 +26,9 @@ export default function StatsSection({ currentStreak, totalSessions, badgesCount
           transition={{ delay: 0.15 + i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="flex items-center gap-4 px-5 py-5 md:px-6"
         >
-          <stat.icon className="w-4 h-4 text-primary shrink-0" strokeWidth={2} />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+            <stat.icon className="w-4 h-4 text-primary" strokeWidth={2} />
+          </div>
           <div className="min-w-0">
             <p className="text-2xl md:text-3xl font-semibold tabular-nums leading-none tracking-tight text-foreground">
               {values[i]}

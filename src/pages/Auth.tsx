@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Sparkles, Mail, Lock, User, AtSign, Chrome } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import GlassCard from '@/components/GlassCard';
+import PageBackground from '@/components/PageBackground';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
@@ -58,7 +59,7 @@ export default function Auth() {
               .select('id')
               .eq('user_id', session.session.user.id)
               .limit(1);
-            
+
             if (userHobbies && userHobbies.length > 0) {
               navigate('/home');
             } else {
@@ -68,13 +69,13 @@ export default function Auth() {
         }
       } else {
         const validated = signUpSchema.parse({ username, fullName, email, password });
-        
+
         const { data: existingUser } = await supabase
           .from('profiles')
           .select('username')
           .eq('username', validated.username.toLowerCase())
           .maybeSingle();
-        
+
         if (existingUser) {
           toast({
             title: 'Username Taken',
@@ -84,7 +85,7 @@ export default function Auth() {
           setLoading(false);
           return;
         }
-        
+
         const { error } = await signUp(validated.email, validated.password, validated.fullName, validated.username);
         if (!error) {
           navigate('/onboarding');
@@ -104,61 +105,65 @@ export default function Auth() {
     setLoading(false);
   };
 
-const handleGoogleSignIn = async () => {
-  setGoogleLoading(true);
-  try {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin,
-      },
-    });
+  const handleGoogleSignIn = async () => {
+    setGoogleLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
 
-    if (error) {
+      if (error) {
+        toast({
+          title: 'Google Sign In Failed',
+          description: error.message,
+          variant: 'destructive',
+        });
+      }
+    } catch (error: any) {
       toast({
         title: 'Google Sign In Failed',
-        description: error.message,
+        description: error.message || 'An unexpected error occurred',
         variant: 'destructive',
       });
     }
-  } catch (error: any) {
-    toast({
-      title: 'Google Sign In Failed',
-      description: error.message || 'An unexpected error occurred',
-      variant: 'destructive',
-    });
-  }
-  setGoogleLoading(false);
-};
+    setGoogleLoading(false);
+  };
 
   return (
     <div className="ob-page min-h-screen flex items-center justify-center p-4 relative z-10">
+      <PageBackground src="/landing-bg.png" />
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="w-full max-w-md relative"
+        className="w-full max-w-md relative z-10"
       >
-        <div className="text-center mb-8">
-          <p className="ob-label mb-4" style={{ color: '#F26422' }}>MicroMuse</p>
-          <motion.h1
-            key={isLogin ? 'login' : 'signup'}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="ob-h1 mb-3"
-          >
-            <span>
-              {isLogin ? 'Welcome Back' : 'Begin Your Story'}
-            </span>
-          </motion.h1>
-          <p className="ob-sub text-base md:text-lg">
-            {isLogin
-              ? 'Sign in to continue your creative journey '
-              : 'Where 10 minutes a day sparks a lifetime of art'}
-          </p>
-        </div>
+        <div className="ob-card p-6 md:p-10 space-y-6">
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 mb-5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <Sparkles className="h-4 w-4" />
+              </span>
+              <span className="text-lg font-semibold ob-ink tracking-tight">MicroMuse</span>
+            </div>
+            <motion.h1
+              key={isLogin ? 'login' : 'signup'}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="ob-h1 mb-2 !text-[2rem] md:!text-[2.5rem]"
+            >
+              <span>{isLogin ? 'Welcome Back' : 'Begin Your Story'}</span>
+            </motion.h1>
+            <p className="ob-sub text-sm md:text-base">
+              {isLogin
+                ? 'Sign in to continue your creative journey'
+                : 'Where 10 minutes a day sparks a lifetime of art'}
+            </p>
+          </div>
 
-        <div className="ob-card p-6 md:p-8 space-y-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <AnimatePresence mode="wait">
               {!isLogin && (
@@ -186,7 +191,7 @@ const handleGoogleSignIn = async () => {
                     </div>
                     <p className="text-xs ob-muted">Letters, numbers, and underscores only</p>
                   </div>
-                  
+
                   {/* Full Name field - second */}
                   <div className="space-y-2">
                     <Label className="ob-label" htmlFor="fullName">Full Name</Label>
@@ -254,13 +259,10 @@ const handleGoogleSignIn = async () => {
             </Button>
           </form>
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" style={{ borderColor: '#DCD7CE' }} />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="px-2 ob-muted" style={{ background: '#FFFFFF' }}>Or continue with</span>
-            </div>
+          <div className="flex items-center gap-3 text-xs uppercase ob-muted">
+            <span className="h-px flex-1" style={{ background: '#DCD7CE' }} />
+            Or continue with
+            <span className="h-px flex-1" style={{ background: '#DCD7CE' }} />
           </div>
 
           <Button
@@ -300,7 +302,8 @@ const handleGoogleSignIn = async () => {
             <button
               type="button"
               onClick={() => setIsLogin(!isLogin)}
-              className="font-semibold hover:underline" style={{ color: '#D95117' }}
+              className="font-semibold hover:underline"
+              style={{ color: '#D95117' }}
             >
               {isLogin
                 ? "Don't have an account? Sign up"
@@ -309,7 +312,7 @@ const handleGoogleSignIn = async () => {
           </div>
         </div>
 
-        <p className="text-center text-sm ob-muted mt-4">
+        <p className="mt-4 mx-auto w-fit rounded-full bg-white/70 backdrop-blur-md px-4 py-1.5 text-center text-xs ob-sub">
           By continuing, you agree to our Terms of Service and Privacy Policy
         </p>
       </motion.div>

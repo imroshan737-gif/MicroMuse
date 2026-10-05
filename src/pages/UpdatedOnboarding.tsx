@@ -1,3 +1,4 @@
+import PageBackground from '@/components/PageBackground';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -252,8 +253,9 @@ export default function UpdatedOnboarding() {
     step === 2;
 
   return (
-    <div className="ob-page min-h-screen flex flex-col items-center justify-center p-4 pt-6 relative z-10">
-      <div className="w-full max-w-4xl mx-auto">
+    <div className="ob-page min-h-screen flex flex-col items-center justify-center p-4 relative z-10">
+      <PageBackground src="/landing-bg.png" />
+      <div className="ob-card w-full max-w-4xl mx-auto relative z-10 px-5 py-8 md:px-12 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
