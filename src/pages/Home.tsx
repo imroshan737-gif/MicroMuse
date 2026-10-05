@@ -101,7 +101,7 @@ export default function Home() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 glass px-4 py-1.5 rounded-full mb-4 border border-primary/20"
+                className="inline-flex items-center gap-2 bg-card px-4 py-1.5 rounded-full mb-4 border border-primary/30 shadow-sm"
               >
                 <Sparkles className="w-4 h-4 text-primary animate-pulse" />
                 <span className="text-xs font-semibold text-primary tracking-widest uppercase">
