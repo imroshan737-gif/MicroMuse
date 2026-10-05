@@ -51,10 +51,10 @@
     --gradient-cosmic: linear-gradient(180deg, hsl(40 12% 97%) 0%, hsl(36 10% 94%) 100%);
 
     /* Surfaces (formerly "glass") — quiet, layered, 1px borders */
-    --surface: hsla(40, 30%, 98%, 0.58);
-    --surface-strong: hsla(40, 30%, 99%, 0.80);
-    --surface-border: hsla(30, 10%, 12%, 0.08);
-    --surface-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.65), 0 1px 2px hsla(30, 8%, 10%, 0.05), 0 12px 32px -16px hsla(30, 8%, 10%, 0.22);
+    --surface: hsl(0 0% 100%);
+    --surface-strong: hsl(0 0% 100%);
+    --surface-border: hsl(36 12% 80%);
+    --surface-shadow: 0 1px 2px hsla(30, 8%, 10%, 0.08), 0 4px 12px -6px hsla(30, 8%, 10%, 0.12);
     
     --shadow-soft: 0 1px 2px hsla(30, 8%, 10%, 0.05);
     --shadow-medium: 0 2px 4px hsla(30, 8%, 10%, 0.05), 0 12px 32px -16px hsla(30, 8%, 10%, 0.16);
@@ -140,20 +140,24 @@
 
 @layer utilities {
   /* Layered surfaces (replaces heavy glassmorphism) */
+  /* Solid, defined business cards: white surface, crisp border, orange top rule */
   .glass {
+    position: relative;
     background: var(--surface);
-    -webkit-backdrop-filter: blur(18px) saturate(1.25);
-    backdrop-filter: blur(18px) saturate(1.25);
     border: 1px solid var(--surface-border);
+    border-top: 3px solid hsl(var(--primary));
     box-shadow: var(--surface-shadow);
   }
 
   .glass-strong {
     background: var(--surface-strong);
-    -webkit-backdrop-filter: blur(24px) saturate(1.25);
-    backdrop-filter: blur(24px) saturate(1.25);
     border: 1px solid var(--surface-border);
     box-shadow: var(--surface-shadow);
+  }
+
+  .glass:hover {
+    border-color: hsl(36 12% 68%);
+    border-top-color: hsl(var(--primary));
   }
 
   .surface {
