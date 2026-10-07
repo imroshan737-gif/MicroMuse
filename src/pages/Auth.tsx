@@ -181,7 +181,7 @@ export default function Auth() {
                       <Input
                         id="username"
                         type="text"
-                        placeholder="Choose a unique username"
+                        placeholder="Choose a Unique Username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
                         className="pl-10 ob-input"
