@@ -99,13 +99,13 @@ export default function Landing() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 mb-8"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground/80 border border-foreground/60 mb-8"
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
             </span>
-            <span className="text-sm font-semibold text-primary">Your daily creative companion</span>
+            <span className="text-sm font-semibold text-background">Your daily creative companion</span>
           </motion.div>
 
           {/* Headline */}
