@@ -292,7 +292,7 @@ export default function Landing() {
                 We don't show music challenges to coders or study tasks to dancers.
                 Your personalized feed contains only what you've chosen to master.
               </p>
-              <div className="space-y-5">
+              <div className="space-y-3">
                 {[
                   'Challenges based ONLY on your selected hobbies',
                   'AI-powered personalization that learns your style',
@@ -300,11 +300,11 @@ export default function Landing() {
                   'Built-in AI assistant to help you learn faster',
                 ].map((benefit, i) => (
                   <AnimatedSection key={i} delay={i * 0.1}>
-                    <div className="flex items-center gap-4">
-                      <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center flex-shrink-0">
-                        <Check className="w-3.5 h-3.5 text-primary" />
+                    <div className="flex items-center gap-4 rounded-xl border border-border bg-card px-4 py-3.5 shadow-sm">
+                      <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                        <Check className="w-4 h-4 text-primary-foreground" strokeWidth={2.5} />
                       </div>
-                      <span className="text-foreground/90">{benefit}</span>
+                      <span className="text-sm font-medium text-foreground">{benefit}</span>
                     </div>
                   </AnimatedSection>
                 ))}
@@ -312,30 +312,30 @@ export default function Landing() {
             </AnimatedSection>
 
             <AnimatedSection delay={0.2}>
-              <div className="relative rounded-2xl border border-border/40 bg-card/50 backdrop-blur-sm p-6 space-y-3 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5" />
-                <div className="relative z-10 space-y-3">
-                  {[
-                    { icon: Brain, title: 'Math Puzzle Sprint', meta: '10 min • Beginner • 15 pts', active: true },
-                    { icon: Code, title: 'Build a Mini Calculator', meta: '15 min • Moderate • 25 pts', active: false },
-                    { icon: BookOpen, title: 'Speed Reading Challenge', meta: '10 min • Beginner • 10 pts', active: false },
-                  ].map((item, i) => (
-                    <motion.div
-                      key={i}
-                      whileHover={{ x: 4 }}
-                      className={`flex items-center gap-3 p-4 rounded-xl border transition-colors ${item.active ? 'bg-primary/10 border-primary/25' : 'bg-muted/30 border-border/30 hover:border-primary/20'}`}
-                    >
-                      <item.icon className="w-7 h-7 text-primary flex-shrink-0" />
-                      <div>
-                        <p className="font-semibold text-sm text-foreground">{item.title}</p>
-                        <p className="text-xs text-muted-foreground">{item.meta}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                  <p className="text-center text-xs text-muted-foreground pt-3">
-                    ✨ Shown because you selected Studies & Coding
-                  </p>
-                </div>
+              <div className="rounded-2xl border border-border bg-card p-6 shadow-md space-y-3">
+                <p className="eyebrow pb-1">Your personalized feed</p>
+                {[
+                  { icon: Brain, title: 'Math Puzzle Sprint', meta: '10 min • Beginner • 15 pts', active: true },
+                  { icon: Code, title: 'Build a Mini Calculator', meta: '15 min • Moderate • 25 pts', active: false },
+                  { icon: BookOpen, title: 'Speed Reading Challenge', meta: '10 min • Beginner • 10 pts', active: false },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    whileHover={{ x: 4 }}
+                    className={`flex items-center gap-3 p-4 rounded-xl border transition-colors ${item.active ? 'bg-primary/10 border-primary/40' : 'bg-muted/40 border-border hover:border-primary/30'}`}
+                  >
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${item.active ? 'bg-primary text-primary-foreground' : 'bg-card border border-border text-primary'}`}>
+                      <item.icon className="w-5 h-5" strokeWidth={1.75} />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm text-foreground">{item.title}</p>
+                      <p className="text-xs text-muted-foreground">{item.meta}</p>
+                    </div>
+                  </motion.div>
+                ))}
+                <p className="text-center text-xs font-medium text-muted-foreground pt-2">
+                  Shown because you selected Studies & Coding
+                </p>
               </div>
             </AnimatedSection>
           </div>
