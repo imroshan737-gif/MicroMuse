@@ -93,7 +93,7 @@ export default function LandingFooter() {
 
       {/* Contact Modal */}
       <Dialog open={activeModal === 'contact'} onOpenChange={() => setActiveModal(null)}>
-        <DialogContent className="glass-strong border-border/60 max-w-md">
+        <DialogContent className="!bg-[hsl(40_20%_88%)] border-border max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl">
               <Mail className="w-6 h-6 text-primary" />

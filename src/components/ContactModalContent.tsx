@@ -50,7 +50,7 @@ export default function ContactModalContent() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 + i * 0.06, duration: 0.35 }}
-            className="group flex items-center gap-4 p-4 rounded-xl border border-border/60 bg-card/40 hover:border-primary/30 transition-smooth"
+            className="group flex items-center gap-4 p-4 rounded-xl border border-border bg-[hsl(40_22%_93%)] hover:border-primary/30 transition-smooth"
           >
             <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
               <link.icon className="w-4.5 h-4.5 text-primary" strokeWidth={1.75} />
@@ -69,7 +69,7 @@ export default function ContactModalContent() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.35 }}
-          className="flex items-center gap-4 p-4 rounded-xl border border-border/60 bg-card/40"
+          className="flex items-center gap-4 p-4 rounded-xl border border-border bg-[hsl(40_22%_93%)]"
         >
           <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center flex-shrink-0">
             <MapPin className="w-4.5 h-4.5 text-muted-foreground" strokeWidth={1.75} />
