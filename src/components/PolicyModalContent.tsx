@@ -16,7 +16,7 @@ function PolicySection({ icon, title, content, index }: Section & { index: numbe
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative rounded-xl border border-border/60 bg-card/40 p-5 transition-smooth hover:border-primary/25"
+      className="group relative rounded-xl border border-border bg-card p-5 transition-smooth hover:border-primary/25"
     >
       <div className="flex items-start gap-4">
         <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
