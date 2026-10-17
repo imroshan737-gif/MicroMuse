@@ -165,6 +165,25 @@
     border: 1px solid var(--surface-border);
   }
 
+  /* Dark grey theme scoped to footer info windows (Privacy, Terms, Contact) */
+  .modal-dark {
+    --background: 220 5% 20%;
+    --foreground: 0 0% 97%;
+    --card: 220 5% 26%;
+    --card-foreground: 0 0% 97%;
+    --muted: 220 5% 30%;
+    --muted-foreground: 0 0% 85%;
+    --subtle-foreground: 0 0% 80%;
+    --border: 220 5% 38%;
+    --accent: 220 5% 30%;
+    --surface: hsl(220 5% 26%);
+    --surface-strong: hsl(220 5% 26%);
+    --surface-border: hsl(220 5% 38%);
+    background-color: hsl(var(--background)) !important;
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--border));
+  }
+
   /* Editorial helpers */
   .eyebrow {
     @apply text-[11px] font-semibold uppercase text-muted-foreground;

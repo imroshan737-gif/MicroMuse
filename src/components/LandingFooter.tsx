@@ -67,7 +67,7 @@ export default function LandingFooter() {
 
       {/* Privacy Modal */}
       <Dialog open={activeModal === 'privacy'} onOpenChange={() => setActiveModal(null)}>
-        <DialogContent className="glass-strong border-border/60 max-w-2xl">
+        <DialogContent className="modal-dark max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl">
               <Shield className="w-6 h-6 text-primary" />
@@ -80,7 +80,7 @@ export default function LandingFooter() {
 
       {/* Terms Modal */}
       <Dialog open={activeModal === 'terms'} onOpenChange={() => setActiveModal(null)}>
-        <DialogContent className="glass-strong border-border/60 max-w-2xl">
+        <DialogContent className="modal-dark max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl">
               <FileText className="w-6 h-6 text-primary" />
@@ -93,7 +93,7 @@ export default function LandingFooter() {
 
       {/* Contact Modal */}
       <Dialog open={activeModal === 'contact'} onOpenChange={() => setActiveModal(null)}>
-        <DialogContent className="!bg-[hsl(40_20%_88%)] border-border max-w-md">
+        <DialogContent className="modal-dark max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl">
               <Mail className="w-6 h-6 text-primary" />
