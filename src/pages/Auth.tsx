@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Sparkles, Mail, Lock, User, AtSign, Chrome, Shield, FileText } from 'lucide-react';
+import { Sparkles, Mail, Lock, User, AtSign, Chrome, Shield, FileText, ChevronUp } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import GlassCard from '@/components/GlassCard';
 import PageBackground from '@/components/PageBackground';
