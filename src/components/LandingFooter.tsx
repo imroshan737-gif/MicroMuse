@@ -29,36 +29,39 @@ export default function LandingFooter() {
             </a>
 
             {/* Legal Links */}
-            <div className="flex flex-wrap items-center justify-center gap-6">
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
                 onClick={() => setActiveModal('privacy')}
-                className="flex items-center gap-2 px-4 py-2 rounded-full glass hover:bg-muted/50 transition-all duration-300 text-muted-foreground hover:text-foreground"
+                className="group flex items-center gap-2.5 pl-2.5 pr-5 py-2 rounded-full bg-card border border-border shadow-sm hover:border-primary/50 hover:shadow-md transition-all duration-200 cursor-pointer"
               >
-                <Shield className="w-4 h-4" />
-                <span>Privacy</span>
-              </motion.button>
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <Shield className="w-3.5 h-3.5" />
+                </span>
+                <span className="text-sm font-medium text-foreground">Privacy</span>
+              </button>
 
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
+              <button
+                type="button"
                 onClick={() => setActiveModal('terms')}
-                className="flex items-center gap-2 px-4 py-2 rounded-full glass hover:bg-muted/50 transition-all duration-300 text-muted-foreground hover:text-foreground"
+                className="group flex items-center gap-2.5 pl-2.5 pr-5 py-2 rounded-full bg-card border border-border shadow-sm hover:border-primary/50 hover:shadow-md transition-all duration-200 cursor-pointer"
               >
-                <FileText className="w-4 h-4" />
-                <span>Terms</span>
-              </motion.button>
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <FileText className="w-3.5 h-3.5" />
+                </span>
+                <span className="text-sm font-medium text-foreground">Terms</span>
+              </button>
 
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
+              <button
+                type="button"
                 onClick={() => setActiveModal('contact')}
-                className="flex items-center gap-2 px-4 py-2 rounded-full glass hover:bg-muted/50 transition-all duration-300 text-muted-foreground hover:text-foreground"
+                className="group flex items-center gap-2.5 pl-2.5 pr-5 py-2 rounded-full bg-card border border-border shadow-sm hover:border-primary/50 hover:shadow-md transition-all duration-200 cursor-pointer"
               >
-                <Mail className="w-4 h-4" />
-                <span>Contact</span>
-              </motion.button>
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <Mail className="w-3.5 h-3.5" />
+                </span>
+                <span className="text-sm font-medium text-foreground">Contact</span>
+              </button>
             </div>
           </div>
         </div>
