@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Sparkles, Mail, Lock, User, AtSign, Chrome } from 'lucide-react';
+import { Sparkles, Mail, Lock, User, AtSign, Chrome, Shield, FileText } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import GlassCard from '@/components/GlassCard';
 import PageBackground from '@/components/PageBackground';
@@ -11,6 +11,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 import { toast } from '@/hooks/use-toast';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { PrivacyContent, TermsContent } from '@/components/PolicyModalContent';
 
 // Validation schemas
 const signInSchema = z.object({
@@ -35,6 +37,7 @@ export default function Auth() {
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [legalPanel, setLegalPanel] = useState<'privacy' | 'terms' | null>(null);
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
 
