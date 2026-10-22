@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Sparkles, Mail, Lock, User, AtSign, Chrome } from 'lucide-react';
+import { Sparkles, Mail, Lock, User, AtSign, Chrome, Shield, FileText, ChevronUp } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import GlassCard from '@/components/GlassCard';
 import PageBackground from '@/components/PageBackground';
@@ -11,6 +11,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 import { toast } from '@/hooks/use-toast';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { PrivacyContent, TermsContent } from '@/components/PolicyModalContent';
 
 // Validation schemas
 const signInSchema = z.object({
@@ -35,6 +37,7 @@ export default function Auth() {
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [legalPanel, setLegalPanel] = useState<'privacy' | 'terms' | null>(null);
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
 
@@ -312,9 +315,50 @@ export default function Auth() {
           </div>
         </div>
 
-        <p className="mt-4 mx-auto w-fit rounded-full bg-white/70 backdrop-blur-md px-4 py-1.5 text-center text-xs ob-sub">
-          By continuing, you agree to our Terms of Service and Privacy Policy
-        </p>
+        <Popover open={legalPanel !== null} onOpenChange={(open) => { if (!open) setLegalPanel(null); }}>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              onClick={() => setLegalPanel(legalPanel ?? 'privacy')}
+              className="mt-4 mx-auto flex w-fit items-center gap-1.5 rounded-full bg-card border border-border shadow-sm px-4 py-1.5 text-center text-xs font-medium text-foreground/80 hover:text-foreground hover:border-primary/50 transition-colors cursor-pointer"
+            >
+              <Shield className="w-3.5 h-3.5 text-primary" />
+              By continuing, you agree to our Terms of Service and Privacy Policy
+              <ChevronUp className="w-3.5 h-3.5 text-muted-foreground" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent side="top" align="center" className="w-[360px] p-0 overflow-hidden" onOpenAutoFocus={(e) => e.preventDefault()}>
+            <div className="flex items-center gap-1 p-1.5 border-b border-border bg-muted/50">
+              <button
+                type="button"
+                onClick={() => setLegalPanel('privacy')}
+                className={`flex flex-1 items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                  legalPanel === 'privacy'
+                    ? 'bg-primary/10 text-primary border border-primary/30'
+                    : 'text-muted-foreground hover:text-foreground border border-transparent'
+                }`}
+              >
+                <Shield className="w-3.5 h-3.5" />
+                Privacy Policy
+              </button>
+              <button
+                type="button"
+                onClick={() => setLegalPanel('terms')}
+                className={`flex flex-1 items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                  legalPanel === 'terms'
+                    ? 'bg-primary/10 text-primary border border-primary/30'
+                    : 'text-muted-foreground hover:text-foreground border border-transparent'
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5" />
+                Terms of Service
+              </button>
+            </div>
+            <div className="max-h-[320px] overflow-y-auto p-3 custom-scrollbar bg-card">
+              {legalPanel === 'terms' ? <TermsContent /> : <PrivacyContent />}
+            </div>
+          </PopoverContent>
+        </Popover>
       </motion.div>
     </div>
   );
