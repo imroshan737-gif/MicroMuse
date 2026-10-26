@@ -397,10 +397,12 @@ export type Database = {
           full_name: string | null
           id: string
           is_profile_public: boolean | null
+          last_completed_date: string | null
           location: string | null
           longest_streak: number | null
           mood: string | null
           profile_completion: number | null
+          timezone: string | null
           total_points: number | null
           total_sessions: number | null
           two_factor_enabled: boolean | null
@@ -417,10 +419,12 @@ export type Database = {
           full_name?: string | null
           id: string
           is_profile_public?: boolean | null
+          last_completed_date?: string | null
           location?: string | null
           longest_streak?: number | null
           mood?: string | null
           profile_completion?: number | null
+          timezone?: string | null
           total_points?: number | null
           total_sessions?: number | null
           two_factor_enabled?: boolean | null
@@ -437,10 +441,12 @@ export type Database = {
           full_name?: string | null
           id?: string
           is_profile_public?: boolean | null
+          last_completed_date?: string | null
           location?: string | null
           longest_streak?: number | null
           mood?: string | null
           profile_completion?: number | null
+          timezone?: string | null
           total_points?: number | null
           total_sessions?: number | null
           two_factor_enabled?: boolean | null
@@ -730,6 +736,16 @@ export type Database = {
       }
     }
     Functions: {
+      complete_challenge_streak: {
+        Args: {
+          p_challenge_id: string
+          p_points: number
+          p_submission_url?: string
+          p_timezone?: string
+        }
+        Returns: Json
+      }
+      get_streak_state: { Args: never; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
