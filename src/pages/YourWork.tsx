@@ -157,7 +157,7 @@ export default function YourWork() {
         <GlassCard className="p-0 overflow-hidden">
           <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border">
             <div className="flex items-center gap-4 px-6 py-5">
-              <div className="w-10 h-10 rounded-lg bg-primary-soft flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center shrink-0">
                 <FolderOpen className="w-5 h-5 text-primary" />
               </div>
               <div>
@@ -166,7 +166,7 @@ export default function YourWork() {
               </div>
             </div>
             <div className="flex items-center gap-4 px-6 py-5">
-              <div className="w-10 h-10 rounded-lg bg-primary-soft flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center shrink-0">
                 <FileAudio className="w-5 h-5 text-primary" />
               </div>
               <div>
@@ -234,7 +234,7 @@ export default function YourWork() {
               <p className="text-foreground/70 mb-5 max-w-sm mx-auto">
                 Complete challenges and upload your work to see them here
               </p>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-soft border border-primary/30">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent border border-primary/30">
                 <Trophy className="w-3.5 h-3.5 text-primary" />
                 <span className="text-sm font-medium text-foreground">
                   Earn bonus points by uploading
@@ -268,7 +268,7 @@ export default function YourWork() {
                         <span className="text-border">•</span>
                         <span className="tabular-nums">{formatFileSize(submission.size)}</span>
                       </div>
-                      <span className="inline-block mt-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-primary-soft text-primary">
+                      <span className="inline-block mt-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-accent text-primary">
                         {typeLabel(submission.type)}
                       </span>
                     </div>
